@@ -1,4 +1,4 @@
-baseurl      = "localhost"
+baseurl      = ""
 title        = "Matsu Dev Blog"
 languageCode = "en-us"
 theme        = "hello-friend-ng"
