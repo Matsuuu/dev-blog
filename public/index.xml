@@ -7,9 +7,22 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>&lt;a href=&#34;https://creativecommons.org/licenses/by-nc/4.0/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;CC BY-NC 4.0&lt;/a&gt;</copyright>
+    <lastBuildDate>Sat, 16 May 2020 12:06:50 +0300</lastBuildDate>
     
 	<atom:link href="/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Introducing Bulle</title>
+      <link>/posts/introducing-bulle/</link>
+      <pubDate>Sat, 16 May 2020 12:06:50 +0300</pubDate>
+      
+      <guid>/posts/introducing-bulle/</guid>
+      <description>/bull-E/
+ Bulle is a modern solution for mocking HTTP API&amp;rsquo;s.
+Bulle can be utilized to create mock API endpoints for development purposes or for general testing.
+ Preface I found myself developing applications where we had decided on the front-end technology, but were still contemplating on the backend technology. In these situtations, we started work on the front-end nontheless, and as with almost any modern web application, the front-end utilizes data acquired from the API.</description>
+    </item>
     
   </channel>
 </rss>

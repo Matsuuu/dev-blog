@@ -41,7 +41,7 @@ paginate     = 10
 
 
 [taxonomies]
-    category = "blog"
+    category = "posts"
     tag      = "tags"
     series   = "series"
 

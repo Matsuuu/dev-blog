@@ -1,0 +1,164 @@
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+    <channel>
+        <title>Posts on Matsu</title>
+        <link>/posts/</link>
+        <description>Recent content in Posts on Matsu</description>
+        <generator>Hugo -- gohugo.io</generator>
+        <language>en-us</language>
+        <copyright>&lt;a href=&#34;https://creativecommons.org/licenses/by-nc/4.0/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;CC BY-NC 4.0&lt;/a&gt;</copyright>
+        <lastBuildDate>Sat, 16 May 2020 12:06:50 +0300</lastBuildDate>
+        <atom:link href="/posts/index.xml" rel="self" type="application/rss+xml" />
+        
+        <item>
+            <title>Introducing Bulle</title>
+            <link>/posts/introducing-bulle/</link>
+            <pubDate>Sat, 16 May 2020 12:06:50 +0300</pubDate>
+            
+            <guid>/posts/introducing-bulle/</guid>
+            <description>/bull-E/
+ Bulle is a modern solution for mocking HTTP API&amp;rsquo;s.
+Bulle can be utilized to create mock API endpoints for development purposes or for general testing.
+ Preface I found myself developing applications where we had decided on the front-end technology, but were still contemplating on the backend technology. In these situtations, we started work on the front-end nontheless, and as with almost any modern web application, the front-end utilizes data acquired from the API.</description>
+            <content type="html"><![CDATA[<p><em>/bull-E/</em></p>
+<blockquote>
+<p>Bulle is a modern solution for mocking HTTP API&rsquo;s.</p>
+<p>Bulle can be utilized to create mock API endpoints for development purposes or for general testing.</p>
+</blockquote>
+<h3 id="preface">Preface</h3>
+<p>I found myself developing applications where we had decided on the front-end technology, but were still contemplating on the backend technology.
+In these situtations, we started work on the front-end nontheless, and as with almost any modern web application, the front-end
+utilizes data acquired from the API. However we did not have a API built yet, nor had we decided what it should be written in.</p>
+<p>In this situation we had 2 choices:</p>
+<ul>
+<li>Fill the front-end code with mocked JSON objects, which would act as they were the value acquired from the API</li>
+<li>Mocking an API, and fetching the data from it, like we would in the finalized product</li>
+</ul>
+<p>I Dislike having my code filled with temporary javascript objects, which will have to be replaced with AJAX calls down the line,
+and so decided to go with the latter approach.</p>
+<p>However, I was not able to find many good tools for quickly mocking an API for the use cases I needed. Most of them usually required a
+setup process, or a full on project strucured around them, and I found that as a huge waste of time and resources.</p>
+<blockquote>
+<p>In comes Bulle</p>
+</blockquote>
+<p>After not finding a solution fitting for me, I started work on <a href="https://github.com/Matsuuu/Bulle">Bulle</a>.</p>
+<p>The aim with Bulle was to create a tool that could be started in the matter of seconds from the command line,
+but could also be expanded for larger testing.</p>
+<hr>
+<h2 id="introduction-to-bulle">Introduction to Bulle</h2>
+<p>The main focus on Bulle was ease of use, and that is noticeable from the start.</p>
+<p>To get started with Bulle, you just need to install it through <code>npm</code></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">npm install -g bulle
+</code></pre></div><p>Bulle being a cli tool written in Javascript, it requires <a href="https://nodejs.org/en/">NodeJS</a> to be installed to be able to run.</p>
+<h4 id="hello-bulle">Hello Bulle</h4>
+<p>We can now test out that Bulle functions properly setting it up with a single route.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">bulle -r ping <span style="color:#e6db74">&#39;{&#34;message&#34;: &#34;pong&#34;}&#39;</span>
+</code></pre></div><p>After running the command, we are greeted with the GUI for Bulle, displaying all of the endpoints mocked, port number of Bulle, and the
+amount of requests each of the endpoints has received.</p>
+<p><img src="/bulle-startup.png" alt="Bulle Startup screen"></p>
+<p>Now if we check out our localhost port 3000 (default address for Bulle), we should see the endpoint active.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#75715e"># -v for more verbose example</span>
+curl -v http://localhost:3000/ping
+</code></pre></div><p>We get a return value of</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">*   Trying 127.0.0.1...
+* TCP_NODELAY set
+* Connected to localhost <span style="color:#f92672">(</span>127.0.0.1<span style="color:#f92672">)</span> port <span style="color:#ae81ff">3000</span> <span style="color:#f92672">(</span><span style="color:#75715e">#0)</span>
+&gt; GET /ping HTTP/1.1
+&gt; Host: localhost:3000
+&gt; User-Agent: curl/7.58.0
+&gt; Accept: */*
+&gt;
+&lt; HTTP/1.1 <span style="color:#ae81ff">200</span> OK
+&lt; content-type: text/plain; charset<span style="color:#f92672">=</span>utf-8
+&lt; content-length: <span style="color:#ae81ff">19</span>
+&lt; Date: Sat, <span style="color:#ae81ff">16</span> May <span style="color:#ae81ff">2020</span> 11:04:22 GMT
+&lt; Connection: keep-alive
+&lt;
+* Connection <span style="color:#75715e">#0 to host localhost left intact</span>
+<span style="color:#f92672">{</span><span style="color:#e6db74">&#34;message&#34;</span>: <span style="color:#e6db74">&#34;pong&#34;</span><span style="color:#f92672">}</span>
+</code></pre></div><p>And just like that, we have a mocked API which returns JSON data.</p>
+<p>Next let&rsquo;s look at some real world applications</p>
+<hr>
+<h2 id="bulle-as-the-developers-best-friend">Bulle as the Developers&rsquo; best friend</h2>
+<p>Let&rsquo;s create a common developer scenario:</p>
+<blockquote>
+<p>You are developing the user profile page, but do not have the backend API for the user profiles built yet.</p>
+<p>You, however want to create the data retrieval as a part of the page from the start, instead of just mocking the data in the code
+and worrying about the AJAX later on.</p>
+</blockquote>
+<p>Let&rsquo;s say we have our normal user profile page. It will contain the following user information:</p>
+<ul>
+<li>User Name</li>
+<li>User email address</li>
+<li>User phone number</li>
+<li>Has the user subscribed to the email letter</li>
+</ul>
+<p>Meaning that our data model would look something like</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript">{
+  <span style="color:#a6e22e">id</span><span style="color:#f92672">:</span> <span style="color:#ae81ff">1</span>,
+  <span style="color:#a6e22e">name</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;Foo Bar&#34;</span>,
+  <span style="color:#a6e22e">email</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;foobar@foo.bar&#34;</span>,
+  <span style="color:#a6e22e">phone</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;+123 555 555&#34;</span>,
+  <span style="color:#a6e22e">subscribedToLetter</span><span style="color:#f92672">:</span> <span style="color:#66d9ef">true</span>
+}
+</code></pre></div><p>Let&rsquo;s see how we could go about creating the necessary API&rsquo;s for this page.</p>
+<p>We would need a:</p>
+<ul>
+<li>Route for the user data (GET)</li>
+<li>Route for updating the user data (PUT)</li>
+<li>Route for deleting the user (DELETE)</li>
+</ul>
+<p>We can create a mock API for this page extremely easily with Bulle.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">bulle -p <span style="color:#ae81ff">1234</span> <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>-r user/1 <span style="color:#e6db74">&#39;{&#34;id&#34;: 1, &#34;name&#34;: &#34;Foo Bar&#34;, &#34;email&#34;: &#34;foobar@foo.bar&#34;, &#34;phone&#34;: &#34;+123 555 555&#34;, &#34;subscribedToLetter&#34;: true}&#39;</span> <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>-r user PUT <span style="color:#ae81ff">204</span> <span style="color:#e6db74">&#39;id=number;name=string;email=string;phone=string;subscribedToLetter=boolean&#39;</span> <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>-r user/1 DELETE <span style="color:#ae81ff">202</span> <span style="color:#e6db74">&#39;{&#34;success&#34;: true}&#39;</span>
+</code></pre></div><p>Let&rsquo;s go through the command line by line</p>
+<h2 id="the-initialization">The Initialization</h2>
+<p>Here we just call Bulle, and specify the port to be 1234 instead of the default 3000</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">bulle -p <span style="color:#ae81ff">1234</span>
+</code></pre></div><h2 id="the-get-route">The GET route</h2>
+<p>First we specify the GET route. Since GET is the default method, and 200 is the default return code, those can be omitted.</p>
+<p>We specify the return value of the request as the same JSON object we came up with earlier. This will be sent back to the
+requester on a successful GET request.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">-r user/1 <span style="color:#e6db74">&#39;{&#34;id&#34;: 1, &#34;name&#34;: &#34;Foo Bar&#34;, &#34;email&#34;: &#34;foobar@foo.bar&#34;, &#34;phone&#34;: &#34;+123 555 555&#34;, &#34;subscribedToLetter&#34;: true}&#39;</span>
+</code></pre></div><h2 id="the-put-route">The PUT route</h2>
+<p>Next we specify the PUT route, which is the route we use for updating the user&rsquo;s data.</p>
+<p>When updating entities, we usually want to check that the entity field types match what we want. This is where we apply
+the Bulle validation pattern.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">-r user PUT <span style="color:#ae81ff">204</span> <span style="color:#e6db74">&#39;id=number;name=string;email=string;phone=string;subscribedToLetter=boolean&#39;</span>
+</code></pre></div><p>The pattern is a semicolon-seperated pattern of key-value pairs, where the key is the key of the entity we want to check,
+and the value is the variable type we want the sent data to be.</p>
+<p>For example here we want to make sure that the sent <code>id</code> is a number, <code>name</code>, <code>email</code> and <code>phone</code>
+fields are strings and that the <code>subscribedToLetter</code> variable is a boolean.</p>
+<p>On a invalid data type, Bulle will return with a response code <code>422 Unprocessable Entity</code></p>
+<p>If some of the specified fields are missing from the sent data, Bulle will return with a <code>500 Internal Server Error</code></p>
+<h2 id="the-delete-route">The DELETE route</h2>
+<p>Last we specify the DELETE route. This one is a simple task of specifying a response code and a simple response body.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">-r user/1 DELETE <span style="color:#ae81ff">202</span> <span style="color:#e6db74">&#39;{&#34;success&#34;: true}&#39;</span>
+</code></pre></div><h2 id="testing">Testing</h2>
+<p>Now if we test the API, on a GET request, we should get the user profile information.</p>
+<p><img src="/bulle-get-result.png" alt="Bulle GET request result"></p>
+<p>Next up we can try out the update (PUT) route.</p>
+<p>We can try out if our type checking works, but wrapping our boolean <code>subscribedToLetter</code> in quotes, making it a string
+instead of a boolean.</p>
+<p><img src="/bulle-put-error.png" alt="Bulle PUT getting a validation error"></p>
+<p>Seems that the validation works.</p>
+<p>If we fix the error we should get a successful request through:</p>
+<p><img src="/bulle-put-success.png" alt="Bulle PUT successful request"></p>
+<p>And we received a 204, which was the return value we wanted to see.</p>
+<p>Last we can test out our delete path:</p>
+<p><img src="/bulle-delete-success.png" alt="Bulle DELETE succesful request"></p>
+<p>And as we could have guessed, the DELETE path works just like it should.</p>
+<h2 id="verdict">Verdict</h2>
+<p>By using Bulle, we were able to mock a simple API with different methods with just a single small command from the command line.</p>
+<p>When used in real development, we would save a lot of time in refactoring, since we wouldn&rsquo;t need to rewrite our data
+acquisition methods all over again after transferring from test data to a real API.</p>
+<p>This was just a simple example of how to use Bulle in front-end development. Bulle is still a really early in development and
+will be updated and expanded upon as new needs rise.</p>
+<p>You can start using Bulle today by getting it from <a href="https://www.npmjs.com/package/bulle">npm</a>.</p>
+<p>Contributions to the project are also welcome in the <a href="https://github.com/Matsuuu/Bulle">Bulle Github Repository</a></p>
+]]></content>
+        </item>
+        
+    </channel>
+</rss>
