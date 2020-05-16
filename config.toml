@@ -27,6 +27,19 @@ paginate     = 10
   # Default theme "light" or "dark"
   defaultTheme = "dark"
 
+  [[params.social]]
+    name    = "twitter"
+    url     = "https://twitter.com/matsuuu_"
+
+  [[params.social]]
+    name    = "github"
+    url     = "https://github.com/Matsuuu"
+
+  [[params.social]]
+    name    = "linkedin"
+    url     = "https://www.linkedin.com/in/matias-huhta-b0b159106/"
+
+
 [taxonomies]
     category = "blog"
     tag      = "tags"
