@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Matsu</title>
-    <link>/</link>
-    <description>Recent content on Matsu</description>
+    <title>Vim on Matsu</title>
+    <link>/tags/vim/</link>
+    <description>Recent content in Vim on Matsu</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>&lt;a href=&#34;https://creativecommons.org/licenses/by-nc/4.0/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;CC BY-NC 4.0&lt;/a&gt;</copyright>
     <lastBuildDate>Tue, 19 May 2020 15:48:32 +0300</lastBuildDate>
     
-	<atom:link href="/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="/tags/vim/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
@@ -21,18 +21,6 @@
       <description>Vim. It&amp;rsquo;s the editor in the center of all freshman Computer Science student memes.
  It&amp;rsquo;s something almost every developer has seen at some part of their career. The most usual first touch to Vim is when new developers start using Git from the command line, and there is a merge conflict, or you forget to type a commit message.
  Oh no what is this how do I escape &amp;lt;esc&amp;gt; &amp;lt;esc&amp;gt; &amp;lt;CTRL-C&amp;gt;</description>
-    </item>
-    
-    <item>
-      <title>Introducing Bulle</title>
-      <link>/posts/introducing-bulle/</link>
-      <pubDate>Sat, 16 May 2020 12:06:50 +0300</pubDate>
-      
-      <guid>/posts/introducing-bulle/</guid>
-      <description>/bull-E/
- Bulle is a modern solution for mocking HTTP API&amp;rsquo;s.
-Bulle can be utilized to create mock API endpoints for development purposes or for general testing.
- Preface I found myself developing applications where we had decided on the front-end technology, but were still contemplating on the backend technology. In these situtations, we started work on the front-end nontheless, and as with almost any modern web application, the front-end utilizes data acquired from the API.</description>
     </item>
     
   </channel>
