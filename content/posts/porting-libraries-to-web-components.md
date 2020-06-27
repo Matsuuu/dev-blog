@@ -1,6 +1,6 @@
 ---
 title: 'Porting Libraries to Web Components'
-date: 2020-06-27T11:00:55+03:00
+date: 2020-06-27T11:00:00+03:00
 ---
 
 As Web Components become a part of the [Web Standard](https://html.spec.whatwg.org/multipage/custom-elements.html), more libraries are being

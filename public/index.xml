@@ -7,7 +7,7 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>&lt;a href=&#34;https://creativecommons.org/licenses/by-nc/4.0/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;CC BY-NC 4.0&lt;/a&gt;</copyright>
-    <lastBuildDate>Sat, 27 Jun 2020 11:00:55 +0300</lastBuildDate>
+    <lastBuildDate>Sat, 27 Jun 2020 11:00:00 +0300</lastBuildDate>
     
 	<atom:link href="/index.xml" rel="self" type="application/rss+xml" />
     
@@ -15,7 +15,7 @@
     <item>
       <title>Porting Libraries to Web Components</title>
       <link>/posts/porting-libraries-to-web-components/</link>
-      <pubDate>Sat, 27 Jun 2020 11:00:55 +0300</pubDate>
+      <pubDate>Sat, 27 Jun 2020 11:00:00 +0300</pubDate>
       
       <guid>/posts/porting-libraries-to-web-components/</guid>
       <description>As Web Components become a part of the Web Standard, more libraries are being created with Web Components instead of just exposing the API of said library.
