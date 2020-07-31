@@ -7,10 +7,21 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>&lt;a href=&#34;https://creativecommons.org/licenses/by-nc/4.0/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;CC BY-NC 4.0&lt;/a&gt;</copyright>
-    <lastBuildDate>Sat, 27 Jun 2020 11:00:00 +0300</lastBuildDate>
+    <lastBuildDate>Fri, 31 Jul 2020 13:00:00 +0300</lastBuildDate>
     
 	<atom:link href="/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Comparing React and Web Components. Part 1: Starters</title>
+      <link>/posts/comparing-react-and-web-components-part-1-starters/</link>
+      <pubDate>Fri, 31 Jul 2020 13:00:00 +0300</pubDate>
+      
+      <guid>/posts/comparing-react-and-web-components-part-1-starters/</guid>
+      <description>I&amp;rsquo;ve always shunned away from big frameworks while working with Javascript. I used to work with React, but after gaining more experience with the language, I&amp;rsquo;ve started to go closer to vanilla with everything I do.
+Comparing starter scripts I ran the recommended starters for both React and Lit Element, one of the most used Web Component libraries.
+For React, the started included 262 mb of depndencies just to get started</description>
+    </item>
     
     <item>
       <title>Porting Libraries to Web Components</title>
