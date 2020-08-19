@@ -3,6 +3,7 @@ title        = "Matsu Dev Blog"
 languageCode = "en-us"
 theme        = "hello-friend-ng"
 paginate     = 10
+googleAnalytics = "UA-85452649-2"
 
 [author]
   name       = "Matsu"
