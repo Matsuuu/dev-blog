@@ -7,10 +7,21 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>&lt;a href=&#34;https://creativecommons.org/licenses/by-nc/4.0/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;CC BY-NC 4.0&lt;/a&gt;</copyright>
-    <lastBuildDate>Fri, 31 Jul 2020 13:00:00 +0300</lastBuildDate>
+    <lastBuildDate>Wed, 19 Aug 2020 15:00:00 +0300</lastBuildDate>
     
 	<atom:link href="/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Comparing React and Web Components. Part 2: Components</title>
+      <link>/posts/comparing-react-and-web-components-part-2-components/</link>
+      <pubDate>Wed, 19 Aug 2020 15:00:00 +0300</pubDate>
+      
+      <guid>/posts/comparing-react-and-web-components-part-2-components/</guid>
+      <description>This is part 2 of my series comparing Web Components and React. You can find the first part here
+Before we get started, I&amp;rsquo;ll clear out some possible misconceptions from the last post:
+ OpenWC is not LitElement. LitElement is a Open source library written by the Polymer team and the open source contributors while OpenWC is a community aimed at providing recommendations for web component development. LitElement is a base class that makes use of the lit-html library.</description>
+    </item>
     
     <item>
       <title>Comparing React and Web Components. Part 1: Starters</title>

@@ -5,6 +5,17 @@ date: 2020-08-19T15:00:00+03:00
 
 This is part 2 of my series comparing Web Components and React. You can find the first part [here](https://matsu.fi/posts/comparing-react-and-web-components-part-1-starters/)
 
+Before we get started, I'll clear out some possible misconceptions from the last post:
+
+-   OpenWC is not LitElement. LitElement is a Open source library written by the Polymer team and the open source contributors while
+    OpenWC is a community aimed at providing recommendations for web component development.
+-   LitElement is a base class that makes use of the lit-html library.
+-   lit-html is a templating library used for creating fast html templates.
+
+Allright. Now let's continue where we left off.
+
+---
+
 ### Comparing Component development
 
 In today's post we'll be comparing building Javascript components in 3 different evironments:
@@ -212,6 +223,205 @@ Overall after finding and setting up the environment, the development was fairly
 provided us with commands for publishing the package. The one downside here is like I said, that the package can now
 only be used if React is used in the project.
 
+#### Output
+
+Last thing we will take a look at is the output of the build process.
+
+As said earlier, we have 5 files, from which
+
+-   1 is a css file
+-   2 are js files
+-   2 are js map files
+
+Let's get the easiest out of the way and look inside the css file:
+
+```css
+._index-module__formWrapper__r8sB5 div {
+    display: flex;
+    flex-direction: column;
+}
+
+._index-module__formWrapper__r8sB5 input,
+._index-module__formWrapper__r8sB5 button {
+    font-size: 2rem;
+    margin: 0 0 1rem;
+    width: 10rem;
+}
+```
+
+We can see that the styles have stayed untouched, except for the classname. As we never named a css selector outside of the
+call `styles.formWrapper`, we can see that the build process generated a unique identifier for the class.
+
+I see two cases here which I would like to highlight:
+
+-   Creating convoluted class names makes it harder for test automation to create readable tests that don't break after a new build
+-   `index-module__formWrapper__r8sB5` isn't really as descriptive to read if looking at the source from the browser as `form-wrapper` would be.
+
+Next we'll check out the `index.js` file:
+
+```javascript
+function _interopDefault(ex) {
+    return ex && typeof ex === 'object' && 'default' in ex ? ex['default'] : ex;
+}
+
+var React = require('react');
+var React__default = _interopDefault(React);
+
+var styles = { formWrapper: '_index-module__formWrapper__r8sB5' };
+
+var placeKittenUrl = 'http://placekitten.com/{width}/{height}';
+function CatImageViewer() {
+    var _useState = React.useState(0),
+        imageWidth = _useState[0],
+        setImageWidth = _useState[1];
+
+    var _useState2 = React.useState(0),
+        imageHeight = _useState2[0],
+        setImageHeight = _useState2[1];
+
+    var _useState3 = React.useState(null),
+        currentImage = _useState3[0],
+        setCurrentImage = _useState3[1];
+
+    var getNewCatImage = function getNewCatImage() {
+        var searchUrl = placeKittenUrl
+            .replace('{width}', imageWidth)
+            .replace('{height}', imageHeight);
+        setCurrentImage(searchUrl);
+    };
+
+    return /*#__PURE__*/ React__default.createElement(
+        'div',
+        {
+            className: styles.formWrapper,
+        },
+        /*#__PURE__*/ React__default.createElement(
+            'div',
+            null,
+            /*#__PURE__*/ React__default.createElement(
+                'p',
+                null,
+                'Enter the dimensions of the desired cat image'
+            ),
+            /*#__PURE__*/ React__default.createElement('input', {
+                type: 'number',
+                placeholder: 'Width',
+                id: 'image-width',
+                onInput: function onInput(e) {
+                    return setImageWidth(e.target.value);
+                },
+            }),
+            /*#__PURE__*/ React__default.createElement('input', {
+                type: 'number',
+                placeholder: 'Height',
+                id: 'image-height',
+                onInput: function onInput(e) {
+                    return setImageHeight(e.target.value);
+                },
+            }),
+            /*#__PURE__*/ React__default.createElement(
+                'button',
+                {
+                    type: 'button',
+                    onClick: getNewCatImage,
+                },
+                'Search'
+            )
+        ),
+        currentImage &&
+            /*#__PURE__*/ React__default.createElement('img', {
+                alt: '',
+                src: currentImage,
+            })
+    );
+}
+
+module.exports = CatImageViewer;
+//# sourceMappingURL=index.js.map
+```
+
+Allright so after we get over the fact that this code is quite unreadable, especially the render part, we can
+take a look at a few parts.
+
+-   Why are all of our const's turned into `var`s? Out of all the possibilities, a var.
+    -   const is supported by all browsers back to IE11 (which by the way is not even supported soon anymore)
+-   If a developer was to inspect this element straight from the source, without knowing how React works, it would be quite hard to know
+    what's going on with the hooks.
+    -   In the browser this is resolved by providing a source map of the file, provided your browser supports it and has it enabled.
+    -   Source maps aren't foolproof and might introduce some problems while debugging
+
+Next let's look inside the other generated javascript file: `index.modern.js`
+
+```javascript
+import React, { useState } from 'react';
+
+var styles = { formWrapper: '_index-module__formWrapper__r8sB5' };
+
+const placeKittenUrl = 'http://placekitten.com/{width}/{height}';
+function CatImageViewer() {
+    const [imageWidth, setImageWidth] = useState(0);
+    const [imageHeight, setImageHeight] = useState(0);
+    const [currentImage, setCurrentImage] = useState(null);
+
+    const getNewCatImage = () => {
+        const searchUrl = placeKittenUrl
+            .replace('{width}', imageWidth)
+            .replace('{height}', imageHeight);
+        setCurrentImage(searchUrl);
+    };
+
+    return /*#__PURE__*/ React.createElement(
+        'div',
+        {
+            className: styles.formWrapper,
+        },
+        /*#__PURE__*/ React.createElement(
+            'div',
+            null,
+            /*#__PURE__*/ React.createElement(
+                'p',
+                null,
+                'Enter the dimensions of the desired cat image'
+            ),
+            /*#__PURE__*/ React.createElement('input', {
+                type: 'number',
+                placeholder: 'Width',
+                id: 'image-width',
+                onInput: (e) => setImageWidth(e.target.value),
+            }),
+            /*#__PURE__*/ React.createElement('input', {
+                type: 'number',
+                placeholder: 'Height',
+                id: 'image-height',
+                onInput: (e) => setImageHeight(e.target.value),
+            }),
+            /*#__PURE__*/ React.createElement(
+                'button',
+                {
+                    type: 'button',
+                    onClick: getNewCatImage,
+                },
+                'Search'
+            )
+        ),
+        currentImage &&
+            /*#__PURE__*/ React.createElement('img', {
+                alt: '',
+                src: currentImage,
+            })
+    );
+}
+
+export default CatImageViewer;
+//# sourceMappingURL=index.modern.js.map
+```
+
+Now this one is looking more like what we wrote, and that's mostly because this is the es module version of the
+built code. We see that our `const`s have been untampered with this time.
+
+Our project was fairly simple, so the source code can't be analyzed deeper, but I'd imagine that in more complex systems,
+you could find more to talk about these built files.
+
 Next we'll look at a little more vanilla approach with Lit Element
 
 ---
@@ -309,6 +519,8 @@ export class CatImageLitViewer extends LitElement {
         `;
     }
 }
+
+customElements.define('cat-image-lit-viewer', CatImageLitViewer);
 ```
 
 Compared to our React example, the LitElement version is quite similiar. The differences are mainly in state management.
@@ -356,6 +568,8 @@ rendering thrown in there, and our components handle events with event listener 
 
 Now that we have our component, we should be ready to build.
 
+#### Output
+
 ... Except that we won't do that.
 
 ---
@@ -368,6 +582,8 @@ Reading the open-wc recommendations on building, in the section about creating c
 
 Meaning in short that we can ship our Web Component _as is_. Isn't that cool?
 
+Also since we're not building our package, we don't need to ship any source maps.
+
 If we were to ship our Web Component, we would only need to ship the one js file, and tag LitElement as the dependency.
 LitElement being a fairly small library (318kB unpacked), our total project size would be in total around 320kB.
 
@@ -378,7 +594,7 @@ LitElement being a fairly small library (318kB unpacked), our total project size
 ```
 
 This is, if we were not already using LitElement in our project. If we are already writing a LitElement project, our new package would
-only bring the 4KB with it to the project.
+only bring the 4KB with it to the project. And this is unminified.
 
 _For comparison_: If we wanted to add a single React Component to a non-react project, the minimal setup would require both React
 and React-DOM, which together weight in at 204kB + 3MB unpackaged.
@@ -394,3 +610,253 @@ Next we'll take a look at fully buildless and dependencyless implementation usin
 ---
 
 ### HTMLElement implementation
+
+#### Creation
+
+As we're building a project as vanilla as possible, we don't really need a initializer for this implementation.
+
+We can just start by creating a folder, running npm init and creating the necessary files
+
+```bash
+mkdir cat-image-vanilla-viewer
+cd cat-image-vanilla-viewer
+npm init
+touch index.html index.js
+```
+
+Now we can populate our index.html with the minimal setup needed for development:
+
+```html
+<html>
+    <head> </head>
+    <body>
+        <cat-image-vanilla-viewer></cat-image-vanilla-viewer>
+        <script src="./index.js" type="module"></script>
+    </body>
+</html>
+```
+
+Real simple and smooth. Just like Vanilla ice cream.
+
+We could serve our project with any http server implementation, from [http-server](https://www.npmjs.com/package/http-server) to
+[es-dev-server](https://www.npmjs.com/package/es-dev-server), since it's just a simple html + js file setup. For this post
+I just added `es-dev-server` as a dev dependency, as it won't affect the package size that way.
+
+Our package.json is now also in it's minimal setup:
+
+```json
+{
+    "name": "cat-image-vanilla-viewer",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "start": "es-dev-server --app-index index.html --node-resolve --watch"
+    },
+    "author": "",
+    "license": "ISC",
+    "devDependencies": {
+        "es-dev-server": "^1.57.2"
+    }
+}
+```
+
+Now we can just run `npm start` and get a nice, hot-reloading developer experience.
+
+#### Development
+
+As we use es-dev-server, the development setup and workflow are quite similiar to the Lit-Element example.
+
+Now that we have the environment setup, we can write our component. The implementation is just a tad bit longer than the
+ones we made using the libraries.
+
+```javascript
+const template = document.createElement('template');
+template.innerHTML = `
+<style>
+    .form-wrapper {
+        display: flex;
+        flex-direction: column;
+    }
+    button,
+    input {
+        font-size: 2rem;
+        margin: 0 0 1rem;
+        width: 10rem;
+    }
+</style>
+<div class="form-wrapper">
+    <p>Enter the dimensions of the desired cat image</p>
+    <input
+        type="number"
+        placeholder="Width"
+        id="image-width"
+    />
+    <input
+        type="number"
+        placeholder="Height"
+        id="image-height"
+    />
+    <button type="button" >Search</button>
+</div>
+`;
+
+const placeKittenUrl = 'http://placekitten.com/{width}/{height}';
+
+export default class CatImageVanillaViewer extends HTMLElement {
+    constructor() {
+        super();
+        this.imageWidth = 0;
+        this.imageHeight = 0;
+        this.currentImage = null;
+
+        const root = this.attachShadow({ mode: 'open' });
+        root.appendChild(template.content.cloneNode(true));
+    }
+
+    connectedCallback() {
+        this.shadowRoot
+            .querySelector('#image-width')
+            .addEventListener('input', (e) => (this.imageWidth = e.target.value));
+
+        this.shadowRoot
+            .querySelector('#image-height')
+            .addEventListener('input', (e) => (this.imageHeight = e.target.value));
+
+        this.shadowRoot
+            .querySelector('button')
+            .addEventListener('click', this.getNewCatImage.bind(this));
+    }
+
+    getNewCatImage() {
+        const searchUrl = placeKittenUrl
+            .replace('{width}', this.imageWidth)
+            .replace('{height}', this.imageHeight);
+        this.currentImage = searchUrl;
+
+        let imageElem = this.shadowRoot.querySelector('img');
+        if (!imageElem) {
+            imageElem = document.createElement('img');
+            this.shadowRoot.appendChild(imageElem);
+        }
+        imageElem.src = searchUrl;
+    }
+}
+
+customElements.define('cat-image-vanilla-viewer', CatImageVanillaViewer);
+```
+
+Let's start going through what's different in this implementation. As you might see from the start, quite a lot has changed.
+
+Firstly we're working with [templates](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/template).
+Templates are used by `lit-html` under the hood too, but here we are creating them manually and
+populating the contents here instead of inside the `render` function, which our component doesn't have.
+
+The templates are "a mechanism for holding HTML that is not to be rendered immediately when a page is loaded, but
+may be instantiated subsequently during runtime using Javascript" (From the template MDN page).
+
+> Think of a template as a content fragment that is being stored for subsequent use in the document.
+> While the parser does process the contents of the \<template\> element while loading the page, it does so only
+> to ensure that those contents are valid; the element's contents are not rendered, however.
+
+The Template elements enable us to write markup templates that are not rendered immeadiately and can then be
+reused multiple times as the basis of a custom element's structure.
+
+In our template element we declare our styling, and also the HTML structure of our component. The content
+is basically what we would normally put inside the `render` -function.
+
+Next up we create the class itself. We extend the [HTMLElement](https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement),
+which is a part of the Javascript Web API.
+Any class extending HTMLElement represents a HTML element. Some Web Components might implement this interface directly,
+while others might implement another interface, which inherits this interface.
+
+Our Web Component has it's own built-in lifecycle callbacks of which we use some in this example.
+The full list of the callbacks is as follows:
+
+-   **_connectedCallback_**: Invoked when the custom element is first connected to the document's DOM.
+-   **_disconnectedCallback_**: Invoked when the custom element is disconnected from the document's DOM.
+-   **_adoptedCallback_**: Invoked when the custom element is moved to a new document.
+-   **_attributeChangedCallback_**: Invoked when one of the custom element's attributes is added, removed, or changed
+
+_Source: [MDN](https://developer.mozilla.org/en-US/docs/Web/Web_Components)_
+
+Inside our constructor we initialize our properties with their default values. We also attach the shadow DOM
+to our element to create encapsulation for our Web Component.
+After creating the shadowRoot, we append a copy of our template inside it.
+
+After `connectedCallback` is called, we can be sure that our element has hit the DOM, making it safe to attach events
+to our element. So that's what we do inside our connectedCallback.
+
+We could handle the onclick and oninput events inline, but while creating vanilla components, I prefer attaching the elements
+manually inside the javascript instead of appending them inline into the html.
+
+After that we are only left with the appending of the cat image. Different from the other cases, here we are not able to
+just easily conditionally render our element, well at least not as easily as in the other libraries.
+
+In our instance, it's easier to just append the image element into the element's DOM tree as the image is
+added for the first time. After that we just `querySelector` our image element, and manipulate it's
+src element manually.
+
+#### Output
+
+Once again, since this is fully vanilla, our component is supported by browsers without need for building.
+
+Let's look at the size of our package, which we are going to be shipping for comparison with the others:
+
+```bash
+> du -sh index.js
+
+4.0K    index.js
+```
+
+Well look at that. It's the same size as our LitElement implementation, but without adding the LitElement and lit-html
+libraries to your project (in case you're not already using them).
+
+And as we had in LitElement, in vanilla we don't need to provide a source maps, since we'll be shipping a unbuilt,
+unminified version of our package.
+
+Building the package in full vanilla also allows us to easily import this to literally any page we want, by just
+importing the package from a JS CDN like [unpkg](https://unpkg.com/) and just adding the HTML element to the page.
+No external tooling required.
+
+Of course this comes with some drawbacks, which don't become relevant from this kind of a simple package.
+
+With Vanilla Web Components
+
+-   You can't pass other than string-based data via HTML
+    -   But you can do it by passing the properties in javascript
+
+```javascript
+// Example
+const profileObject = { id: 1, name: 'Matsu' };
+document.querySelector('my-element').profile = profileObject;
+```
+
+-   You need to register attribute change callback yourself with callbacks like `attributechangedcallback`
+-   You can get confused between attributes and properties
+    -   But this is solved by just studying the subject, and in the end isn't all that complicated
+-   You might need to write some custom update logic
+
+But for creating simple Web Components like the one we created, some of these problems might not even surface.
+
+---
+
+### Verdict
+
+So to recap, you should write a X component when...
+
+-   Write a React component if you don't have any other choice
+-   Write a LitElement component if you are going to be building anything more complicated, and can
+    afford to force your component's developers to use slight tooling like Rollup.
+    -   ... at least until bare module specifiers are supported globally.
+-   Write a Vanilla component if you're building a simple component, that doesn't require some of the more complicated
+    functionalities of the libraries and want your component to be able to be run absolutely (well almost) everywhere.
+
+So the next time you are building a Javascript component, take a second to evaluate on which scale you want to
+build it, and what level of dependencies you want to tie your users to.
+
+I hope you all are enjoying the series. Please provide me feedback about the posts and correct me if I said something
+wrong in writter at [@matsuuu\_](https://twitter.com/matsuuu_) and if you're enjoying the series, please
+send me a DM and let me know :)
+
+Until next time, when we'll be discussing more Web Components.

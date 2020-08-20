@@ -6,8 +6,729 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>en-us</language>
         <copyright>&lt;a href=&#34;https://creativecommons.org/licenses/by-nc/4.0/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;CC BY-NC 4.0&lt;/a&gt;</copyright>
-        <lastBuildDate>Fri, 31 Jul 2020 13:00:00 +0300</lastBuildDate>
+        <lastBuildDate>Wed, 19 Aug 2020 15:00:00 +0300</lastBuildDate>
         <atom:link href="/posts/index.xml" rel="self" type="application/rss+xml" />
+        
+        <item>
+            <title>Comparing React and Web Components. Part 2: Components</title>
+            <link>/posts/comparing-react-and-web-components-part-2-components/</link>
+            <pubDate>Wed, 19 Aug 2020 15:00:00 +0300</pubDate>
+            
+            <guid>/posts/comparing-react-and-web-components-part-2-components/</guid>
+            <description>This is part 2 of my series comparing Web Components and React. You can find the first part here
+Before we get started, I&amp;rsquo;ll clear out some possible misconceptions from the last post:
+ OpenWC is not LitElement. LitElement is a Open source library written by the Polymer team and the open source contributors while OpenWC is a community aimed at providing recommendations for web component development. LitElement is a base class that makes use of the lit-html library.</description>
+            <content type="html"><![CDATA[<p>This is part 2 of my series comparing Web Components and React. You can find the first part <a href="https://matsu.fi/posts/comparing-react-and-web-components-part-1-starters/">here</a></p>
+<p>Before we get started, I&rsquo;ll clear out some possible misconceptions from the last post:</p>
+<ul>
+<li>OpenWC is not LitElement. LitElement is a Open source library written by the Polymer team and the open source contributors while
+OpenWC is a community aimed at providing recommendations for web component development.</li>
+<li>LitElement is a base class that makes use of the lit-html library.</li>
+<li>lit-html is a templating library used for creating fast html templates.</li>
+</ul>
+<p>Allright. Now let&rsquo;s continue where we left off.</p>
+<hr>
+<h3 id="comparing-component-development">Comparing Component development</h3>
+<p>In today&rsquo;s post we&rsquo;ll be comparing building Javascript components in 3 different evironments:</p>
+<ul>
+<li>React</li>
+<li>Lit-Element</li>
+<li>HTMLElement (vanilla)</li>
+</ul>
+<p>We will go through a simple implementation of a small form, in which the user can insert the desired width and height
+of a random cat picture they desire and then receive it by our code querying the <a href="https://placekitten.com/">PlaceKitten</a> API</p>
+<p>Our finished application will be look something along the lines of the picture below.</p>
+<p><img src="/cat-viewer-example.png" alt="Cat Image Viewer"></p>
+<p>It&rsquo;s beautiful, right? I didn&rsquo;t spend much time on css, since only the usage of css is relevant to this post,
+not the stylized output of it.</p>
+<p>Let&rsquo;s first dive into how we went through this task in React</p>
+<hr>
+<h3 id="the-react-implementation">The React Implementation</h3>
+<h4 id="creation">Creation</h4>
+<p>For the React implementation, I found a lot of differing material around online on what was the
+best way to create React components / libraries. I ended up settling on <a href="https://github.com/transitive-bullshit/create-react-library">create-react-library</a>
+due to it having a nice &gt;3k stars on Github and a straight forward starter kit.</p>
+<p>We first start by running the instructed command <code>npx create-react-library</code>, which is nicely familiar
+to the <code>create-react-app</code> a lot of people use, including us in the last post.</p>
+<p>Running this command creates us a project, or actually 2 seperate projects.</p>
+<p>We got ourselves a project for our component development, and also a project for demoing our
+component in a &ldquo;real&rdquo; environment.</p>
+<p>This works by the first project building the component, and serving it with the other needed libraries
+by symlinking them to the node_modules of the example-directory.</p>
+<p>This allows our demo project to import it like a normal package would</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#66d9ef">import</span> <span style="color:#a6e22e">CatImageViewer</span> <span style="color:#a6e22e">from</span> <span style="color:#e6db74">&#39;cat-image-react-viewer&#39;</span>;
+</code></pre></div><p>The node_modules of the demo project are symlinked from the top level project, which is the component project.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">&gt; ll example/node_modules/
+
+total <span style="color:#ae81ff">20</span>
+drwxrwxr-x <span style="color:#ae81ff">5</span> matsu matsu <span style="color:#ae81ff">4096</span> Aug <span style="color:#ae81ff">13</span> 13:56  ./
+drwxrwxr-x <span style="color:#ae81ff">5</span> matsu matsu <span style="color:#ae81ff">4096</span> Aug <span style="color:#ae81ff">13</span> 13:56  ../
+drwxrwxr-x <span style="color:#ae81ff">4</span> matsu matsu <span style="color:#ae81ff">4096</span> Aug <span style="color:#ae81ff">13</span> 13:56 <span style="color:#e6db74">&#39;@babel&#39;</span>/
+drwxrwxr-x <span style="color:#ae81ff">2</span> matsu matsu <span style="color:#ae81ff">4096</span> Aug <span style="color:#ae81ff">13</span> 13:56  .bin/
+drwxrwxr-x <span style="color:#ae81ff">4</span> matsu matsu <span style="color:#ae81ff">4096</span> Aug <span style="color:#ae81ff">13</span> 13:56  .cache/
+lrwxrwxrwx <span style="color:#ae81ff">1</span> matsu matsu    <span style="color:#ae81ff">5</span> Aug <span style="color:#ae81ff">13</span> 13:56  cat-image-react-viewer -&gt; ../../
+lrwxrwxrwx <span style="color:#ae81ff">1</span> matsu matsu   <span style="color:#ae81ff">24</span> Aug <span style="color:#ae81ff">13</span> 13:56  react -&gt; ../../node_modules/react/
+lrwxrwxrwx <span style="color:#ae81ff">1</span> matsu matsu   <span style="color:#ae81ff">28</span> Aug <span style="color:#ae81ff">13</span> 13:56  react-dom -&gt; ../../node_modules/react-dom/
+lrwxrwxrwx <span style="color:#ae81ff">1</span> matsu matsu   <span style="color:#ae81ff">32</span> Aug <span style="color:#ae81ff">13</span> 13:56  react-scripts -&gt; ../../node_modules/react-scripts/
+</code></pre></div><h4 id="development">Development</h4>
+<p>To run our dev environment, we need two terminals: One navigating to the component directory and serving the
+component. The other one navigating to the example directory and serving that project instead. I know a lot of developers
+who solely use the VSCode terminal, making this quite a hassle.</p>
+<p>This made me wonder if they could&rsquo;ve somehow combined these two tasks with something like <a href="https://www.npmjs.com/package/concurrently">Concurrently</a>.
+Nevertheless the dev experience from here onwards was pretty painless.</p>
+<p>We are provided with a nice example configuration for the component, and we are able to easily get to work. Our final
+component source looked like this.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#66d9ef">import</span> <span style="color:#a6e22e">React</span>, { <span style="color:#a6e22e">useState</span> } <span style="color:#a6e22e">from</span> <span style="color:#e6db74">&#39;react&#39;</span>;
+<span style="color:#66d9ef">import</span> <span style="color:#a6e22e">styles</span> <span style="color:#a6e22e">from</span> <span style="color:#e6db74">&#39;./index.module.css&#39;</span>;
+
+<span style="color:#66d9ef">const</span> <span style="color:#a6e22e">placeKittenUrl</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;http://placekitten.com/{width}/{height}&#39;</span>;
+
+<span style="color:#66d9ef">export</span> <span style="color:#66d9ef">default</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">CatImageViewer</span>() {
+    <span style="color:#66d9ef">const</span> [<span style="color:#a6e22e">imageWidth</span>, <span style="color:#a6e22e">setImageWidth</span>] <span style="color:#f92672">=</span> <span style="color:#a6e22e">useState</span>(<span style="color:#ae81ff">0</span>);
+    <span style="color:#66d9ef">const</span> [<span style="color:#a6e22e">imageHeight</span>, <span style="color:#a6e22e">setImageHeight</span>] <span style="color:#f92672">=</span> <span style="color:#a6e22e">useState</span>(<span style="color:#ae81ff">0</span>);
+    <span style="color:#66d9ef">const</span> [<span style="color:#a6e22e">currentImage</span>, <span style="color:#a6e22e">setCurrentImage</span>] <span style="color:#f92672">=</span> <span style="color:#a6e22e">useState</span>(<span style="color:#66d9ef">null</span>);
+
+    <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">getNewCatImage</span> <span style="color:#f92672">=</span> () =&gt; {
+        <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">searchUrl</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">placeKittenUrl</span>
+            .<span style="color:#a6e22e">replace</span>(<span style="color:#e6db74">&#39;{width}&#39;</span>, <span style="color:#a6e22e">imageWidth</span>)
+            .<span style="color:#a6e22e">replace</span>(<span style="color:#e6db74">&#39;{height}&#39;</span>, <span style="color:#a6e22e">imageHeight</span>);
+        <span style="color:#a6e22e">setCurrentImage</span>(<span style="color:#a6e22e">searchUrl</span>);
+    };
+
+    <span style="color:#66d9ef">return</span> (
+        <span style="color:#f92672">&lt;</span><span style="color:#a6e22e">div</span> <span style="color:#a6e22e">className</span><span style="color:#f92672">=</span>{<span style="color:#a6e22e">styles</span>.<span style="color:#a6e22e">formWrapper</span>}<span style="color:#f92672">&gt;</span>
+            <span style="color:#f92672">&lt;</span><span style="color:#a6e22e">div</span><span style="color:#f92672">&gt;</span>
+                <span style="color:#f92672">&lt;</span><span style="color:#a6e22e">p</span><span style="color:#f92672">&gt;</span><span style="color:#a6e22e">Enter</span> <span style="color:#a6e22e">the</span> <span style="color:#a6e22e">dimensions</span> <span style="color:#66d9ef">of</span> <span style="color:#a6e22e">the</span> <span style="color:#a6e22e">desired</span> <span style="color:#a6e22e">cat</span> <span style="color:#a6e22e">image</span><span style="color:#f92672">&lt;</span><span style="color:#960050;background-color:#1e0010">/p&gt;</span>
+                <span style="color:#f92672">&lt;</span><span style="color:#a6e22e">input</span>
+                    <span style="color:#a6e22e">type</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;number&#34;</span>
+                    <span style="color:#a6e22e">placeholder</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;Width&#34;</span>
+                    <span style="color:#a6e22e">id</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;image-width&#34;</span>
+                    <span style="color:#a6e22e">onInput</span><span style="color:#f92672">=</span>{(<span style="color:#a6e22e">e</span>) =&gt; <span style="color:#a6e22e">setImageWidth</span>(<span style="color:#a6e22e">e</span>.<span style="color:#a6e22e">target</span>.<span style="color:#a6e22e">value</span>)}
+                <span style="color:#f92672">/&gt;</span>
+                <span style="color:#f92672">&lt;</span><span style="color:#a6e22e">input</span>
+                    <span style="color:#a6e22e">type</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;number&#34;</span>
+                    <span style="color:#a6e22e">placeholder</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;Height&#34;</span>
+                    <span style="color:#a6e22e">id</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;image-height&#34;</span>
+                    <span style="color:#a6e22e">onInput</span><span style="color:#f92672">=</span>{(<span style="color:#a6e22e">e</span>) =&gt; <span style="color:#a6e22e">setImageHeight</span>(<span style="color:#a6e22e">e</span>.<span style="color:#a6e22e">target</span>.<span style="color:#a6e22e">value</span>)}
+                <span style="color:#f92672">/&gt;</span>
+                <span style="color:#f92672">&lt;</span><span style="color:#a6e22e">button</span> <span style="color:#a6e22e">type</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;button&#34;</span> <span style="color:#a6e22e">onClick</span><span style="color:#f92672">=</span>{<span style="color:#a6e22e">getNewCatImage</span>}<span style="color:#f92672">&gt;</span>
+                    <span style="color:#a6e22e">Search</span>
+                <span style="color:#f92672">&lt;</span><span style="color:#960050;background-color:#1e0010">/button&gt;</span>
+            <span style="color:#f92672">&lt;</span><span style="color:#960050;background-color:#1e0010">/div&gt;</span>
+            {<span style="color:#a6e22e">currentImage</span> <span style="color:#f92672">&amp;&amp;</span> <span style="color:#f92672">&lt;</span><span style="color:#a6e22e">img</span> <span style="color:#a6e22e">alt</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;&#34;</span> <span style="color:#a6e22e">src</span><span style="color:#f92672">=</span>{<span style="color:#a6e22e">currentImage</span>} <span style="color:#f92672">/&gt;</span>}
+        <span style="color:#f92672">&lt;</span><span style="color:#960050;background-color:#1e0010">/div&gt;</span>
+    );
+}
+</code></pre></div><p>with the css module looking like this:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-css" data-lang="css">.<span style="color:#a6e22e">formWrapper</span> <span style="color:#f92672">div</span> {
+    <span style="color:#66d9ef">display</span>: <span style="color:#66d9ef">flex</span>;
+    <span style="color:#66d9ef">flex-direction</span>: <span style="color:#66d9ef">column</span>;
+}
+
+.<span style="color:#a6e22e">formWrapper</span> <span style="color:#f92672">input</span><span style="color:#f92672">,</span>
+.<span style="color:#a6e22e">formWrapper</span> <span style="color:#f92672">button</span> {
+    <span style="color:#66d9ef">font-size</span>: <span style="color:#ae81ff">2</span><span style="color:#66d9ef">rem</span>;
+    <span style="color:#66d9ef">margin</span>: <span style="color:#ae81ff">0</span> <span style="color:#ae81ff">0</span> <span style="color:#ae81ff">1</span><span style="color:#66d9ef">rem</span>;
+    <span style="color:#66d9ef">width</span>: <span style="color:#ae81ff">10</span><span style="color:#66d9ef">rem</span>;
+}
+</code></pre></div><p>I created the component using React Hooks since they seem to be the hottest thing right now in the React world.
+This allowed us to fairly concisely create the component.</p>
+<p>I&rsquo;m by no means a React master, but this is perfect for emulating the developer experience
+of a new dev wanting to create their first component.</p>
+<p>The starter had a <code>index.module.css</code> set up from the start, and from what I&rsquo;ve looked at
+React projects, seperate css files for components are fairly usual (compared to the Web Component way of
+having the css in js).</p>
+<p>As you might remember from the last post, the <code>create-react-app</code> had a huge footprint in the
+package size on a vanilla installation. I was surprised and happy as I noticed that after building
+we weren&rsquo;t greeted by a 500KB package.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">&gt; npm run build
+
+&gt; du -sh dist/
+24K     dist/
+</code></pre></div><p>I&rsquo;m guessing this is partly due to the fact that our component project doesn&rsquo;t build any of it&rsquo;s dependencies
+with it. In the package.json we have no libraries listed as dependencies. However we have React
+listed as a peerDependency meaning that our package is forever doomed to be run only by
+other React projects.</p>
+<p>A quick look inside the dist folder also explains why the size of the package is 24K: the project
+builds itself as a commonjs and as and es package.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">&gt; ll dist/
+
+total <span style="color:#ae81ff">28</span>
+drwxrwxr-x <span style="color:#ae81ff">2</span> matsu matsu <span style="color:#ae81ff">4096</span> Aug <span style="color:#ae81ff">13</span> 13:55 ./
+drwxrwxr-x <span style="color:#ae81ff">7</span> matsu matsu <span style="color:#ae81ff">4096</span> Aug <span style="color:#ae81ff">13</span> 13:56 ../
+-rw-rw-r-- <span style="color:#ae81ff">1</span> matsu matsu  <span style="color:#ae81ff">149</span> Aug <span style="color:#ae81ff">19</span> 17:12 index.css
+-rw-rw-r-- <span style="color:#ae81ff">1</span> matsu matsu <span style="color:#ae81ff">1833</span> Aug <span style="color:#ae81ff">19</span> 17:12 index.js
+-rw-rw-r-- <span style="color:#ae81ff">1</span> matsu matsu <span style="color:#ae81ff">2595</span> Aug <span style="color:#ae81ff">19</span> 17:12 index.js.map
+-rw-rw-r-- <span style="color:#ae81ff">1</span> matsu matsu <span style="color:#ae81ff">1607</span> Aug <span style="color:#ae81ff">19</span> 17:12 index.modern.js
+-rw-rw-r-- <span style="color:#ae81ff">1</span> matsu matsu <span style="color:#ae81ff">2584</span> Aug <span style="color:#ae81ff">19</span> 17:12 index.modern.js.map
+</code></pre></div><p>This is fairly convenient, but also doubles the package size, in a case that both of these versions
+get published.</p>
+<p>If we take a look at our example folder, we can see how the project would be imported in a React environment:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#66d9ef">import</span> <span style="color:#a6e22e">React</span> <span style="color:#a6e22e">from</span> <span style="color:#e6db74">&#39;react&#39;</span>;
+
+<span style="color:#66d9ef">import</span> <span style="color:#a6e22e">CatImageViewer</span> <span style="color:#a6e22e">from</span> <span style="color:#e6db74">&#39;cat-image-react-viewer&#39;</span>;
+<span style="color:#66d9ef">import</span> <span style="color:#e6db74">&#39;cat-image-react-viewer/dist/index.css&#39;</span>;
+
+<span style="color:#66d9ef">const</span> <span style="color:#a6e22e">App</span> <span style="color:#f92672">=</span> () =&gt; {
+    <span style="color:#66d9ef">return</span> <span style="color:#f92672">&lt;</span><span style="color:#a6e22e">CatImageViewer</span> <span style="color:#f92672">/&gt;</span>;
+};
+
+<span style="color:#66d9ef">export</span> <span style="color:#66d9ef">default</span> <span style="color:#a6e22e">App</span>;
+</code></pre></div><p>We notice that to make use of the styles of our component, we are forced to import the css package
+as it&rsquo;s own import. This means that to build this project, we are required to have a css bundler
+in our project.</p>
+<p>However React usually is built with something like Webpack or Rollup, so this shouldn&rsquo;t
+cause too much overhead. In a buildless environment however this would cause a headache or two.</p>
+<p>Overall after finding and setting up the environment, the development was fairly straight forward. The starter
+provided us with commands for publishing the package. The one downside here is like I said, that the package can now
+only be used if React is used in the project.</p>
+<h4 id="output">Output</h4>
+<p>Last thing we will take a look at is the output of the build process.</p>
+<p>As said earlier, we have 5 files, from which</p>
+<ul>
+<li>1 is a css file</li>
+<li>2 are js files</li>
+<li>2 are js map files</li>
+</ul>
+<p>Let&rsquo;s get the easiest out of the way and look inside the css file:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-css" data-lang="css">.<span style="color:#a6e22e">_index-module__formWrapper__r8sB5</span> <span style="color:#f92672">div</span> {
+    <span style="color:#66d9ef">display</span>: <span style="color:#66d9ef">flex</span>;
+    <span style="color:#66d9ef">flex-direction</span>: <span style="color:#66d9ef">column</span>;
+}
+
+.<span style="color:#a6e22e">_index-module__formWrapper__r8sB5</span> <span style="color:#f92672">input</span><span style="color:#f92672">,</span>
+.<span style="color:#a6e22e">_index-module__formWrapper__r8sB5</span> <span style="color:#f92672">button</span> {
+    <span style="color:#66d9ef">font-size</span>: <span style="color:#ae81ff">2</span><span style="color:#66d9ef">rem</span>;
+    <span style="color:#66d9ef">margin</span>: <span style="color:#ae81ff">0</span> <span style="color:#ae81ff">0</span> <span style="color:#ae81ff">1</span><span style="color:#66d9ef">rem</span>;
+    <span style="color:#66d9ef">width</span>: <span style="color:#ae81ff">10</span><span style="color:#66d9ef">rem</span>;
+}
+</code></pre></div><p>We can see that the styles have stayed untouched, except for the classname. As we never named a css selector outside of the
+call <code>styles.formWrapper</code>, we can see that the build process generated a unique identifier for the class.</p>
+<p>I see two cases here which I would like to highlight:</p>
+<ul>
+<li>Creating convoluted class names makes it harder for test automation to create readable tests that don&rsquo;t break after a new build</li>
+<li><code>index-module__formWrapper__r8sB5</code> isn&rsquo;t really as descriptive to read if looking at the source from the browser as <code>form-wrapper</code> would be.</li>
+</ul>
+<p>Next we&rsquo;ll check out the <code>index.js</code> file:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#66d9ef">function</span> <span style="color:#a6e22e">_interopDefault</span>(<span style="color:#a6e22e">ex</span>) {
+    <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">ex</span> <span style="color:#f92672">&amp;&amp;</span> <span style="color:#66d9ef">typeof</span> <span style="color:#a6e22e">ex</span> <span style="color:#f92672">===</span> <span style="color:#e6db74">&#39;object&#39;</span> <span style="color:#f92672">&amp;&amp;</span> <span style="color:#e6db74">&#39;default&#39;</span> <span style="color:#66d9ef">in</span> <span style="color:#a6e22e">ex</span> <span style="color:#f92672">?</span> <span style="color:#a6e22e">ex</span>[<span style="color:#e6db74">&#39;default&#39;</span>] <span style="color:#f92672">:</span> <span style="color:#a6e22e">ex</span>;
+}
+
+<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">React</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">require</span>(<span style="color:#e6db74">&#39;react&#39;</span>);
+<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">React__default</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">_interopDefault</span>(<span style="color:#a6e22e">React</span>);
+
+<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">styles</span> <span style="color:#f92672">=</span> { <span style="color:#a6e22e">formWrapper</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;_index-module__formWrapper__r8sB5&#39;</span> };
+
+<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">placeKittenUrl</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;http://placekitten.com/{width}/{height}&#39;</span>;
+<span style="color:#66d9ef">function</span> <span style="color:#a6e22e">CatImageViewer</span>() {
+    <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">_useState</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">React</span>.<span style="color:#a6e22e">useState</span>(<span style="color:#ae81ff">0</span>),
+        <span style="color:#a6e22e">imageWidth</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">_useState</span>[<span style="color:#ae81ff">0</span>],
+        <span style="color:#a6e22e">setImageWidth</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">_useState</span>[<span style="color:#ae81ff">1</span>];
+
+    <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">_useState2</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">React</span>.<span style="color:#a6e22e">useState</span>(<span style="color:#ae81ff">0</span>),
+        <span style="color:#a6e22e">imageHeight</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">_useState2</span>[<span style="color:#ae81ff">0</span>],
+        <span style="color:#a6e22e">setImageHeight</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">_useState2</span>[<span style="color:#ae81ff">1</span>];
+
+    <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">_useState3</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">React</span>.<span style="color:#a6e22e">useState</span>(<span style="color:#66d9ef">null</span>),
+        <span style="color:#a6e22e">currentImage</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">_useState3</span>[<span style="color:#ae81ff">0</span>],
+        <span style="color:#a6e22e">setCurrentImage</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">_useState3</span>[<span style="color:#ae81ff">1</span>];
+
+    <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">getNewCatImage</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">getNewCatImage</span>() {
+        <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">searchUrl</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">placeKittenUrl</span>
+            .<span style="color:#a6e22e">replace</span>(<span style="color:#e6db74">&#39;{width}&#39;</span>, <span style="color:#a6e22e">imageWidth</span>)
+            .<span style="color:#a6e22e">replace</span>(<span style="color:#e6db74">&#39;{height}&#39;</span>, <span style="color:#a6e22e">imageHeight</span>);
+        <span style="color:#a6e22e">setCurrentImage</span>(<span style="color:#a6e22e">searchUrl</span>);
+    };
+
+    <span style="color:#66d9ef">return</span> <span style="color:#75715e">/*#__PURE__*/</span> <span style="color:#a6e22e">React__default</span>.<span style="color:#a6e22e">createElement</span>(
+        <span style="color:#e6db74">&#39;div&#39;</span>,
+        {
+            <span style="color:#a6e22e">className</span><span style="color:#f92672">:</span> <span style="color:#a6e22e">styles</span>.<span style="color:#a6e22e">formWrapper</span>,
+        },
+        <span style="color:#75715e">/*#__PURE__*/</span> <span style="color:#a6e22e">React__default</span>.<span style="color:#a6e22e">createElement</span>(
+            <span style="color:#e6db74">&#39;div&#39;</span>,
+            <span style="color:#66d9ef">null</span>,
+            <span style="color:#75715e">/*#__PURE__*/</span> <span style="color:#a6e22e">React__default</span>.<span style="color:#a6e22e">createElement</span>(
+                <span style="color:#e6db74">&#39;p&#39;</span>,
+                <span style="color:#66d9ef">null</span>,
+                <span style="color:#e6db74">&#39;Enter the dimensions of the desired cat image&#39;</span>
+            ),
+            <span style="color:#75715e">/*#__PURE__*/</span> <span style="color:#a6e22e">React__default</span>.<span style="color:#a6e22e">createElement</span>(<span style="color:#e6db74">&#39;input&#39;</span>, {
+                <span style="color:#a6e22e">type</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;number&#39;</span>,
+                <span style="color:#a6e22e">placeholder</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;Width&#39;</span>,
+                <span style="color:#a6e22e">id</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;image-width&#39;</span>,
+                <span style="color:#a6e22e">onInput</span><span style="color:#f92672">:</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">onInput</span>(<span style="color:#a6e22e">e</span>) {
+                    <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">setImageWidth</span>(<span style="color:#a6e22e">e</span>.<span style="color:#a6e22e">target</span>.<span style="color:#a6e22e">value</span>);
+                },
+            }),
+            <span style="color:#75715e">/*#__PURE__*/</span> <span style="color:#a6e22e">React__default</span>.<span style="color:#a6e22e">createElement</span>(<span style="color:#e6db74">&#39;input&#39;</span>, {
+                <span style="color:#a6e22e">type</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;number&#39;</span>,
+                <span style="color:#a6e22e">placeholder</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;Height&#39;</span>,
+                <span style="color:#a6e22e">id</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;image-height&#39;</span>,
+                <span style="color:#a6e22e">onInput</span><span style="color:#f92672">:</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">onInput</span>(<span style="color:#a6e22e">e</span>) {
+                    <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">setImageHeight</span>(<span style="color:#a6e22e">e</span>.<span style="color:#a6e22e">target</span>.<span style="color:#a6e22e">value</span>);
+                },
+            }),
+            <span style="color:#75715e">/*#__PURE__*/</span> <span style="color:#a6e22e">React__default</span>.<span style="color:#a6e22e">createElement</span>(
+                <span style="color:#e6db74">&#39;button&#39;</span>,
+                {
+                    <span style="color:#a6e22e">type</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;button&#39;</span>,
+                    <span style="color:#a6e22e">onClick</span><span style="color:#f92672">:</span> <span style="color:#a6e22e">getNewCatImage</span>,
+                },
+                <span style="color:#e6db74">&#39;Search&#39;</span>
+            )
+        ),
+        <span style="color:#a6e22e">currentImage</span> <span style="color:#f92672">&amp;&amp;</span>
+            <span style="color:#75715e">/*#__PURE__*/</span> <span style="color:#a6e22e">React__default</span>.<span style="color:#a6e22e">createElement</span>(<span style="color:#e6db74">&#39;img&#39;</span>, {
+                <span style="color:#a6e22e">alt</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;&#39;</span>,
+                <span style="color:#a6e22e">src</span><span style="color:#f92672">:</span> <span style="color:#a6e22e">currentImage</span>,
+            })
+    );
+}
+
+<span style="color:#a6e22e">module</span>.<span style="color:#a6e22e">exports</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">CatImageViewer</span>;
+<span style="color:#75715e">//# sourceMappingURL=index.js.map
+</span></code></pre></div><p>Allright so after we get over the fact that this code is quite unreadable, especially the render part, we can
+take a look at a few parts.</p>
+<ul>
+<li>Why are all of our const&rsquo;s turned into <code>var</code>s? Out of all the possibilities, a var.
+<ul>
+<li>const is supported by all browsers back to IE11 (which by the way is not even supported soon anymore)</li>
+</ul>
+</li>
+<li>If a developer was to inspect this element straight from the source, without knowing how React works, it would be quite hard to know
+what&rsquo;s going on with the hooks.
+<ul>
+<li>In the browser this is resolved by providing a source map of the file, provided your browser supports it and has it enabled.</li>
+<li>Source maps aren&rsquo;t foolproof and might introduce some problems while debugging</li>
+</ul>
+</li>
+</ul>
+<p>Next let&rsquo;s look inside the other generated javascript file: <code>index.modern.js</code></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#66d9ef">import</span> <span style="color:#a6e22e">React</span>, { <span style="color:#a6e22e">useState</span> } <span style="color:#a6e22e">from</span> <span style="color:#e6db74">&#39;react&#39;</span>;
+
+<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">styles</span> <span style="color:#f92672">=</span> { <span style="color:#a6e22e">formWrapper</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;_index-module__formWrapper__r8sB5&#39;</span> };
+
+<span style="color:#66d9ef">const</span> <span style="color:#a6e22e">placeKittenUrl</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;http://placekitten.com/{width}/{height}&#39;</span>;
+<span style="color:#66d9ef">function</span> <span style="color:#a6e22e">CatImageViewer</span>() {
+    <span style="color:#66d9ef">const</span> [<span style="color:#a6e22e">imageWidth</span>, <span style="color:#a6e22e">setImageWidth</span>] <span style="color:#f92672">=</span> <span style="color:#a6e22e">useState</span>(<span style="color:#ae81ff">0</span>);
+    <span style="color:#66d9ef">const</span> [<span style="color:#a6e22e">imageHeight</span>, <span style="color:#a6e22e">setImageHeight</span>] <span style="color:#f92672">=</span> <span style="color:#a6e22e">useState</span>(<span style="color:#ae81ff">0</span>);
+    <span style="color:#66d9ef">const</span> [<span style="color:#a6e22e">currentImage</span>, <span style="color:#a6e22e">setCurrentImage</span>] <span style="color:#f92672">=</span> <span style="color:#a6e22e">useState</span>(<span style="color:#66d9ef">null</span>);
+
+    <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">getNewCatImage</span> <span style="color:#f92672">=</span> () =&gt; {
+        <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">searchUrl</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">placeKittenUrl</span>
+            .<span style="color:#a6e22e">replace</span>(<span style="color:#e6db74">&#39;{width}&#39;</span>, <span style="color:#a6e22e">imageWidth</span>)
+            .<span style="color:#a6e22e">replace</span>(<span style="color:#e6db74">&#39;{height}&#39;</span>, <span style="color:#a6e22e">imageHeight</span>);
+        <span style="color:#a6e22e">setCurrentImage</span>(<span style="color:#a6e22e">searchUrl</span>);
+    };
+
+    <span style="color:#66d9ef">return</span> <span style="color:#75715e">/*#__PURE__*/</span> <span style="color:#a6e22e">React</span>.<span style="color:#a6e22e">createElement</span>(
+        <span style="color:#e6db74">&#39;div&#39;</span>,
+        {
+            <span style="color:#a6e22e">className</span><span style="color:#f92672">:</span> <span style="color:#a6e22e">styles</span>.<span style="color:#a6e22e">formWrapper</span>,
+        },
+        <span style="color:#75715e">/*#__PURE__*/</span> <span style="color:#a6e22e">React</span>.<span style="color:#a6e22e">createElement</span>(
+            <span style="color:#e6db74">&#39;div&#39;</span>,
+            <span style="color:#66d9ef">null</span>,
+            <span style="color:#75715e">/*#__PURE__*/</span> <span style="color:#a6e22e">React</span>.<span style="color:#a6e22e">createElement</span>(
+                <span style="color:#e6db74">&#39;p&#39;</span>,
+                <span style="color:#66d9ef">null</span>,
+                <span style="color:#e6db74">&#39;Enter the dimensions of the desired cat image&#39;</span>
+            ),
+            <span style="color:#75715e">/*#__PURE__*/</span> <span style="color:#a6e22e">React</span>.<span style="color:#a6e22e">createElement</span>(<span style="color:#e6db74">&#39;input&#39;</span>, {
+                <span style="color:#a6e22e">type</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;number&#39;</span>,
+                <span style="color:#a6e22e">placeholder</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;Width&#39;</span>,
+                <span style="color:#a6e22e">id</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;image-width&#39;</span>,
+                <span style="color:#a6e22e">onInput</span><span style="color:#f92672">:</span> (<span style="color:#a6e22e">e</span>) =&gt; <span style="color:#a6e22e">setImageWidth</span>(<span style="color:#a6e22e">e</span>.<span style="color:#a6e22e">target</span>.<span style="color:#a6e22e">value</span>),
+            }),
+            <span style="color:#75715e">/*#__PURE__*/</span> <span style="color:#a6e22e">React</span>.<span style="color:#a6e22e">createElement</span>(<span style="color:#e6db74">&#39;input&#39;</span>, {
+                <span style="color:#a6e22e">type</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;number&#39;</span>,
+                <span style="color:#a6e22e">placeholder</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;Height&#39;</span>,
+                <span style="color:#a6e22e">id</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;image-height&#39;</span>,
+                <span style="color:#a6e22e">onInput</span><span style="color:#f92672">:</span> (<span style="color:#a6e22e">e</span>) =&gt; <span style="color:#a6e22e">setImageHeight</span>(<span style="color:#a6e22e">e</span>.<span style="color:#a6e22e">target</span>.<span style="color:#a6e22e">value</span>),
+            }),
+            <span style="color:#75715e">/*#__PURE__*/</span> <span style="color:#a6e22e">React</span>.<span style="color:#a6e22e">createElement</span>(
+                <span style="color:#e6db74">&#39;button&#39;</span>,
+                {
+                    <span style="color:#a6e22e">type</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;button&#39;</span>,
+                    <span style="color:#a6e22e">onClick</span><span style="color:#f92672">:</span> <span style="color:#a6e22e">getNewCatImage</span>,
+                },
+                <span style="color:#e6db74">&#39;Search&#39;</span>
+            )
+        ),
+        <span style="color:#a6e22e">currentImage</span> <span style="color:#f92672">&amp;&amp;</span>
+            <span style="color:#75715e">/*#__PURE__*/</span> <span style="color:#a6e22e">React</span>.<span style="color:#a6e22e">createElement</span>(<span style="color:#e6db74">&#39;img&#39;</span>, {
+                <span style="color:#a6e22e">alt</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;&#39;</span>,
+                <span style="color:#a6e22e">src</span><span style="color:#f92672">:</span> <span style="color:#a6e22e">currentImage</span>,
+            })
+    );
+}
+
+<span style="color:#66d9ef">export</span> <span style="color:#66d9ef">default</span> <span style="color:#a6e22e">CatImageViewer</span>;
+<span style="color:#75715e">//# sourceMappingURL=index.modern.js.map
+</span></code></pre></div><p>Now this one is looking more like what we wrote, and that&rsquo;s mostly because this is the es module version of the
+built code. We see that our <code>const</code>s have been untampered with this time.</p>
+<p>Our project was fairly simple, so the source code can&rsquo;t be analyzed deeper, but I&rsquo;d imagine that in more complex systems,
+you could find more to talk about these built files.</p>
+<p>Next we&rsquo;ll look at a little more vanilla approach with Lit Element</p>
+<hr>
+<h3 id="the-lit-element-implementation">The Lit Element implementation</h3>
+<h4 id="creation-1">Creation</h4>
+<p>Moving on to <a href="https://lit-element.polymer-project.org/">Lit Element</a>, we can make use of the same <a href="https://open-wc.org/">Open WC</a> init
+command we used when creating a sample project. The initializer will prompt us to create either an application or a component.
+In our case we want to obviously choose the Web Component -selection.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">npm init @open-wc
+</code></pre></div><p>After running the initializer, and selecting our configuration, we have a nice sample project like we had in the React component
+example. The difference here is that we can get to developing with just running a single <code>npm start</code> instead of running our seperate demo
+instance. The twist is that we have to relatively call our component instead it being in our node_modules.</p>
+<h4 id="development-1">Development</h4>
+<p>Running <code>npm start</code> starts the <a href="https://www.npmjs.com/package/es-dev-server">es-dev-server</a> and serves a demo <code>index.html</code> file
+appending our newly initialized Web Component. In the case we would create a Typescript component, the command would run es-dev-server
+and tsc in parallel using concurrently. This is really nice allowing users to run the whole environment with just a single command.</p>
+<p>After running the project and cleaning up the example files, we ended up writing our LitElement implementation as follows:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#66d9ef">import</span> { <span style="color:#a6e22e">html</span>, <span style="color:#a6e22e">css</span>, <span style="color:#a6e22e">LitElement</span> } <span style="color:#a6e22e">from</span> <span style="color:#e6db74">&#39;lit-element&#39;</span>;
+
+<span style="color:#66d9ef">const</span> <span style="color:#a6e22e">placeKittenUrl</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;http://placekitten.com/{width}/{height}&#39;</span>;
+
+<span style="color:#66d9ef">export</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">CatImageLitViewer</span> <span style="color:#66d9ef">extends</span> <span style="color:#a6e22e">LitElement</span> {
+    <span style="color:#66d9ef">static</span> <span style="color:#a6e22e">get</span> <span style="color:#a6e22e">properties</span>() {
+        <span style="color:#66d9ef">return</span> {
+            <span style="color:#a6e22e">imageWidth</span><span style="color:#f92672">:</span> { <span style="color:#a6e22e">type</span><span style="color:#f92672">:</span> Number },
+            <span style="color:#a6e22e">imageHeight</span><span style="color:#f92672">:</span> { <span style="color:#a6e22e">type</span><span style="color:#f92672">:</span> Number },
+            <span style="color:#a6e22e">currentImage</span><span style="color:#f92672">:</span> { <span style="color:#a6e22e">type</span><span style="color:#f92672">:</span> String },
+        };
+    }
+
+    <span style="color:#66d9ef">static</span> <span style="color:#a6e22e">styles</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">css</span><span style="color:#e6db74">`
+</span><span style="color:#e6db74">        .form-wrapper {
+</span><span style="color:#e6db74">            display: flex;
+</span><span style="color:#e6db74">            flex-direction: column;
+</span><span style="color:#e6db74">        }
+</span><span style="color:#e6db74">        button,
+</span><span style="color:#e6db74">        input {
+</span><span style="color:#e6db74">            font-size: 2rem;
+</span><span style="color:#e6db74">            margin: 0 0 1rem;
+</span><span style="color:#e6db74">            width: 10rem;
+</span><span style="color:#e6db74">        }
+</span><span style="color:#e6db74">    `</span>;
+
+    <span style="color:#a6e22e">constructor</span>() {
+        <span style="color:#66d9ef">super</span>();
+        <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">imageWidth</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+        <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">imageHeight</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+        <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">currentImage</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">null</span>;
+    }
+
+    <span style="color:#a6e22e">getNewCatImage</span>() {
+        <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">searchUrl</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">placeKittenUrl</span>
+            .<span style="color:#a6e22e">replace</span>(<span style="color:#e6db74">&#39;{width}&#39;</span>, <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">imageWidth</span>)
+            .<span style="color:#a6e22e">replace</span>(<span style="color:#e6db74">&#39;{height}&#39;</span>, <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">imageHeight</span>);
+        <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">currentImage</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">searchUrl</span>;
+    }
+
+    <span style="color:#a6e22e">render</span>() {
+        <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">html</span><span style="color:#e6db74">`
+</span><span style="color:#e6db74">            &lt;div class=&#34;form-wrapper&#34;&gt;
+</span><span style="color:#e6db74">                &lt;p&gt;Enter the dimensions of the desired cat image&lt;/p&gt;
+</span><span style="color:#e6db74">                &lt;input
+</span><span style="color:#e6db74">                    type=&#34;number&#34;
+</span><span style="color:#e6db74">                    placeholder=&#34;Width&#34;
+</span><span style="color:#e6db74">                    id=&#34;image-width&#34;
+</span><span style="color:#e6db74">                    @input=</span><span style="color:#e6db74">${</span>(<span style="color:#a6e22e">e</span>) =&gt; {
+                        <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">imageWidth</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">e</span>.<span style="color:#a6e22e">target</span>.<span style="color:#a6e22e">value</span>;
+                    <span style="color:#e6db74">}</span><span style="color:#e6db74">}
+</span><span style="color:#e6db74">                /&gt;
+</span><span style="color:#e6db74">                &lt;input
+</span><span style="color:#e6db74">                    type=&#34;number&#34;
+</span><span style="color:#e6db74">                    placeholder=&#34;Height&#34;
+</span><span style="color:#e6db74">                    id=&#34;image-height&#34;
+</span><span style="color:#e6db74">                    @input=</span><span style="color:#e6db74">${</span>(<span style="color:#a6e22e">e</span>) =&gt; {
+                        <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">imageHeight</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">e</span>.<span style="color:#a6e22e">target</span>.<span style="color:#a6e22e">value</span>;
+                    <span style="color:#e6db74">}</span><span style="color:#e6db74">}
+</span><span style="color:#e6db74">                /&gt;
+</span><span style="color:#e6db74">                &lt;button type=&#34;button&#34; @click=</span><span style="color:#e6db74">${</span><span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">getNewCatImage</span><span style="color:#e6db74">}</span><span style="color:#e6db74">&gt;
+</span><span style="color:#e6db74">                    Search
+</span><span style="color:#e6db74">                &lt;/button&gt;
+</span><span style="color:#e6db74">            &lt;/div&gt;
+</span><span style="color:#e6db74">            </span><span style="color:#e6db74">${</span><span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">currentImage</span> <span style="color:#f92672">&amp;&amp;</span> <span style="color:#a6e22e">html</span><span style="color:#e6db74">`&lt;img alt=&#34;&#34; src=&#34;</span><span style="color:#e6db74">${</span><span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">currentImage</span><span style="color:#e6db74">}</span><span style="color:#e6db74">&#34; /&gt;`</span><span style="color:#e6db74">}</span><span style="color:#e6db74">
+</span><span style="color:#e6db74">        `</span>;
+    }
+}
+
+<span style="color:#a6e22e">customElements</span>.<span style="color:#a6e22e">define</span>(<span style="color:#e6db74">&#39;cat-image-lit-viewer&#39;</span>, <span style="color:#a6e22e">CatImageLitViewer</span>);
+</code></pre></div><p>Compared to our React example, the LitElement version is quite similiar. The differences are mainly in state management.</p>
+<p>In React we had hooks handling our states. With LitElement we save our state objects as properties on our class, and then
+initialize them inside the constructor. It&rsquo;s a few lines more of code, but it also gives us a nicely typed API for our component,
+even in Javascript.</p>
+<p>The next difference is that we have our styles <em>inside</em> of the js file, unlike in React where we used a css module file.
+Our style selectors are also a bit more relaxed, since we are developing our component into shadow DOM, allowing for an encapsulated
+handling of styles.</p>
+<p>Also differentiating us from the react project is the resulting DOM tree. In the React project we were forced to have a <code>div</code> -element
+wrapping everything in our component. In the Web Component version, we will have a named Web Component wrapping our element, making
+the need for a wrapping div obselete.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html"><span style="color:#75715e">&lt;!-- React --&gt;</span>
+&lt;<span style="color:#f92672">div</span> <span style="color:#a6e22e">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;_index-module__formWrapper__r8sB5&#34;</span>&gt;
+    &lt;<span style="color:#f92672">div</span>&gt;
+        &lt;<span style="color:#f92672">p</span>&gt;Enter the dimensions of the desired cat image&lt;/<span style="color:#f92672">p</span>&gt;
+        &lt;<span style="color:#f92672">input</span> <span style="color:#a6e22e">type</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;number&#34;</span> <span style="color:#a6e22e">placeholder</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;Width&#34;</span> <span style="color:#a6e22e">id</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;image-width&#34;</span> /&gt;
+        &lt;<span style="color:#f92672">input</span> <span style="color:#a6e22e">type</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;number&#34;</span> <span style="color:#a6e22e">placeholder</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;Height&#34;</span> <span style="color:#a6e22e">id</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;image-height&#34;</span> /&gt;
+        &lt;<span style="color:#f92672">button</span> <span style="color:#a6e22e">type</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;button&#34;</span>&gt;
+            Search
+        &lt;/<span style="color:#f92672">button</span>&gt;
+    &lt;/<span style="color:#f92672">div</span>&gt;
+&lt;/<span style="color:#f92672">div</span>&gt;
+
+<span style="color:#75715e">&lt;!-- LitElement --&gt;</span>
+&lt;<span style="color:#f92672">cat-image-lit-viewer</span>&gt;
+    &lt;<span style="color:#f92672">div</span> <span style="color:#a6e22e">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;form-wrapper&#34;</span>&gt;
+        &lt;<span style="color:#f92672">p</span>&gt;Enter the dimensions of the desired cat image&lt;/<span style="color:#f92672">p</span>&gt;
+        &lt;<span style="color:#f92672">input</span> <span style="color:#a6e22e">type</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;number&#34;</span> <span style="color:#a6e22e">placeholder</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;Width&#34;</span> <span style="color:#a6e22e">id</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;image-width&#34;</span> /&gt;
+        &lt;<span style="color:#f92672">input</span> <span style="color:#a6e22e">type</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;number&#34;</span> <span style="color:#a6e22e">placeholder</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;Height&#34;</span> <span style="color:#a6e22e">id</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;image-height&#34;</span> /&gt;
+        &lt;<span style="color:#f92672">button</span> <span style="color:#a6e22e">type</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;button&#34;</span>&gt;
+            Search
+        &lt;/<span style="color:#f92672">button</span>&gt;
+    &lt;/<span style="color:#f92672">div</span>&gt;
+&lt;/<span style="color:#f92672">cat-image-lit-viewer</span>&gt;
+</code></pre></div><p>That&rsquo;s mostly the difference in the code side. Both of our implementations have a nicely structured render with some conditional
+rendering thrown in there, and our components handle events with event listener properties (<code>onInput</code> and <code>onClick</code> with React, <code>@input</code>, <code>@click</code> on LitElement).</p>
+<p>Now that we have our component, we should be ready to build.</p>
+<h4 id="output-1">Output</h4>
+<p>&hellip; Except that we won&rsquo;t do that.</p>
+<hr>
+<p>Reading the open-wc recommendations on building, in the section about creating components, it says:</p>
+<blockquote>
+<p>If you are building a reusable component or library we recommend publishing code that runs without modifications on the latest browsers. You should not bundle in any dependencies or polyfills, or build to a very old version of JavaScript such as ES5. This way, consuming projects can decide which polyfills to load and which JavaScript version to target based on browser support.</p>
+</blockquote>
+<blockquote>
+<p>In practical terms, this means publishing standard ES modules and standard JavaScript features implemented in modern browsers, like Chrome, Safari, Firefox, and Edge. We recommend buildless development, so unless you are using very cutting edge features, you can actually just publish your source code as is.</p>
+</blockquote>
+<p>Meaning in short that we can ship our Web Component <em>as is</em>. Isn&rsquo;t that cool?</p>
+<p>Also since we&rsquo;re not building our package, we don&rsquo;t need to ship any source maps.</p>
+<p>If we were to ship our Web Component, we would only need to ship the one js file, and tag LitElement as the dependency.
+LitElement being a fairly small library (318kB unpacked), our total project size would be in total around 320kB.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">&gt; du -sh src/CatImageLitViewer.js
+
+4.0K    CatImageLitViewer.js
+</code></pre></div><p>This is, if we were not already using LitElement in our project. If we are already writing a LitElement project, our new package would
+only bring the 4KB with it to the project. And this is unminified.</p>
+<p><em>For comparison</em>: If we wanted to add a single React Component to a non-react project, the minimal setup would require both React
+and React-DOM, which together weight in at 204kB + 3MB unpackaged.</p>
+<p>Also a plus in the LitElement approach is that we won&rsquo;t have to build the project in the implementing side either, since
+the css in baked into the js file, therefore eliminating the need for a css loader (unlike in the React version).</p>
+<p>Overall when creating Web Components with LitElement, we ended up with 6x smaller package size (4kb vs 24kb total), and
+about 9x smaller total size with dependencies.</p>
+<p>Next we&rsquo;ll take a look at fully buildless and dependencyless implementation using the browser&rsquo;s own HTMLElement.</p>
+<hr>
+<h3 id="htmlelement-implementation">HTMLElement implementation</h3>
+<h4 id="creation-2">Creation</h4>
+<p>As we&rsquo;re building a project as vanilla as possible, we don&rsquo;t really need a initializer for this implementation.</p>
+<p>We can just start by creating a folder, running npm init and creating the necessary files</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">mkdir cat-image-vanilla-viewer
+cd cat-image-vanilla-viewer
+npm init
+touch index.html index.js
+</code></pre></div><p>Now we can populate our index.html with the minimal setup needed for development:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html">&lt;<span style="color:#f92672">html</span>&gt;
+    &lt;<span style="color:#f92672">head</span>&gt; &lt;/<span style="color:#f92672">head</span>&gt;
+    &lt;<span style="color:#f92672">body</span>&gt;
+        &lt;<span style="color:#f92672">cat-image-vanilla-viewer</span>&gt;&lt;/<span style="color:#f92672">cat-image-vanilla-viewer</span>&gt;
+        &lt;<span style="color:#f92672">script</span> <span style="color:#a6e22e">src</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;./index.js&#34;</span> <span style="color:#a6e22e">type</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;module&#34;</span>&gt;&lt;/<span style="color:#f92672">script</span>&gt;
+    &lt;/<span style="color:#f92672">body</span>&gt;
+&lt;/<span style="color:#f92672">html</span>&gt;
+</code></pre></div><p>Real simple and smooth. Just like Vanilla ice cream.</p>
+<p>We could serve our project with any http server implementation, from <a href="https://www.npmjs.com/package/http-server">http-server</a> to
+<a href="https://www.npmjs.com/package/es-dev-server">es-dev-server</a>, since it&rsquo;s just a simple html + js file setup. For this post
+I just added <code>es-dev-server</code> as a dev dependency, as it won&rsquo;t affect the package size that way.</p>
+<p>Our package.json is now also in it&rsquo;s minimal setup:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-json" data-lang="json">{
+    <span style="color:#f92672">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;cat-image-vanilla-viewer&#34;</span>,
+    <span style="color:#f92672">&#34;version&#34;</span>: <span style="color:#e6db74">&#34;1.0.0&#34;</span>,
+    <span style="color:#f92672">&#34;description&#34;</span>: <span style="color:#e6db74">&#34;&#34;</span>,
+    <span style="color:#f92672">&#34;main&#34;</span>: <span style="color:#e6db74">&#34;index.js&#34;</span>,
+    <span style="color:#f92672">&#34;scripts&#34;</span>: {
+        <span style="color:#f92672">&#34;start&#34;</span>: <span style="color:#e6db74">&#34;es-dev-server --app-index index.html --node-resolve --watch&#34;</span>
+    },
+    <span style="color:#f92672">&#34;author&#34;</span>: <span style="color:#e6db74">&#34;&#34;</span>,
+    <span style="color:#f92672">&#34;license&#34;</span>: <span style="color:#e6db74">&#34;ISC&#34;</span>,
+    <span style="color:#f92672">&#34;devDependencies&#34;</span>: {
+        <span style="color:#f92672">&#34;es-dev-server&#34;</span>: <span style="color:#e6db74">&#34;^1.57.2&#34;</span>
+    }
+}
+</code></pre></div><p>Now we can just run <code>npm start</code> and get a nice, hot-reloading developer experience.</p>
+<h4 id="development-2">Development</h4>
+<p>As we use es-dev-server, the development setup and workflow are quite similiar to the Lit-Element example.</p>
+<p>Now that we have the environment setup, we can write our component. The implementation is just a tad bit longer than the
+ones we made using the libraries.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">template</span> <span style="color:#f92672">=</span> document.<span style="color:#a6e22e">createElement</span>(<span style="color:#e6db74">&#39;template&#39;</span>);
+<span style="color:#a6e22e">template</span>.<span style="color:#a6e22e">innerHTML</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">`
+</span><span style="color:#e6db74">&lt;style&gt;
+</span><span style="color:#e6db74">    .form-wrapper {
+</span><span style="color:#e6db74">        display: flex;
+</span><span style="color:#e6db74">        flex-direction: column;
+</span><span style="color:#e6db74">    }
+</span><span style="color:#e6db74">    button,
+</span><span style="color:#e6db74">    input {
+</span><span style="color:#e6db74">        font-size: 2rem;
+</span><span style="color:#e6db74">        margin: 0 0 1rem;
+</span><span style="color:#e6db74">        width: 10rem;
+</span><span style="color:#e6db74">    }
+</span><span style="color:#e6db74">&lt;/style&gt;
+</span><span style="color:#e6db74">&lt;div class=&#34;form-wrapper&#34;&gt;
+</span><span style="color:#e6db74">    &lt;p&gt;Enter the dimensions of the desired cat image&lt;/p&gt;
+</span><span style="color:#e6db74">    &lt;input
+</span><span style="color:#e6db74">        type=&#34;number&#34;
+</span><span style="color:#e6db74">        placeholder=&#34;Width&#34;
+</span><span style="color:#e6db74">        id=&#34;image-width&#34;
+</span><span style="color:#e6db74">    /&gt;
+</span><span style="color:#e6db74">    &lt;input
+</span><span style="color:#e6db74">        type=&#34;number&#34;
+</span><span style="color:#e6db74">        placeholder=&#34;Height&#34;
+</span><span style="color:#e6db74">        id=&#34;image-height&#34;
+</span><span style="color:#e6db74">    /&gt;
+</span><span style="color:#e6db74">    &lt;button type=&#34;button&#34; &gt;Search&lt;/button&gt;
+</span><span style="color:#e6db74">&lt;/div&gt;
+</span><span style="color:#e6db74">`</span>;
+
+<span style="color:#66d9ef">const</span> <span style="color:#a6e22e">placeKittenUrl</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;http://placekitten.com/{width}/{height}&#39;</span>;
+
+<span style="color:#66d9ef">export</span> <span style="color:#66d9ef">default</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">CatImageVanillaViewer</span> <span style="color:#66d9ef">extends</span> <span style="color:#a6e22e">HTMLElement</span> {
+    <span style="color:#a6e22e">constructor</span>() {
+        <span style="color:#66d9ef">super</span>();
+        <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">imageWidth</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+        <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">imageHeight</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+        <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">currentImage</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">null</span>;
+
+        <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">root</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">attachShadow</span>({ <span style="color:#a6e22e">mode</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;open&#39;</span> });
+        <span style="color:#a6e22e">root</span>.<span style="color:#a6e22e">appendChild</span>(<span style="color:#a6e22e">template</span>.<span style="color:#a6e22e">content</span>.<span style="color:#a6e22e">cloneNode</span>(<span style="color:#66d9ef">true</span>));
+    }
+
+    <span style="color:#a6e22e">connectedCallback</span>() {
+        <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">shadowRoot</span>
+            .<span style="color:#a6e22e">querySelector</span>(<span style="color:#e6db74">&#39;#image-width&#39;</span>)
+            .<span style="color:#a6e22e">addEventListener</span>(<span style="color:#e6db74">&#39;input&#39;</span>, (<span style="color:#a6e22e">e</span>) =&gt; (<span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">imageWidth</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">e</span>.<span style="color:#a6e22e">target</span>.<span style="color:#a6e22e">value</span>));
+
+        <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">shadowRoot</span>
+            .<span style="color:#a6e22e">querySelector</span>(<span style="color:#e6db74">&#39;#image-height&#39;</span>)
+            .<span style="color:#a6e22e">addEventListener</span>(<span style="color:#e6db74">&#39;input&#39;</span>, (<span style="color:#a6e22e">e</span>) =&gt; (<span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">imageHeight</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">e</span>.<span style="color:#a6e22e">target</span>.<span style="color:#a6e22e">value</span>));
+
+        <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">shadowRoot</span>
+            .<span style="color:#a6e22e">querySelector</span>(<span style="color:#e6db74">&#39;button&#39;</span>)
+            .<span style="color:#a6e22e">addEventListener</span>(<span style="color:#e6db74">&#39;click&#39;</span>, <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">getNewCatImage</span>.<span style="color:#a6e22e">bind</span>(<span style="color:#66d9ef">this</span>));
+    }
+
+    <span style="color:#a6e22e">getNewCatImage</span>() {
+        <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">searchUrl</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">placeKittenUrl</span>
+            .<span style="color:#a6e22e">replace</span>(<span style="color:#e6db74">&#39;{width}&#39;</span>, <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">imageWidth</span>)
+            .<span style="color:#a6e22e">replace</span>(<span style="color:#e6db74">&#39;{height}&#39;</span>, <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">imageHeight</span>);
+        <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">currentImage</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">searchUrl</span>;
+
+        <span style="color:#66d9ef">let</span> <span style="color:#a6e22e">imageElem</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">shadowRoot</span>.<span style="color:#a6e22e">querySelector</span>(<span style="color:#e6db74">&#39;img&#39;</span>);
+        <span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span><span style="color:#a6e22e">imageElem</span>) {
+            <span style="color:#a6e22e">imageElem</span> <span style="color:#f92672">=</span> document.<span style="color:#a6e22e">createElement</span>(<span style="color:#e6db74">&#39;img&#39;</span>);
+            <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">shadowRoot</span>.<span style="color:#a6e22e">appendChild</span>(<span style="color:#a6e22e">imageElem</span>);
+        }
+        <span style="color:#a6e22e">imageElem</span>.<span style="color:#a6e22e">src</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">searchUrl</span>;
+    }
+}
+
+<span style="color:#a6e22e">customElements</span>.<span style="color:#a6e22e">define</span>(<span style="color:#e6db74">&#39;cat-image-vanilla-viewer&#39;</span>, <span style="color:#a6e22e">CatImageVanillaViewer</span>);
+</code></pre></div><p>Let&rsquo;s start going through what&rsquo;s different in this implementation. As you might see from the start, quite a lot has changed.</p>
+<p>Firstly we&rsquo;re working with <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/template">templates</a>.
+Templates are used by <code>lit-html</code> under the hood too, but here we are creating them manually and
+populating the contents here instead of inside the <code>render</code> function, which our component doesn&rsquo;t have.</p>
+<p>The templates are &ldquo;a mechanism for holding HTML that is not to be rendered immediately when a page is loaded, but
+may be instantiated subsequently during runtime using Javascript&rdquo; (From the template MDN page).</p>
+<blockquote>
+<p>Think of a template as a content fragment that is being stored for subsequent use in the document.
+While the parser does process the contents of the &lt;template&gt; element while loading the page, it does so only
+to ensure that those contents are valid; the element&rsquo;s contents are not rendered, however.</p>
+</blockquote>
+<p>The Template elements enable us to write markup templates that are not rendered immeadiately and can then be
+reused multiple times as the basis of a custom element&rsquo;s structure.</p>
+<p>In our template element we declare our styling, and also the HTML structure of our component. The content
+is basically what we would normally put inside the <code>render</code> -function.</p>
+<p>Next up we create the class itself. We extend the <a href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement">HTMLElement</a>,
+which is a part of the Javascript Web API.
+Any class extending HTMLElement represents a HTML element. Some Web Components might implement this interface directly,
+while others might implement another interface, which inherits this interface.</p>
+<p>Our Web Component has it&rsquo;s own built-in lifecycle callbacks of which we use some in this example.
+The full list of the callbacks is as follows:</p>
+<ul>
+<li><strong><em>connectedCallback</em></strong>: Invoked when the custom element is first connected to the document&rsquo;s DOM.</li>
+<li><strong><em>disconnectedCallback</em></strong>: Invoked when the custom element is disconnected from the document&rsquo;s DOM.</li>
+<li><strong><em>adoptedCallback</em></strong>: Invoked when the custom element is moved to a new document.</li>
+<li><strong><em>attributeChangedCallback</em></strong>: Invoked when one of the custom element&rsquo;s attributes is added, removed, or changed</li>
+</ul>
+<p><em>Source: <a href="https://developer.mozilla.org/en-US/docs/Web/Web_Components">MDN</a></em></p>
+<p>Inside our constructor we initialize our properties with their default values. We also attach the shadow DOM
+to our element to create encapsulation for our Web Component.
+After creating the shadowRoot, we append a copy of our template inside it.</p>
+<p>After <code>connectedCallback</code> is called, we can be sure that our element has hit the DOM, making it safe to attach events
+to our element. So that&rsquo;s what we do inside our connectedCallback.</p>
+<p>We could handle the onclick and oninput events inline, but while creating vanilla components, I prefer attaching the elements
+manually inside the javascript instead of appending them inline into the html.</p>
+<p>After that we are only left with the appending of the cat image. Different from the other cases, here we are not able to
+just easily conditionally render our element, well at least not as easily as in the other libraries.</p>
+<p>In our instance, it&rsquo;s easier to just append the image element into the element&rsquo;s DOM tree as the image is
+added for the first time. After that we just <code>querySelector</code> our image element, and manipulate it&rsquo;s
+src element manually.</p>
+<h4 id="output-2">Output</h4>
+<p>Once again, since this is fully vanilla, our component is supported by browsers without need for building.</p>
+<p>Let&rsquo;s look at the size of our package, which we are going to be shipping for comparison with the others:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">&gt; du -sh index.js
+
+4.0K    index.js
+</code></pre></div><p>Well look at that. It&rsquo;s the same size as our LitElement implementation, but without adding the LitElement and lit-html
+libraries to your project (in case you&rsquo;re not already using them).</p>
+<p>And as we had in LitElement, in vanilla we don&rsquo;t need to provide a source maps, since we&rsquo;ll be shipping a unbuilt,
+unminified version of our package.</p>
+<p>Building the package in full vanilla also allows us to easily import this to literally any page we want, by just
+importing the package from a JS CDN like <a href="https://unpkg.com/">unpkg</a> and just adding the HTML element to the page.
+No external tooling required.</p>
+<p>Of course this comes with some drawbacks, which don&rsquo;t become relevant from this kind of a simple package.</p>
+<p>With Vanilla Web Components</p>
+<ul>
+<li>You can&rsquo;t pass other than string-based data via HTML
+<ul>
+<li>But you can do it by passing the properties in javascript</li>
+</ul>
+</li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#75715e">// Example
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">profileObject</span> <span style="color:#f92672">=</span> { <span style="color:#a6e22e">id</span><span style="color:#f92672">:</span> <span style="color:#ae81ff">1</span>, <span style="color:#a6e22e">name</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;Matsu&#39;</span> };
+document.<span style="color:#a6e22e">querySelector</span>(<span style="color:#e6db74">&#39;my-element&#39;</span>).<span style="color:#a6e22e">profile</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">profileObject</span>;
+</code></pre></div><ul>
+<li>You need to register attribute change callback yourself with callbacks like <code>attributechangedcallback</code></li>
+<li>You can get confused between attributes and properties
+<ul>
+<li>But this is solved by just studying the subject, and in the end isn&rsquo;t all that complicated</li>
+</ul>
+</li>
+<li>You might need to write some custom update logic</li>
+</ul>
+<p>But for creating simple Web Components like the one we created, some of these problems might not even surface.</p>
+<hr>
+<h3 id="verdict">Verdict</h3>
+<p>So to recap, you should write a X component when&hellip;</p>
+<ul>
+<li>Write a React component if you don&rsquo;t have any other choice</li>
+<li>Write a LitElement component if you are going to be building anything more complicated, and can
+afford to force your component&rsquo;s developers to use slight tooling like Rollup.
+<ul>
+<li>&hellip; at least until bare module specifiers are supported globally.</li>
+</ul>
+</li>
+<li>Write a Vanilla component if you&rsquo;re building a simple component, that doesn&rsquo;t require some of the more complicated
+functionalities of the libraries and want your component to be able to be run absolutely (well almost) everywhere.</li>
+</ul>
+<p>So the next time you are building a Javascript component, take a second to evaluate on which scale you want to
+build it, and what level of dependencies you want to tie your users to.</p>
+<p>I hope you all are enjoying the series. Please provide me feedback about the posts and correct me if I said something
+wrong in writter at <a href="https://twitter.com/matsuuu_">@matsuuu_</a> and if you&rsquo;re enjoying the series, please
+send me a DM and let me know :)</p>
+<p>Until next time, when we&rsquo;ll be discussing more Web Components.</p>
+]]></content>
+        </item>
         
         <item>
             <title>Comparing React and Web Components. Part 1: Starters</title>
