@@ -6,7 +6,1496 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>en-us</language>
         <copyright>&lt;a href=&#34;https://creativecommons.org/licenses/by-nc/4.0/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;CC BY-NC 4.0&lt;/a&gt;</copyright>
+        <lastBuildDate>Wed, 19 Aug 2020 15:00:00 +0300</lastBuildDate>
         <atom:link href="/posts/index.xml" rel="self" type="application/rss+xml" />
+        
+        <item>
+            <title>Comparing React and Web Components. Part 2: Components</title>
+            <link>/posts/comparing-react-and-web-components-part-2-components/</link>
+            <pubDate>Wed, 19 Aug 2020 15:00:00 +0300</pubDate>
+            
+            <guid>/posts/comparing-react-and-web-components-part-2-components/</guid>
+            <description>This is part 2 of my series comparing Web Components and React. You can find the first part here
+Before we get started, I&amp;rsquo;ll clear out some possible misconceptions from the last post:
+ OpenWC is not LitElement. LitElement is a Open source library written by the Polymer team and the open source contributors while OpenWC is a community aimed at providing recommendations for web component development. LitElement is a base class that makes use of the lit-html library.</description>
+            <content type="html"><![CDATA[<p>This is part 2 of my series comparing Web Components and React. You can find the first part <a href="https://matsu.fi/posts/comparing-react-and-web-components-part-1-starters/">here</a></p>
+<p>Before we get started, I&rsquo;ll clear out some possible misconceptions from the last post:</p>
+<ul>
+<li>OpenWC is not LitElement. LitElement is a Open source library written by the Polymer team and the open source contributors while
+OpenWC is a community aimed at providing recommendations for web component development.</li>
+<li>LitElement is a base class that makes use of the lit-html library.</li>
+<li>lit-html is a templating library used for creating fast html templates.</li>
+</ul>
+<p>Allright. Now let&rsquo;s continue where we left off.</p>
+<hr>
+<h3 id="comparing-component-development">Comparing Component development</h3>
+<p>In today&rsquo;s post we&rsquo;ll be comparing building Javascript components in 3 different evironments:</p>
+<ul>
+<li>React</li>
+<li>Lit-Element</li>
+<li>HTMLElement (vanilla)</li>
+</ul>
+<p>We will go through a simple implementation of a small form, in which the user can insert the desired width and height
+of a random cat picture they desire and then receive it by our code querying the <a href="https://placekitten.com/">PlaceKitten</a> API</p>
+<p>Our finished application will look something along the lines of the picture below.</p>
+<p><img src="/cat-viewer-example.png" alt="Cat Image Viewer"></p>
+<p>It&rsquo;s beautiful, right? I didn&rsquo;t spend much time on css, since only the usage of css is relevant to this post,
+not the stylized output of it.</p>
+<p>Let&rsquo;s first dive into how we went through this task in React</p>
+<hr>
+<h3 id="the-react-implementation">The React Implementation</h3>
+<h4 id="creation">Creation</h4>
+<p>For the React implementation, I found a lot of differing material around online on what was the
+best way to create React components / libraries. I ended up settling on <a href="https://github.com/transitive-bullshit/create-react-library">create-react-library</a>
+due to it having a nice &gt;3k stars on Github and a straight forward starter kit.</p>
+<p>We first start by running the instructed command <code>npx create-react-library</code>, which is nicely familiar
+to the <code>create-react-app</code> a lot of people use, including us in the last post.</p>
+<p>Running this command creates us a project, or actually 2 seperate projects.</p>
+<p>We got ourselves a project for our component development, and also a project for demoing our
+component in a &ldquo;real&rdquo; environment.</p>
+<p>This works by the first project building the component, and serving it with the other needed libraries
+by symlinking them to the node_modules of the example-directory.</p>
+<p>This allows our demo project to import it like a normal package would</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#66d9ef">import</span> <span style="color:#a6e22e">CatImageViewer</span> <span style="color:#a6e22e">from</span> <span style="color:#e6db74">&#39;cat-image-react-viewer&#39;</span>;
+</code></pre></div><p>The node_modules of the demo project are symlinked from the top level project, which is the component project.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">&gt; ll example/node_modules/
+
+total <span style="color:#ae81ff">20</span>
+drwxrwxr-x <span style="color:#ae81ff">5</span> matsu matsu <span style="color:#ae81ff">4096</span> Aug <span style="color:#ae81ff">13</span> 13:56  ./
+drwxrwxr-x <span style="color:#ae81ff">5</span> matsu matsu <span style="color:#ae81ff">4096</span> Aug <span style="color:#ae81ff">13</span> 13:56  ../
+drwxrwxr-x <span style="color:#ae81ff">4</span> matsu matsu <span style="color:#ae81ff">4096</span> Aug <span style="color:#ae81ff">13</span> 13:56 <span style="color:#e6db74">&#39;@babel&#39;</span>/
+drwxrwxr-x <span style="color:#ae81ff">2</span> matsu matsu <span style="color:#ae81ff">4096</span> Aug <span style="color:#ae81ff">13</span> 13:56  .bin/
+drwxrwxr-x <span style="color:#ae81ff">4</span> matsu matsu <span style="color:#ae81ff">4096</span> Aug <span style="color:#ae81ff">13</span> 13:56  .cache/
+lrwxrwxrwx <span style="color:#ae81ff">1</span> matsu matsu    <span style="color:#ae81ff">5</span> Aug <span style="color:#ae81ff">13</span> 13:56  cat-image-react-viewer -&gt; ../../
+lrwxrwxrwx <span style="color:#ae81ff">1</span> matsu matsu   <span style="color:#ae81ff">24</span> Aug <span style="color:#ae81ff">13</span> 13:56  react -&gt; ../../node_modules/react/
+lrwxrwxrwx <span style="color:#ae81ff">1</span> matsu matsu   <span style="color:#ae81ff">28</span> Aug <span style="color:#ae81ff">13</span> 13:56  react-dom -&gt; ../../node_modules/react-dom/
+lrwxrwxrwx <span style="color:#ae81ff">1</span> matsu matsu   <span style="color:#ae81ff">32</span> Aug <span style="color:#ae81ff">13</span> 13:56  react-scripts -&gt; ../../node_modules/react-scripts/
+</code></pre></div><h4 id="development">Development</h4>
+<p>To run our dev environment, we need two terminals: One navigating to the component directory and serving the
+component. The other one navigating to the example directory and serving that project instead. I know a lot of developers
+who solely use the VSCode terminal, making this quite a hassle.</p>
+<p>This made me wonder if they could&rsquo;ve somehow combined these two tasks with something like <a href="https://www.npmjs.com/package/concurrently">Concurrently</a>.
+Nevertheless the dev experience from here onwards was pretty painless.</p>
+<p>We are provided with a nice example configuration for the component, and we are able to easily get to work. Our final
+component source looked like this.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#66d9ef">import</span> <span style="color:#a6e22e">React</span>, { <span style="color:#a6e22e">useState</span> } <span style="color:#a6e22e">from</span> <span style="color:#e6db74">&#39;react&#39;</span>;
+<span style="color:#66d9ef">import</span> <span style="color:#a6e22e">styles</span> <span style="color:#a6e22e">from</span> <span style="color:#e6db74">&#39;./index.module.css&#39;</span>;
+
+<span style="color:#66d9ef">const</span> <span style="color:#a6e22e">placeKittenUrl</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;http://placekitten.com/{width}/{height}&#39;</span>;
+
+<span style="color:#66d9ef">export</span> <span style="color:#66d9ef">default</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">CatImageViewer</span>() {
+    <span style="color:#66d9ef">const</span> [<span style="color:#a6e22e">imageWidth</span>, <span style="color:#a6e22e">setImageWidth</span>] <span style="color:#f92672">=</span> <span style="color:#a6e22e">useState</span>(<span style="color:#ae81ff">0</span>);
+    <span style="color:#66d9ef">const</span> [<span style="color:#a6e22e">imageHeight</span>, <span style="color:#a6e22e">setImageHeight</span>] <span style="color:#f92672">=</span> <span style="color:#a6e22e">useState</span>(<span style="color:#ae81ff">0</span>);
+    <span style="color:#66d9ef">const</span> [<span style="color:#a6e22e">currentImage</span>, <span style="color:#a6e22e">setCurrentImage</span>] <span style="color:#f92672">=</span> <span style="color:#a6e22e">useState</span>(<span style="color:#66d9ef">null</span>);
+
+    <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">getNewCatImage</span> <span style="color:#f92672">=</span> () =&gt; {
+        <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">searchUrl</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">placeKittenUrl</span>
+            .<span style="color:#a6e22e">replace</span>(<span style="color:#e6db74">&#39;{width}&#39;</span>, <span style="color:#a6e22e">imageWidth</span>)
+            .<span style="color:#a6e22e">replace</span>(<span style="color:#e6db74">&#39;{height}&#39;</span>, <span style="color:#a6e22e">imageHeight</span>);
+        <span style="color:#a6e22e">setCurrentImage</span>(<span style="color:#a6e22e">searchUrl</span>);
+    };
+
+    <span style="color:#66d9ef">return</span> (
+        <span style="color:#f92672">&lt;</span><span style="color:#a6e22e">div</span> <span style="color:#a6e22e">className</span><span style="color:#f92672">=</span>{<span style="color:#a6e22e">styles</span>.<span style="color:#a6e22e">formWrapper</span>}<span style="color:#f92672">&gt;</span>
+            <span style="color:#f92672">&lt;</span><span style="color:#a6e22e">div</span><span style="color:#f92672">&gt;</span>
+                <span style="color:#f92672">&lt;</span><span style="color:#a6e22e">p</span><span style="color:#f92672">&gt;</span><span style="color:#a6e22e">Enter</span> <span style="color:#a6e22e">the</span> <span style="color:#a6e22e">dimensions</span> <span style="color:#66d9ef">of</span> <span style="color:#a6e22e">the</span> <span style="color:#a6e22e">desired</span> <span style="color:#a6e22e">cat</span> <span style="color:#a6e22e">image</span><span style="color:#f92672">&lt;</span><span style="color:#960050;background-color:#1e0010">/p&gt;</span>
+                <span style="color:#f92672">&lt;</span><span style="color:#a6e22e">input</span>
+                    <span style="color:#a6e22e">type</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;number&#34;</span>
+                    <span style="color:#a6e22e">placeholder</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;Width&#34;</span>
+                    <span style="color:#a6e22e">id</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;image-width&#34;</span>
+                    <span style="color:#a6e22e">onInput</span><span style="color:#f92672">=</span>{(<span style="color:#a6e22e">e</span>) =&gt; <span style="color:#a6e22e">setImageWidth</span>(<span style="color:#a6e22e">e</span>.<span style="color:#a6e22e">target</span>.<span style="color:#a6e22e">value</span>)}
+                <span style="color:#f92672">/&gt;</span>
+                <span style="color:#f92672">&lt;</span><span style="color:#a6e22e">input</span>
+                    <span style="color:#a6e22e">type</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;number&#34;</span>
+                    <span style="color:#a6e22e">placeholder</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;Height&#34;</span>
+                    <span style="color:#a6e22e">id</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;image-height&#34;</span>
+                    <span style="color:#a6e22e">onInput</span><span style="color:#f92672">=</span>{(<span style="color:#a6e22e">e</span>) =&gt; <span style="color:#a6e22e">setImageHeight</span>(<span style="color:#a6e22e">e</span>.<span style="color:#a6e22e">target</span>.<span style="color:#a6e22e">value</span>)}
+                <span style="color:#f92672">/&gt;</span>
+                <span style="color:#f92672">&lt;</span><span style="color:#a6e22e">button</span> <span style="color:#a6e22e">type</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;button&#34;</span> <span style="color:#a6e22e">onClick</span><span style="color:#f92672">=</span>{<span style="color:#a6e22e">getNewCatImage</span>}<span style="color:#f92672">&gt;</span>
+                    <span style="color:#a6e22e">Search</span>
+                <span style="color:#f92672">&lt;</span><span style="color:#960050;background-color:#1e0010">/button&gt;</span>
+            <span style="color:#f92672">&lt;</span><span style="color:#960050;background-color:#1e0010">/div&gt;</span>
+            {<span style="color:#a6e22e">currentImage</span> <span style="color:#f92672">&amp;&amp;</span> <span style="color:#f92672">&lt;</span><span style="color:#a6e22e">img</span> <span style="color:#a6e22e">alt</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;&#34;</span> <span style="color:#a6e22e">src</span><span style="color:#f92672">=</span>{<span style="color:#a6e22e">currentImage</span>} <span style="color:#f92672">/&gt;</span>}
+        <span style="color:#f92672">&lt;</span><span style="color:#960050;background-color:#1e0010">/div&gt;</span>
+    );
+}
+</code></pre></div><p>with the css module looking like this:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-css" data-lang="css">.<span style="color:#a6e22e">formWrapper</span> <span style="color:#f92672">div</span> {
+    <span style="color:#66d9ef">display</span>: <span style="color:#66d9ef">flex</span>;
+    <span style="color:#66d9ef">flex-direction</span>: <span style="color:#66d9ef">column</span>;
+}
+
+.<span style="color:#a6e22e">formWrapper</span> <span style="color:#f92672">input</span><span style="color:#f92672">,</span>
+.<span style="color:#a6e22e">formWrapper</span> <span style="color:#f92672">button</span> {
+    <span style="color:#66d9ef">font-size</span>: <span style="color:#ae81ff">2</span><span style="color:#66d9ef">rem</span>;
+    <span style="color:#66d9ef">margin</span>: <span style="color:#ae81ff">0</span> <span style="color:#ae81ff">0</span> <span style="color:#ae81ff">1</span><span style="color:#66d9ef">rem</span>;
+    <span style="color:#66d9ef">width</span>: <span style="color:#ae81ff">10</span><span style="color:#66d9ef">rem</span>;
+}
+</code></pre></div><p>I created the component using React Hooks since they seem to be the hottest thing right now in the React world.
+This allowed us to fairly concisely create the component.</p>
+<p>I&rsquo;m by no means a React master, but this is perfect for emulating the developer experience
+of a new dev wanting to create their first component.</p>
+<p>The starter had a <code>index.module.css</code> set up from the start, and from what I&rsquo;ve looked at
+React projects, seperate css files for components are fairly usual (compared to the Web Component way of
+having the css in js).</p>
+<p>As you might remember from the last post, the <code>create-react-app</code> had a huge footprint in the
+package size on a vanilla installation. I was surprised and happy as I noticed that after building
+we weren&rsquo;t greeted by a 500KB package.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">&gt; npm run build
+
+&gt; du -sh dist/
+24K     dist/
+</code></pre></div><p>I&rsquo;m guessing this is partly due to the fact that our component project doesn&rsquo;t build any of it&rsquo;s dependencies
+with it. In the package.json we have no libraries listed as dependencies. However we have React
+listed as a peerDependency meaning that our package is forever doomed to be run only by
+other React projects.</p>
+<p>A quick look inside the dist folder also explains why the size of the package is 24K: the project
+builds itself as a commonjs and as and es package.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">&gt; ll dist/
+
+total <span style="color:#ae81ff">28</span>
+drwxrwxr-x <span style="color:#ae81ff">2</span> matsu matsu <span style="color:#ae81ff">4096</span> Aug <span style="color:#ae81ff">13</span> 13:55 ./
+drwxrwxr-x <span style="color:#ae81ff">7</span> matsu matsu <span style="color:#ae81ff">4096</span> Aug <span style="color:#ae81ff">13</span> 13:56 ../
+-rw-rw-r-- <span style="color:#ae81ff">1</span> matsu matsu  <span style="color:#ae81ff">149</span> Aug <span style="color:#ae81ff">19</span> 17:12 index.css
+-rw-rw-r-- <span style="color:#ae81ff">1</span> matsu matsu <span style="color:#ae81ff">1833</span> Aug <span style="color:#ae81ff">19</span> 17:12 index.js
+-rw-rw-r-- <span style="color:#ae81ff">1</span> matsu matsu <span style="color:#ae81ff">2595</span> Aug <span style="color:#ae81ff">19</span> 17:12 index.js.map
+-rw-rw-r-- <span style="color:#ae81ff">1</span> matsu matsu <span style="color:#ae81ff">1607</span> Aug <span style="color:#ae81ff">19</span> 17:12 index.modern.js
+-rw-rw-r-- <span style="color:#ae81ff">1</span> matsu matsu <span style="color:#ae81ff">2584</span> Aug <span style="color:#ae81ff">19</span> 17:12 index.modern.js.map
+</code></pre></div><p>This is fairly convenient, but also doubles the package size, in a case that both of these versions
+get published.</p>
+<p>If we take a look at our example folder, we can see how the project would be imported in a React environment:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#66d9ef">import</span> <span style="color:#a6e22e">React</span> <span style="color:#a6e22e">from</span> <span style="color:#e6db74">&#39;react&#39;</span>;
+
+<span style="color:#66d9ef">import</span> <span style="color:#a6e22e">CatImageViewer</span> <span style="color:#a6e22e">from</span> <span style="color:#e6db74">&#39;cat-image-react-viewer&#39;</span>;
+<span style="color:#66d9ef">import</span> <span style="color:#e6db74">&#39;cat-image-react-viewer/dist/index.css&#39;</span>;
+
+<span style="color:#66d9ef">const</span> <span style="color:#a6e22e">App</span> <span style="color:#f92672">=</span> () =&gt; {
+    <span style="color:#66d9ef">return</span> <span style="color:#f92672">&lt;</span><span style="color:#a6e22e">CatImageViewer</span> <span style="color:#f92672">/&gt;</span>;
+};
+
+<span style="color:#66d9ef">export</span> <span style="color:#66d9ef">default</span> <span style="color:#a6e22e">App</span>;
+</code></pre></div><p>We notice that to make use of the styles of our component, we are forced to import the css package
+as it&rsquo;s own import. This means that to build this project, we are required to have a css bundler
+in our project.</p>
+<p>However React usually is built with something like Webpack or Rollup, so this shouldn&rsquo;t
+cause too much overhead. In a buildless environment however this would cause a headache or two.</p>
+<p>Overall after finding and setting up the environment, the development was fairly straight forward. The starter
+provided us with commands for publishing the package. The one downside here is like I said, that the package can now
+only be used if React is used in the project.</p>
+<h4 id="output">Output</h4>
+<p>Last thing we will take a look at is the output of the build process.</p>
+<p>As said earlier, we have 5 files, from which</p>
+<ul>
+<li>1 is a css file</li>
+<li>2 are js files</li>
+<li>2 are js map files</li>
+</ul>
+<p>Let&rsquo;s get the easiest out of the way and look inside the css file:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-css" data-lang="css">.<span style="color:#a6e22e">_index-module__formWrapper__r8sB5</span> <span style="color:#f92672">div</span> {
+    <span style="color:#66d9ef">display</span>: <span style="color:#66d9ef">flex</span>;
+    <span style="color:#66d9ef">flex-direction</span>: <span style="color:#66d9ef">column</span>;
+}
+
+.<span style="color:#a6e22e">_index-module__formWrapper__r8sB5</span> <span style="color:#f92672">input</span><span style="color:#f92672">,</span>
+.<span style="color:#a6e22e">_index-module__formWrapper__r8sB5</span> <span style="color:#f92672">button</span> {
+    <span style="color:#66d9ef">font-size</span>: <span style="color:#ae81ff">2</span><span style="color:#66d9ef">rem</span>;
+    <span style="color:#66d9ef">margin</span>: <span style="color:#ae81ff">0</span> <span style="color:#ae81ff">0</span> <span style="color:#ae81ff">1</span><span style="color:#66d9ef">rem</span>;
+    <span style="color:#66d9ef">width</span>: <span style="color:#ae81ff">10</span><span style="color:#66d9ef">rem</span>;
+}
+</code></pre></div><p>We can see that the styles have stayed untouched, except for the classname. As we never named a css selector outside of the
+call <code>styles.formWrapper</code>, we can see that the build process generated a unique identifier for the class.</p>
+<p>I see two cases here which I would like to highlight:</p>
+<ul>
+<li>Creating convoluted class names makes it harder for test automation to create readable tests that don&rsquo;t break after a new build</li>
+<li><code>index-module__formWrapper__r8sB5</code> isn&rsquo;t really as descriptive to read if looking at the source from the browser as <code>form-wrapper</code> would be.</li>
+</ul>
+<p>Next we&rsquo;ll check out the <code>index.js</code> file:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#66d9ef">function</span> <span style="color:#a6e22e">_interopDefault</span>(<span style="color:#a6e22e">ex</span>) {
+    <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">ex</span> <span style="color:#f92672">&amp;&amp;</span> <span style="color:#66d9ef">typeof</span> <span style="color:#a6e22e">ex</span> <span style="color:#f92672">===</span> <span style="color:#e6db74">&#39;object&#39;</span> <span style="color:#f92672">&amp;&amp;</span> <span style="color:#e6db74">&#39;default&#39;</span> <span style="color:#66d9ef">in</span> <span style="color:#a6e22e">ex</span> <span style="color:#f92672">?</span> <span style="color:#a6e22e">ex</span>[<span style="color:#e6db74">&#39;default&#39;</span>] <span style="color:#f92672">:</span> <span style="color:#a6e22e">ex</span>;
+}
+
+<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">React</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">require</span>(<span style="color:#e6db74">&#39;react&#39;</span>);
+<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">React__default</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">_interopDefault</span>(<span style="color:#a6e22e">React</span>);
+
+<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">styles</span> <span style="color:#f92672">=</span> { <span style="color:#a6e22e">formWrapper</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;_index-module__formWrapper__r8sB5&#39;</span> };
+
+<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">placeKittenUrl</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;http://placekitten.com/{width}/{height}&#39;</span>;
+<span style="color:#66d9ef">function</span> <span style="color:#a6e22e">CatImageViewer</span>() {
+    <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">_useState</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">React</span>.<span style="color:#a6e22e">useState</span>(<span style="color:#ae81ff">0</span>),
+        <span style="color:#a6e22e">imageWidth</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">_useState</span>[<span style="color:#ae81ff">0</span>],
+        <span style="color:#a6e22e">setImageWidth</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">_useState</span>[<span style="color:#ae81ff">1</span>];
+
+    <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">_useState2</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">React</span>.<span style="color:#a6e22e">useState</span>(<span style="color:#ae81ff">0</span>),
+        <span style="color:#a6e22e">imageHeight</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">_useState2</span>[<span style="color:#ae81ff">0</span>],
+        <span style="color:#a6e22e">setImageHeight</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">_useState2</span>[<span style="color:#ae81ff">1</span>];
+
+    <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">_useState3</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">React</span>.<span style="color:#a6e22e">useState</span>(<span style="color:#66d9ef">null</span>),
+        <span style="color:#a6e22e">currentImage</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">_useState3</span>[<span style="color:#ae81ff">0</span>],
+        <span style="color:#a6e22e">setCurrentImage</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">_useState3</span>[<span style="color:#ae81ff">1</span>];
+
+    <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">getNewCatImage</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">getNewCatImage</span>() {
+        <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">searchUrl</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">placeKittenUrl</span>
+            .<span style="color:#a6e22e">replace</span>(<span style="color:#e6db74">&#39;{width}&#39;</span>, <span style="color:#a6e22e">imageWidth</span>)
+            .<span style="color:#a6e22e">replace</span>(<span style="color:#e6db74">&#39;{height}&#39;</span>, <span style="color:#a6e22e">imageHeight</span>);
+        <span style="color:#a6e22e">setCurrentImage</span>(<span style="color:#a6e22e">searchUrl</span>);
+    };
+
+    <span style="color:#66d9ef">return</span> <span style="color:#75715e">/*#__PURE__*/</span> <span style="color:#a6e22e">React__default</span>.<span style="color:#a6e22e">createElement</span>(
+        <span style="color:#e6db74">&#39;div&#39;</span>,
+        {
+            <span style="color:#a6e22e">className</span><span style="color:#f92672">:</span> <span style="color:#a6e22e">styles</span>.<span style="color:#a6e22e">formWrapper</span>,
+        },
+        <span style="color:#75715e">/*#__PURE__*/</span> <span style="color:#a6e22e">React__default</span>.<span style="color:#a6e22e">createElement</span>(
+            <span style="color:#e6db74">&#39;div&#39;</span>,
+            <span style="color:#66d9ef">null</span>,
+            <span style="color:#75715e">/*#__PURE__*/</span> <span style="color:#a6e22e">React__default</span>.<span style="color:#a6e22e">createElement</span>(
+                <span style="color:#e6db74">&#39;p&#39;</span>,
+                <span style="color:#66d9ef">null</span>,
+                <span style="color:#e6db74">&#39;Enter the dimensions of the desired cat image&#39;</span>
+            ),
+            <span style="color:#75715e">/*#__PURE__*/</span> <span style="color:#a6e22e">React__default</span>.<span style="color:#a6e22e">createElement</span>(<span style="color:#e6db74">&#39;input&#39;</span>, {
+                <span style="color:#a6e22e">type</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;number&#39;</span>,
+                <span style="color:#a6e22e">placeholder</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;Width&#39;</span>,
+                <span style="color:#a6e22e">id</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;image-width&#39;</span>,
+                <span style="color:#a6e22e">onInput</span><span style="color:#f92672">:</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">onInput</span>(<span style="color:#a6e22e">e</span>) {
+                    <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">setImageWidth</span>(<span style="color:#a6e22e">e</span>.<span style="color:#a6e22e">target</span>.<span style="color:#a6e22e">value</span>);
+                },
+            }),
+            <span style="color:#75715e">/*#__PURE__*/</span> <span style="color:#a6e22e">React__default</span>.<span style="color:#a6e22e">createElement</span>(<span style="color:#e6db74">&#39;input&#39;</span>, {
+                <span style="color:#a6e22e">type</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;number&#39;</span>,
+                <span style="color:#a6e22e">placeholder</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;Height&#39;</span>,
+                <span style="color:#a6e22e">id</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;image-height&#39;</span>,
+                <span style="color:#a6e22e">onInput</span><span style="color:#f92672">:</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">onInput</span>(<span style="color:#a6e22e">e</span>) {
+                    <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">setImageHeight</span>(<span style="color:#a6e22e">e</span>.<span style="color:#a6e22e">target</span>.<span style="color:#a6e22e">value</span>);
+                },
+            }),
+            <span style="color:#75715e">/*#__PURE__*/</span> <span style="color:#a6e22e">React__default</span>.<span style="color:#a6e22e">createElement</span>(
+                <span style="color:#e6db74">&#39;button&#39;</span>,
+                {
+                    <span style="color:#a6e22e">type</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;button&#39;</span>,
+                    <span style="color:#a6e22e">onClick</span><span style="color:#f92672">:</span> <span style="color:#a6e22e">getNewCatImage</span>,
+                },
+                <span style="color:#e6db74">&#39;Search&#39;</span>
+            )
+        ),
+        <span style="color:#a6e22e">currentImage</span> <span style="color:#f92672">&amp;&amp;</span>
+            <span style="color:#75715e">/*#__PURE__*/</span> <span style="color:#a6e22e">React__default</span>.<span style="color:#a6e22e">createElement</span>(<span style="color:#e6db74">&#39;img&#39;</span>, {
+                <span style="color:#a6e22e">alt</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;&#39;</span>,
+                <span style="color:#a6e22e">src</span><span style="color:#f92672">:</span> <span style="color:#a6e22e">currentImage</span>,
+            })
+    );
+}
+
+<span style="color:#a6e22e">module</span>.<span style="color:#a6e22e">exports</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">CatImageViewer</span>;
+<span style="color:#75715e">//# sourceMappingURL=index.js.map
+</span></code></pre></div><p>Allright so after we get over the fact that this code is quite unreadable, especially the render part, we can
+take a look at a few parts.</p>
+<ul>
+<li>Why are all of our const&rsquo;s turned into <code>var</code>s? Out of all the possibilities, a var.
+<ul>
+<li>const is supported by all browsers back to IE11 (which by the way is not even supported soon anymore)</li>
+</ul>
+</li>
+<li>If a developer was to inspect this element straight from the source, without knowing how React works, it would be quite hard to know
+what&rsquo;s going on with the hooks.
+<ul>
+<li>In the browser this is resolved by providing a source map of the file, provided your browser supports it and has it enabled.</li>
+<li>Source maps aren&rsquo;t foolproof and might introduce some problems while debugging</li>
+</ul>
+</li>
+</ul>
+<p>Next let&rsquo;s look inside the other generated javascript file: <code>index.modern.js</code></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#66d9ef">import</span> <span style="color:#a6e22e">React</span>, { <span style="color:#a6e22e">useState</span> } <span style="color:#a6e22e">from</span> <span style="color:#e6db74">&#39;react&#39;</span>;
+
+<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">styles</span> <span style="color:#f92672">=</span> { <span style="color:#a6e22e">formWrapper</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;_index-module__formWrapper__r8sB5&#39;</span> };
+
+<span style="color:#66d9ef">const</span> <span style="color:#a6e22e">placeKittenUrl</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;http://placekitten.com/{width}/{height}&#39;</span>;
+<span style="color:#66d9ef">function</span> <span style="color:#a6e22e">CatImageViewer</span>() {
+    <span style="color:#66d9ef">const</span> [<span style="color:#a6e22e">imageWidth</span>, <span style="color:#a6e22e">setImageWidth</span>] <span style="color:#f92672">=</span> <span style="color:#a6e22e">useState</span>(<span style="color:#ae81ff">0</span>);
+    <span style="color:#66d9ef">const</span> [<span style="color:#a6e22e">imageHeight</span>, <span style="color:#a6e22e">setImageHeight</span>] <span style="color:#f92672">=</span> <span style="color:#a6e22e">useState</span>(<span style="color:#ae81ff">0</span>);
+    <span style="color:#66d9ef">const</span> [<span style="color:#a6e22e">currentImage</span>, <span style="color:#a6e22e">setCurrentImage</span>] <span style="color:#f92672">=</span> <span style="color:#a6e22e">useState</span>(<span style="color:#66d9ef">null</span>);
+
+    <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">getNewCatImage</span> <span style="color:#f92672">=</span> () =&gt; {
+        <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">searchUrl</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">placeKittenUrl</span>
+            .<span style="color:#a6e22e">replace</span>(<span style="color:#e6db74">&#39;{width}&#39;</span>, <span style="color:#a6e22e">imageWidth</span>)
+            .<span style="color:#a6e22e">replace</span>(<span style="color:#e6db74">&#39;{height}&#39;</span>, <span style="color:#a6e22e">imageHeight</span>);
+        <span style="color:#a6e22e">setCurrentImage</span>(<span style="color:#a6e22e">searchUrl</span>);
+    };
+
+    <span style="color:#66d9ef">return</span> <span style="color:#75715e">/*#__PURE__*/</span> <span style="color:#a6e22e">React</span>.<span style="color:#a6e22e">createElement</span>(
+        <span style="color:#e6db74">&#39;div&#39;</span>,
+        {
+            <span style="color:#a6e22e">className</span><span style="color:#f92672">:</span> <span style="color:#a6e22e">styles</span>.<span style="color:#a6e22e">formWrapper</span>,
+        },
+        <span style="color:#75715e">/*#__PURE__*/</span> <span style="color:#a6e22e">React</span>.<span style="color:#a6e22e">createElement</span>(
+            <span style="color:#e6db74">&#39;div&#39;</span>,
+            <span style="color:#66d9ef">null</span>,
+            <span style="color:#75715e">/*#__PURE__*/</span> <span style="color:#a6e22e">React</span>.<span style="color:#a6e22e">createElement</span>(
+                <span style="color:#e6db74">&#39;p&#39;</span>,
+                <span style="color:#66d9ef">null</span>,
+                <span style="color:#e6db74">&#39;Enter the dimensions of the desired cat image&#39;</span>
+            ),
+            <span style="color:#75715e">/*#__PURE__*/</span> <span style="color:#a6e22e">React</span>.<span style="color:#a6e22e">createElement</span>(<span style="color:#e6db74">&#39;input&#39;</span>, {
+                <span style="color:#a6e22e">type</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;number&#39;</span>,
+                <span style="color:#a6e22e">placeholder</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;Width&#39;</span>,
+                <span style="color:#a6e22e">id</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;image-width&#39;</span>,
+                <span style="color:#a6e22e">onInput</span><span style="color:#f92672">:</span> (<span style="color:#a6e22e">e</span>) =&gt; <span style="color:#a6e22e">setImageWidth</span>(<span style="color:#a6e22e">e</span>.<span style="color:#a6e22e">target</span>.<span style="color:#a6e22e">value</span>),
+            }),
+            <span style="color:#75715e">/*#__PURE__*/</span> <span style="color:#a6e22e">React</span>.<span style="color:#a6e22e">createElement</span>(<span style="color:#e6db74">&#39;input&#39;</span>, {
+                <span style="color:#a6e22e">type</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;number&#39;</span>,
+                <span style="color:#a6e22e">placeholder</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;Height&#39;</span>,
+                <span style="color:#a6e22e">id</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;image-height&#39;</span>,
+                <span style="color:#a6e22e">onInput</span><span style="color:#f92672">:</span> (<span style="color:#a6e22e">e</span>) =&gt; <span style="color:#a6e22e">setImageHeight</span>(<span style="color:#a6e22e">e</span>.<span style="color:#a6e22e">target</span>.<span style="color:#a6e22e">value</span>),
+            }),
+            <span style="color:#75715e">/*#__PURE__*/</span> <span style="color:#a6e22e">React</span>.<span style="color:#a6e22e">createElement</span>(
+                <span style="color:#e6db74">&#39;button&#39;</span>,
+                {
+                    <span style="color:#a6e22e">type</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;button&#39;</span>,
+                    <span style="color:#a6e22e">onClick</span><span style="color:#f92672">:</span> <span style="color:#a6e22e">getNewCatImage</span>,
+                },
+                <span style="color:#e6db74">&#39;Search&#39;</span>
+            )
+        ),
+        <span style="color:#a6e22e">currentImage</span> <span style="color:#f92672">&amp;&amp;</span>
+            <span style="color:#75715e">/*#__PURE__*/</span> <span style="color:#a6e22e">React</span>.<span style="color:#a6e22e">createElement</span>(<span style="color:#e6db74">&#39;img&#39;</span>, {
+                <span style="color:#a6e22e">alt</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;&#39;</span>,
+                <span style="color:#a6e22e">src</span><span style="color:#f92672">:</span> <span style="color:#a6e22e">currentImage</span>,
+            })
+    );
+}
+
+<span style="color:#66d9ef">export</span> <span style="color:#66d9ef">default</span> <span style="color:#a6e22e">CatImageViewer</span>;
+<span style="color:#75715e">//# sourceMappingURL=index.modern.js.map
+</span></code></pre></div><p>Now this one is looking more like what we wrote, and that&rsquo;s mostly because this is the es module version of the
+built code. We see that our <code>const</code>s have been untampered with this time.</p>
+<p>Our project was fairly simple, so the source code can&rsquo;t be analyzed deeper, but I&rsquo;d imagine that in more complex systems,
+you could find more to talk about these built files.</p>
+<p>Next we&rsquo;ll look at a little more vanilla approach with Lit Element</p>
+<hr>
+<h3 id="the-lit-element-implementation">The Lit Element implementation</h3>
+<h4 id="creation-1">Creation</h4>
+<p>Moving on to <a href="https://lit-element.polymer-project.org/">Lit Element</a>, we can make use of the same <a href="https://open-wc.org/">Open WC</a> init
+command we used when creating a sample project. The initializer will prompt us to create either an application or a component.
+In our case we want to obviously choose the Web Component -selection.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">npm init @open-wc
+</code></pre></div><p>After running the initializer, and selecting our configuration, we have a nice sample project like we had in the React component
+example. The difference here is that we can get to developing with just running a single <code>npm start</code> instead of running our seperate demo
+instance. The twist is that we have to relatively call our component instead it being in our node_modules.</p>
+<h4 id="development-1">Development</h4>
+<p>Running <code>npm start</code> starts the <a href="https://www.npmjs.com/package/es-dev-server">es-dev-server</a> and serves a demo <code>index.html</code> file
+appending our newly initialized Web Component. In the case we would create a Typescript component, the command would run es-dev-server
+and tsc in parallel using concurrently. This is really nice allowing users to run the whole environment with just a single command.</p>
+<p>After running the project and cleaning up the example files, we ended up writing our LitElement implementation as follows:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#66d9ef">import</span> { <span style="color:#a6e22e">html</span>, <span style="color:#a6e22e">css</span>, <span style="color:#a6e22e">LitElement</span> } <span style="color:#a6e22e">from</span> <span style="color:#e6db74">&#39;lit-element&#39;</span>;
+
+<span style="color:#66d9ef">const</span> <span style="color:#a6e22e">placeKittenUrl</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;http://placekitten.com/{width}/{height}&#39;</span>;
+
+<span style="color:#66d9ef">export</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">CatImageLitViewer</span> <span style="color:#66d9ef">extends</span> <span style="color:#a6e22e">LitElement</span> {
+    <span style="color:#66d9ef">static</span> <span style="color:#a6e22e">get</span> <span style="color:#a6e22e">properties</span>() {
+        <span style="color:#66d9ef">return</span> {
+            <span style="color:#a6e22e">imageWidth</span><span style="color:#f92672">:</span> { <span style="color:#a6e22e">type</span><span style="color:#f92672">:</span> Number },
+            <span style="color:#a6e22e">imageHeight</span><span style="color:#f92672">:</span> { <span style="color:#a6e22e">type</span><span style="color:#f92672">:</span> Number },
+            <span style="color:#a6e22e">currentImage</span><span style="color:#f92672">:</span> { <span style="color:#a6e22e">type</span><span style="color:#f92672">:</span> String },
+        };
+    }
+
+    <span style="color:#66d9ef">static</span> <span style="color:#a6e22e">styles</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">css</span><span style="color:#e6db74">`
+</span><span style="color:#e6db74">        .form-wrapper {
+</span><span style="color:#e6db74">            display: flex;
+</span><span style="color:#e6db74">            flex-direction: column;
+</span><span style="color:#e6db74">        }
+</span><span style="color:#e6db74">        button,
+</span><span style="color:#e6db74">        input {
+</span><span style="color:#e6db74">            font-size: 2rem;
+</span><span style="color:#e6db74">            margin: 0 0 1rem;
+</span><span style="color:#e6db74">            width: 10rem;
+</span><span style="color:#e6db74">        }
+</span><span style="color:#e6db74">    `</span>;
+
+    <span style="color:#a6e22e">constructor</span>() {
+        <span style="color:#66d9ef">super</span>();
+        <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">imageWidth</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+        <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">imageHeight</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+        <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">currentImage</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">null</span>;
+    }
+
+    <span style="color:#a6e22e">getNewCatImage</span>() {
+        <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">searchUrl</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">placeKittenUrl</span>
+            .<span style="color:#a6e22e">replace</span>(<span style="color:#e6db74">&#39;{width}&#39;</span>, <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">imageWidth</span>)
+            .<span style="color:#a6e22e">replace</span>(<span style="color:#e6db74">&#39;{height}&#39;</span>, <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">imageHeight</span>);
+        <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">currentImage</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">searchUrl</span>;
+    }
+
+    <span style="color:#a6e22e">render</span>() {
+        <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">html</span><span style="color:#e6db74">`
+</span><span style="color:#e6db74">            &lt;div class=&#34;form-wrapper&#34;&gt;
+</span><span style="color:#e6db74">                &lt;p&gt;Enter the dimensions of the desired cat image&lt;/p&gt;
+</span><span style="color:#e6db74">                &lt;input
+</span><span style="color:#e6db74">                    type=&#34;number&#34;
+</span><span style="color:#e6db74">                    placeholder=&#34;Width&#34;
+</span><span style="color:#e6db74">                    id=&#34;image-width&#34;
+</span><span style="color:#e6db74">                    @input=</span><span style="color:#e6db74">${</span>(<span style="color:#a6e22e">e</span>) =&gt; {
+                        <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">imageWidth</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">e</span>.<span style="color:#a6e22e">target</span>.<span style="color:#a6e22e">value</span>;
+                    <span style="color:#e6db74">}</span><span style="color:#e6db74">}
+</span><span style="color:#e6db74">                /&gt;
+</span><span style="color:#e6db74">                &lt;input
+</span><span style="color:#e6db74">                    type=&#34;number&#34;
+</span><span style="color:#e6db74">                    placeholder=&#34;Height&#34;
+</span><span style="color:#e6db74">                    id=&#34;image-height&#34;
+</span><span style="color:#e6db74">                    @input=</span><span style="color:#e6db74">${</span>(<span style="color:#a6e22e">e</span>) =&gt; {
+                        <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">imageHeight</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">e</span>.<span style="color:#a6e22e">target</span>.<span style="color:#a6e22e">value</span>;
+                    <span style="color:#e6db74">}</span><span style="color:#e6db74">}
+</span><span style="color:#e6db74">                /&gt;
+</span><span style="color:#e6db74">                &lt;button type=&#34;button&#34; @click=</span><span style="color:#e6db74">${</span><span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">getNewCatImage</span><span style="color:#e6db74">}</span><span style="color:#e6db74">&gt;
+</span><span style="color:#e6db74">                    Search
+</span><span style="color:#e6db74">                &lt;/button&gt;
+</span><span style="color:#e6db74">            &lt;/div&gt;
+</span><span style="color:#e6db74">            </span><span style="color:#e6db74">${</span><span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">currentImage</span> <span style="color:#f92672">&amp;&amp;</span> <span style="color:#a6e22e">html</span><span style="color:#e6db74">`&lt;img alt=&#34;&#34; src=&#34;</span><span style="color:#e6db74">${</span><span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">currentImage</span><span style="color:#e6db74">}</span><span style="color:#e6db74">&#34; /&gt;`</span><span style="color:#e6db74">}</span><span style="color:#e6db74">
+</span><span style="color:#e6db74">        `</span>;
+    }
+}
+
+<span style="color:#a6e22e">customElements</span>.<span style="color:#a6e22e">define</span>(<span style="color:#e6db74">&#39;cat-image-lit-viewer&#39;</span>, <span style="color:#a6e22e">CatImageLitViewer</span>);
+</code></pre></div><p>Compared to our React example, the LitElement version is quite similiar. The differences are mainly in state management.</p>
+<p>In React we had hooks handling our states. With LitElement we save our state objects as properties on our class, and then
+initialize them inside the constructor. It&rsquo;s a few lines more of code, but it also gives us a nicely typed API for our component,
+even in Javascript.</p>
+<p>The next difference is that we have our styles <em>inside</em> of the js file, unlike in React where we used a css module file.
+Our style selectors are also a bit more relaxed, since we are developing our component into shadow DOM, allowing for an encapsulated
+handling of styles.</p>
+<p>Also differentiating us from the react project is the resulting DOM tree. In the React project we were forced to have a <code>div</code> -element
+wrapping everything in our component. In the Web Component version, we will have a named Web Component wrapping our element, making
+the need for a wrapping div obselete.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html"><span style="color:#75715e">&lt;!-- React --&gt;</span>
+&lt;<span style="color:#f92672">div</span> <span style="color:#a6e22e">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;_index-module__formWrapper__r8sB5&#34;</span>&gt;
+    &lt;<span style="color:#f92672">div</span>&gt;
+        &lt;<span style="color:#f92672">p</span>&gt;Enter the dimensions of the desired cat image&lt;/<span style="color:#f92672">p</span>&gt;
+        &lt;<span style="color:#f92672">input</span> <span style="color:#a6e22e">type</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;number&#34;</span> <span style="color:#a6e22e">placeholder</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;Width&#34;</span> <span style="color:#a6e22e">id</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;image-width&#34;</span> /&gt;
+        &lt;<span style="color:#f92672">input</span> <span style="color:#a6e22e">type</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;number&#34;</span> <span style="color:#a6e22e">placeholder</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;Height&#34;</span> <span style="color:#a6e22e">id</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;image-height&#34;</span> /&gt;
+        &lt;<span style="color:#f92672">button</span> <span style="color:#a6e22e">type</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;button&#34;</span>&gt;
+            Search
+        &lt;/<span style="color:#f92672">button</span>&gt;
+    &lt;/<span style="color:#f92672">div</span>&gt;
+&lt;/<span style="color:#f92672">div</span>&gt;
+
+<span style="color:#75715e">&lt;!-- LitElement --&gt;</span>
+&lt;<span style="color:#f92672">cat-image-lit-viewer</span>&gt;
+    &lt;<span style="color:#f92672">div</span> <span style="color:#a6e22e">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;form-wrapper&#34;</span>&gt;
+        &lt;<span style="color:#f92672">p</span>&gt;Enter the dimensions of the desired cat image&lt;/<span style="color:#f92672">p</span>&gt;
+        &lt;<span style="color:#f92672">input</span> <span style="color:#a6e22e">type</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;number&#34;</span> <span style="color:#a6e22e">placeholder</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;Width&#34;</span> <span style="color:#a6e22e">id</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;image-width&#34;</span> /&gt;
+        &lt;<span style="color:#f92672">input</span> <span style="color:#a6e22e">type</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;number&#34;</span> <span style="color:#a6e22e">placeholder</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;Height&#34;</span> <span style="color:#a6e22e">id</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;image-height&#34;</span> /&gt;
+        &lt;<span style="color:#f92672">button</span> <span style="color:#a6e22e">type</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;button&#34;</span>&gt;
+            Search
+        &lt;/<span style="color:#f92672">button</span>&gt;
+    &lt;/<span style="color:#f92672">div</span>&gt;
+&lt;/<span style="color:#f92672">cat-image-lit-viewer</span>&gt;
+</code></pre></div><p>That&rsquo;s mostly the difference in the code side. Both of our implementations have a nicely structured render with some conditional
+rendering thrown in there, and our components handle events with event listener properties (<code>onInput</code> and <code>onClick</code> with React, <code>@input</code>, <code>@click</code> on LitElement).</p>
+<p>Now that we have our component, we should be ready to build.</p>
+<h4 id="output-1">Output</h4>
+<p>&hellip; Except that we won&rsquo;t do that.</p>
+<hr>
+<p>Reading the open-wc recommendations on building, in the section about creating components, it says:</p>
+<blockquote>
+<p>If you are building a reusable component or library we recommend publishing code that runs without modifications on the latest browsers. You should not bundle in any dependencies or polyfills, or build to a very old version of JavaScript such as ES5. This way, consuming projects can decide which polyfills to load and which JavaScript version to target based on browser support.</p>
+</blockquote>
+<blockquote>
+<p>In practical terms, this means publishing standard ES modules and standard JavaScript features implemented in modern browsers, like Chrome, Safari, Firefox, and Edge. We recommend buildless development, so unless you are using very cutting edge features, you can actually just publish your source code as is.</p>
+</blockquote>
+<p>Meaning in short that we can ship our Web Component <em>as is</em>. Isn&rsquo;t that cool?</p>
+<p>Also since we&rsquo;re not building our package, we don&rsquo;t need to ship any source maps.</p>
+<p>If we were to ship our Web Component, we would only need to ship the one js file, and tag LitElement as the dependency.
+LitElement being a fairly small library (<a href="https://bundlephobia.com/result?p=lit-element@2.4.0">23.2kB minified, 7.4kB minified + Gzipped</a>),
+our total project size would be in total around 30kB if we don&rsquo;t compress anything.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">&gt; du -sh src/CatImageLitViewer.js
+
+4.0K    CatImageLitViewer.js
+</code></pre></div><p>This is, if we were not already using LitElement in our project. If we are already writing a LitElement project, our new package would
+only bring the 4KB with it to the project. And this is unminified.</p>
+<p><em>For comparison</em>: If we wanted to add a single React Component to a non-react project, the minimal setup would require both React
+and React-DOM, which together weight in at
+<a href="https://bundlephobia.com/result?p=react@16.13.1">6.3kB, 2.6 gzipped</a> + <a href="https://bundlephobia.com/result?p=react-dom@16.13.1">114.6kB, 35.9kB gzipped</a>
+totaling around 120kB uncompressed.</p>
+<p>Also a plus in the LitElement approach is that we won&rsquo;t have to build the project in the implementing side either, since
+the css in baked into the js file, therefore eliminating the need for a css loader (unlike in the React version).</p>
+<p>Overall when creating Web Components with LitElement, we ended up with 6x smaller package size (4kb vs 24kb total), and
+about 9x smaller total size with dependencies.</p>
+<p>Next we&rsquo;ll take a look at fully buildless and dependencyless implementation using the browser&rsquo;s own HTMLElement.</p>
+<hr>
+<h3 id="htmlelement-implementation">HTMLElement implementation</h3>
+<h4 id="creation-2">Creation</h4>
+<p>As we&rsquo;re building a project as vanilla as possible, we don&rsquo;t really need a initializer for this implementation.</p>
+<p>We can just start by creating a folder, running npm init and creating the necessary files</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">mkdir cat-image-vanilla-viewer
+cd cat-image-vanilla-viewer
+npm init
+touch index.html index.js
+</code></pre></div><p>Now we can populate our index.html with the minimal setup needed for development:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html">&lt;<span style="color:#f92672">html</span>&gt;
+    &lt;<span style="color:#f92672">head</span>&gt; &lt;/<span style="color:#f92672">head</span>&gt;
+    &lt;<span style="color:#f92672">body</span>&gt;
+        &lt;<span style="color:#f92672">cat-image-vanilla-viewer</span>&gt;&lt;/<span style="color:#f92672">cat-image-vanilla-viewer</span>&gt;
+        &lt;<span style="color:#f92672">script</span> <span style="color:#a6e22e">src</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;./index.js&#34;</span> <span style="color:#a6e22e">type</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;module&#34;</span>&gt;&lt;/<span style="color:#f92672">script</span>&gt;
+    &lt;/<span style="color:#f92672">body</span>&gt;
+&lt;/<span style="color:#f92672">html</span>&gt;
+</code></pre></div><p>Real simple and smooth. Just like Vanilla ice cream.</p>
+<p>We could serve our project with any http server implementation, from <a href="https://www.npmjs.com/package/http-server">http-server</a> to
+<a href="https://www.npmjs.com/package/es-dev-server">es-dev-server</a>, since it&rsquo;s just a simple html + js file setup. For this post
+I just added <code>es-dev-server</code> as a dev dependency, as it won&rsquo;t affect the package size that way.</p>
+<p>Our package.json is now also in it&rsquo;s minimal setup:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-json" data-lang="json">{
+    <span style="color:#f92672">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;cat-image-vanilla-viewer&#34;</span>,
+    <span style="color:#f92672">&#34;version&#34;</span>: <span style="color:#e6db74">&#34;1.0.0&#34;</span>,
+    <span style="color:#f92672">&#34;description&#34;</span>: <span style="color:#e6db74">&#34;&#34;</span>,
+    <span style="color:#f92672">&#34;main&#34;</span>: <span style="color:#e6db74">&#34;index.js&#34;</span>,
+    <span style="color:#f92672">&#34;scripts&#34;</span>: {
+        <span style="color:#f92672">&#34;start&#34;</span>: <span style="color:#e6db74">&#34;es-dev-server --app-index index.html --node-resolve --watch&#34;</span>
+    },
+    <span style="color:#f92672">&#34;author&#34;</span>: <span style="color:#e6db74">&#34;&#34;</span>,
+    <span style="color:#f92672">&#34;license&#34;</span>: <span style="color:#e6db74">&#34;ISC&#34;</span>,
+    <span style="color:#f92672">&#34;devDependencies&#34;</span>: {
+        <span style="color:#f92672">&#34;es-dev-server&#34;</span>: <span style="color:#e6db74">&#34;^1.57.2&#34;</span>
+    }
+}
+</code></pre></div><p>Now we can just run <code>npm start</code> and get a nice, hot-reloading developer experience.</p>
+<h4 id="development-2">Development</h4>
+<p>As we use es-dev-server, the development setup and workflow are quite similiar to the Lit-Element example.</p>
+<p>Now that we have the environment setup, we can write our component. The implementation is just a tad bit longer than the
+ones we made using the libraries.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">template</span> <span style="color:#f92672">=</span> document.<span style="color:#a6e22e">createElement</span>(<span style="color:#e6db74">&#39;template&#39;</span>);
+<span style="color:#a6e22e">template</span>.<span style="color:#a6e22e">innerHTML</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">`
+</span><span style="color:#e6db74">&lt;style&gt;
+</span><span style="color:#e6db74">    .form-wrapper {
+</span><span style="color:#e6db74">        display: flex;
+</span><span style="color:#e6db74">        flex-direction: column;
+</span><span style="color:#e6db74">    }
+</span><span style="color:#e6db74">    button,
+</span><span style="color:#e6db74">    input {
+</span><span style="color:#e6db74">        font-size: 2rem;
+</span><span style="color:#e6db74">        margin: 0 0 1rem;
+</span><span style="color:#e6db74">        width: 10rem;
+</span><span style="color:#e6db74">    }
+</span><span style="color:#e6db74">&lt;/style&gt;
+</span><span style="color:#e6db74">&lt;div class=&#34;form-wrapper&#34;&gt;
+</span><span style="color:#e6db74">    &lt;p&gt;Enter the dimensions of the desired cat image&lt;/p&gt;
+</span><span style="color:#e6db74">    &lt;input
+</span><span style="color:#e6db74">        type=&#34;number&#34;
+</span><span style="color:#e6db74">        placeholder=&#34;Width&#34;
+</span><span style="color:#e6db74">        id=&#34;image-width&#34;
+</span><span style="color:#e6db74">    /&gt;
+</span><span style="color:#e6db74">    &lt;input
+</span><span style="color:#e6db74">        type=&#34;number&#34;
+</span><span style="color:#e6db74">        placeholder=&#34;Height&#34;
+</span><span style="color:#e6db74">        id=&#34;image-height&#34;
+</span><span style="color:#e6db74">    /&gt;
+</span><span style="color:#e6db74">    &lt;button type=&#34;button&#34; &gt;Search&lt;/button&gt;
+</span><span style="color:#e6db74">&lt;/div&gt;
+</span><span style="color:#e6db74">`</span>;
+
+<span style="color:#66d9ef">const</span> <span style="color:#a6e22e">placeKittenUrl</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;http://placekitten.com/{width}/{height}&#39;</span>;
+
+<span style="color:#66d9ef">export</span> <span style="color:#66d9ef">default</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">CatImageVanillaViewer</span> <span style="color:#66d9ef">extends</span> <span style="color:#a6e22e">HTMLElement</span> {
+    <span style="color:#a6e22e">constructor</span>() {
+        <span style="color:#66d9ef">super</span>();
+        <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">imageWidth</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+        <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">imageHeight</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+        <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">currentImage</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">null</span>;
+
+        <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">root</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">attachShadow</span>({ <span style="color:#a6e22e">mode</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;open&#39;</span> });
+        <span style="color:#a6e22e">root</span>.<span style="color:#a6e22e">appendChild</span>(<span style="color:#a6e22e">template</span>.<span style="color:#a6e22e">content</span>.<span style="color:#a6e22e">cloneNode</span>(<span style="color:#66d9ef">true</span>));
+    }
+
+    <span style="color:#a6e22e">connectedCallback</span>() {
+        <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">shadowRoot</span>
+            .<span style="color:#a6e22e">querySelector</span>(<span style="color:#e6db74">&#39;#image-width&#39;</span>)
+            .<span style="color:#a6e22e">addEventListener</span>(<span style="color:#e6db74">&#39;input&#39;</span>, (<span style="color:#a6e22e">e</span>) =&gt; (<span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">imageWidth</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">e</span>.<span style="color:#a6e22e">target</span>.<span style="color:#a6e22e">value</span>));
+
+        <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">shadowRoot</span>
+            .<span style="color:#a6e22e">querySelector</span>(<span style="color:#e6db74">&#39;#image-height&#39;</span>)
+            .<span style="color:#a6e22e">addEventListener</span>(<span style="color:#e6db74">&#39;input&#39;</span>, (<span style="color:#a6e22e">e</span>) =&gt; (<span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">imageHeight</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">e</span>.<span style="color:#a6e22e">target</span>.<span style="color:#a6e22e">value</span>));
+
+        <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">shadowRoot</span>
+            .<span style="color:#a6e22e">querySelector</span>(<span style="color:#e6db74">&#39;button&#39;</span>)
+            .<span style="color:#a6e22e">addEventListener</span>(<span style="color:#e6db74">&#39;click&#39;</span>, <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">getNewCatImage</span>.<span style="color:#a6e22e">bind</span>(<span style="color:#66d9ef">this</span>));
+    }
+
+    <span style="color:#a6e22e">getNewCatImage</span>() {
+        <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">searchUrl</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">placeKittenUrl</span>
+            .<span style="color:#a6e22e">replace</span>(<span style="color:#e6db74">&#39;{width}&#39;</span>, <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">imageWidth</span>)
+            .<span style="color:#a6e22e">replace</span>(<span style="color:#e6db74">&#39;{height}&#39;</span>, <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">imageHeight</span>);
+        <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">currentImage</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">searchUrl</span>;
+
+        <span style="color:#66d9ef">let</span> <span style="color:#a6e22e">imageElem</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">shadowRoot</span>.<span style="color:#a6e22e">querySelector</span>(<span style="color:#e6db74">&#39;img&#39;</span>);
+        <span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span><span style="color:#a6e22e">imageElem</span>) {
+            <span style="color:#a6e22e">imageElem</span> <span style="color:#f92672">=</span> document.<span style="color:#a6e22e">createElement</span>(<span style="color:#e6db74">&#39;img&#39;</span>);
+            <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">shadowRoot</span>.<span style="color:#a6e22e">appendChild</span>(<span style="color:#a6e22e">imageElem</span>);
+        }
+        <span style="color:#a6e22e">imageElem</span>.<span style="color:#a6e22e">src</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">searchUrl</span>;
+    }
+}
+
+<span style="color:#a6e22e">customElements</span>.<span style="color:#a6e22e">define</span>(<span style="color:#e6db74">&#39;cat-image-vanilla-viewer&#39;</span>, <span style="color:#a6e22e">CatImageVanillaViewer</span>);
+</code></pre></div><p>Let&rsquo;s start going through what&rsquo;s different in this implementation. As you might see from the start, quite a lot has changed.</p>
+<p>Firstly we&rsquo;re working with <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/template">templates</a>.
+Templates are used by <code>lit-html</code> under the hood too, but here we are creating them manually and
+populating the contents here instead of inside the <code>render</code> function, which our component doesn&rsquo;t have.</p>
+<p>The templates are &ldquo;a mechanism for holding HTML that is not to be rendered immediately when a page is loaded, but
+may be instantiated subsequently during runtime using Javascript&rdquo; (From the template MDN page).</p>
+<blockquote>
+<p>Think of a template as a content fragment that is being stored for subsequent use in the document.
+While the parser does process the contents of the &lt;template&gt; element while loading the page, it does so only
+to ensure that those contents are valid; the element&rsquo;s contents are not rendered, however.</p>
+</blockquote>
+<p>The Template elements enable us to write markup templates that are not rendered immeadiately and can then be
+reused multiple times as the basis of a custom element&rsquo;s structure.</p>
+<p>In our template element we declare our styling, and also the HTML structure of our component. The content
+is basically what we would normally put inside the <code>render</code> -function.</p>
+<p>Next up we create the class itself. We extend the <a href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement">HTMLElement</a>,
+which is a part of the Javascript Web API.
+Any class extending HTMLElement represents a HTML element. Some Web Components might implement this interface directly,
+while others might implement another interface, which inherits this interface.</p>
+<p>Our Web Component has it&rsquo;s own built-in lifecycle callbacks of which we use some in this example.
+The full list of the callbacks is as follows:</p>
+<ul>
+<li><strong><em>connectedCallback</em></strong>: Invoked when the custom element is first connected to the document&rsquo;s DOM.</li>
+<li><strong><em>disconnectedCallback</em></strong>: Invoked when the custom element is disconnected from the document&rsquo;s DOM.</li>
+<li><strong><em>adoptedCallback</em></strong>: Invoked when the custom element is moved to a new document.</li>
+<li><strong><em>attributeChangedCallback</em></strong>: Invoked when one of the custom element&rsquo;s attributes is added, removed, or changed</li>
+</ul>
+<p><em>Source: <a href="https://developer.mozilla.org/en-US/docs/Web/Web_Components">MDN</a></em></p>
+<p>Inside our constructor we initialize our properties with their default values. We also attach the shadow DOM
+to our element to create encapsulation for our Web Component.
+After creating the shadowRoot, we append a copy of our template inside it.</p>
+<p>After <code>connectedCallback</code> is called, we can be sure that our element has hit the DOM, making it safe to attach events
+to our element. So that&rsquo;s what we do inside our connectedCallback.</p>
+<p>We could handle the onclick and oninput events inline, but while creating vanilla components, I prefer attaching the elements
+manually inside the javascript instead of appending them inline into the html.</p>
+<p>After that we are only left with the appending of the cat image. Different from the other cases, here we are not able to
+just easily conditionally render our element, well at least not as easily as in the other libraries.</p>
+<p>In our instance, it&rsquo;s easier to just append the image element into the element&rsquo;s DOM tree as the image is
+added for the first time. After that we just <code>querySelector</code> our image element, and manipulate it&rsquo;s
+src element manually.</p>
+<h4 id="output-2">Output</h4>
+<p>Once again, since this is fully vanilla, our component is supported by browsers without need for building.</p>
+<p>Let&rsquo;s look at the size of our package, which we are going to be shipping for comparison with the others:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">&gt; du -sh index.js
+
+4.0K    index.js
+</code></pre></div><p>Well look at that. It&rsquo;s the same size as our LitElement implementation, but without adding the LitElement and lit-html
+libraries to your project (in case you&rsquo;re not already using them).</p>
+<p>And as we had in LitElement, in vanilla we don&rsquo;t need to provide a source maps, since we&rsquo;ll be shipping a unbuilt,
+unminified version of our package.</p>
+<p>Building the package in full vanilla also allows us to easily import this to literally any page we want, by just
+importing the package from a JS CDN like <a href="https://unpkg.com/">unpkg</a> and just adding the HTML element to the page.
+No external tooling required.</p>
+<p>Of course this comes with some drawbacks, which don&rsquo;t become relevant from this kind of a simple package.</p>
+<p>With Vanilla Web Components</p>
+<ul>
+<li>You can&rsquo;t pass other than string-based data via HTML
+<ul>
+<li>But you can do it by passing the properties in javascript</li>
+</ul>
+</li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#75715e">// Example
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">profileObject</span> <span style="color:#f92672">=</span> { <span style="color:#a6e22e">id</span><span style="color:#f92672">:</span> <span style="color:#ae81ff">1</span>, <span style="color:#a6e22e">name</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;Matsu&#39;</span> };
+document.<span style="color:#a6e22e">querySelector</span>(<span style="color:#e6db74">&#39;my-element&#39;</span>).<span style="color:#a6e22e">profile</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">profileObject</span>;
+</code></pre></div><ul>
+<li>You need to register attribute change callback yourself with callbacks like <code>attributechangedcallback</code></li>
+<li>You can get confused between attributes and properties
+<ul>
+<li>But this is solved by just studying the subject, and in the end isn&rsquo;t all that complicated</li>
+</ul>
+</li>
+<li>You might need to write some custom update logic</li>
+</ul>
+<p>But for creating simple Web Components like the one we created, some of these problems might not even surface.</p>
+<hr>
+<h3 id="verdict">Verdict</h3>
+<p>So to recap, you should write a X component when&hellip;</p>
+<ul>
+<li>Write a React component if you don&rsquo;t have any other choice</li>
+<li>Write a LitElement component if you are going to be building anything more complicated, and can
+afford to force your component&rsquo;s developers to use slight tooling like Rollup.
+<ul>
+<li>&hellip; at least until bare module specifiers are supported globally.</li>
+</ul>
+</li>
+<li>Write a Vanilla component if you&rsquo;re building a simple component, that doesn&rsquo;t require some of the more complicated
+functionalities of the libraries and want your component to be able to be run absolutely (well almost) everywhere.</li>
+</ul>
+<p>So the next time you are building a Javascript component, take a second to evaluate on which scale you want to
+build it, and what level of dependencies you want to tie your users to.</p>
+<p>I hope you all are enjoying the series. Please provide me feedback about the posts and correct me if I said something
+wrong in writter at <a href="https://twitter.com/matsuuu_">@matsuuu_</a> and if you&rsquo;re enjoying the series, please
+send me a DM and let me know :)</p>
+<p>Until next time, when we&rsquo;ll be discussing more Web Components.</p>
+]]></content>
+        </item>
+        
+        <item>
+            <title>Comparing React and Web Components. Part 1: Starters</title>
+            <link>/posts/comparing-react-and-web-components-part-1-starters/</link>
+            <pubDate>Fri, 31 Jul 2020 13:00:00 +0300</pubDate>
+            
+            <guid>/posts/comparing-react-and-web-components-part-1-starters/</guid>
+            <description>I&amp;rsquo;ve always shunned away from big frameworks while working with Javascript. I used to work with React, but after gaining more experience with the language, I&amp;rsquo;ve started to go closer to vanilla with everything I do.
+Comparing starter scripts I ran the recommended starters for both React and Lit Element, one of the most used Web Component libraries.
+For React, the started included 262 mb of depndencies just to get started</description>
+            <content type="html"><![CDATA[<p>I&rsquo;ve always shunned away from big frameworks while working with Javascript.
+I used to work with React, but after gaining more experience with the language, I&rsquo;ve started to go closer to vanilla with
+everything I do.</p>
+<h3 id="comparing-starter-scripts">Comparing starter scripts</h3>
+<p>I ran the recommended starters for both React and Lit Element, one of the most used Web Component libraries.</p>
+<p>For React, the started included 262 mb of depndencies just to get started</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">npm create-react-app react-example
+cd react-example
+du -sh node_modules
+&gt;&gt; 262M
+</code></pre></div><p>For Lit Element, I used the OpenWC recommended starter</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">npm init @open-wc
+cd lit-element-example
+du -sh node_modules
+&gt;&gt; 161M
+</code></pre></div><p>That&rsquo;s just a tad bit over 100 MB worth of code more to get started with building some web applications.</p>
+<p>Not to talk about the dependency tree. Create-React-App seems to not make use of the devDependencies tag of the package.json.
+All of the testing packages are included as normal dependencies.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#e6db74">&#34;dependencies&#34;</span><span style="color:#f92672">:</span> {
+    <span style="color:#e6db74">&#34;@testing-library/jest-dom&#34;</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;^4.2.4&#34;</span>,
+    <span style="color:#e6db74">&#34;@testing-library/react&#34;</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;^9.3.2&#34;</span>,
+    <span style="color:#e6db74">&#34;@testing-library/user-event&#34;</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;^7.1.2&#34;</span>,
+    <span style="color:#e6db74">&#34;react&#34;</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;^16.13.1&#34;</span>,
+    <span style="color:#e6db74">&#34;react-dom&#34;</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;^16.13.1&#34;</span>,
+    <span style="color:#e6db74">&#34;react-scripts&#34;</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;3.4.1&#34;</span>
+}
+</code></pre></div><p>This won&rsquo;t cause any problems most of the time, but listing the deps clearly used only in development as devDependencies would be
+welcome.</p>
+<p>Most of React&rsquo;s libraries are low on dependencies, only containing in the ballpark of 2-6 deps. But then we look at the <code>react-scripts</code>
+included in the create-react-app and it contains a whopping 53 dependencies! That&rsquo;s 11 times more dependencies to look after than the
+other packages. With the Lodash fiasco we just had, making everyone bump their packages, having that many dependencies sure does make
+the likelyhood of that happening again a lot larger.</p>
+<p>If we look at the picture on the OpenWC side, the starter asks for what packages you want to include in your starter,
+from packaging to testing to linting to demoing. For this purpose I chose everything but not demoing (storybook).</p>
+<p>Our normal dependencies are looking great with just 2 libraries:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js">  <span style="color:#e6db74">&#34;dependencies&#34;</span><span style="color:#f92672">:</span> {
+    <span style="color:#e6db74">&#34;lit-html&#34;</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;^1.0.0&#34;</span>,
+    <span style="color:#e6db74">&#34;lit-element&#34;</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;^2.0.1&#34;</span>
+  }
+</code></pre></div><p>And the only cross dependency here is that Lit-Element depends on lit-html, nothing else.</p>
+<p>On top of that the starter has a lot more of useful packages included like linting with eslint, prettifying with prettier and husky for pre-commit hooks.
+Here&rsquo;s the whole devDependencies tree or the OpenWC starter:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js">  <span style="color:#e6db74">&#34;devDependencies&#34;</span><span style="color:#f92672">:</span> {
+    <span style="color:#e6db74">&#34;eslint&#34;</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;^6.1.0&#34;</span>,
+    <span style="color:#e6db74">&#34;@open-wc/eslint-config&#34;</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;^2.0.0&#34;</span>,
+    <span style="color:#e6db74">&#34;prettier&#34;</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;^2.0.4&#34;</span>,
+    <span style="color:#e6db74">&#34;eslint-config-prettier&#34;</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;^6.11.0&#34;</span>,
+    <span style="color:#e6db74">&#34;husky&#34;</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;^1.0.0&#34;</span>,
+    <span style="color:#e6db74">&#34;lint-staged&#34;</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;^10.0.0&#34;</span>,
+    <span style="color:#e6db74">&#34;@open-wc/testing-karma&#34;</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;^3.0.0&#34;</span>,
+    <span style="color:#e6db74">&#34;deepmerge&#34;</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;^3.2.0&#34;</span>,
+    <span style="color:#e6db74">&#34;@open-wc/testing&#34;</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;^2.0.0&#34;</span>,
+    <span style="color:#e6db74">&#34;@open-wc/building-rollup&#34;</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;^1.0.0&#34;</span>,
+    <span style="color:#e6db74">&#34;rimraf&#34;</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;^2.6.3&#34;</span>,
+    <span style="color:#e6db74">&#34;rollup&#34;</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;^2.3.4&#34;</span>,
+    <span style="color:#e6db74">&#34;es-dev-server&#34;</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;^1.5.0&#34;</span>
+  },
+</code></pre></div><p>Last we can check the build sizes both of the starters end up with.</p>
+<p>I ran <code>npm run build</code> on both of these clean installations and then checked the size of the export folders.</p>
+<p>For React, we are standing at a whopping 548K with the whole folder included and 472K inside the js folder.</p>
+<p>For OpenWc, we end up with just 168K with the whole build folder, from which workbox seems to take most of.
+If we won&rsquo;t be using workbox, we can delete these and our dist folder size drops down to just 40K.</p>
+<p>That&rsquo;s quite a large size difference with just a starter level package. And considering a lot of
+people use these starters as their basis, they might be shipping a lot more bloat than they think.</p>
+<h3 id="bottom-line">Bottom line</h3>
+<p>While the create-react-app is a great tool, it brings a lot more bloat than with alternative frameworks.
+While some of this might be able to be gotten rid of with some treeshaking, a lot of projects
+don&rsquo;t use technologies that allow for that, and just ship the whole bundle as is.</p>
+<p>With OpenWC, developers are able to get started with a more customizable starter build, and a lot less
+unnecessary bloat included. The package size for a finished build can be almost 10 times smaller than when using React.</p>
+<p>In the next post we&rsquo;ll be discussing developing for both React and Web Components, and the usability of
+said developed components cross framework.</p>
+]]></content>
+        </item>
+        
+        <item>
+            <title>Porting Libraries to Web Components</title>
+            <link>/posts/porting-libraries-to-web-components/</link>
+            <pubDate>Sat, 27 Jun 2020 11:00:00 +0300</pubDate>
+            
+            <guid>/posts/porting-libraries-to-web-components/</guid>
+            <description>As Web Components become a part of the Web Standard, more libraries are being created with Web Components instead of just exposing the API of said library.
+But what about the libraries created before the rise of Web Components? Can they be ported into Web Components, and what kind of a workload would this be? This is what we&amp;rsquo;ll be discussing today.
+Preface So why would we want to create a Web Component equivalent of a library if there already is an existing implementation?</description>
+            <content type="html"><![CDATA[<p>As Web Components become a part of the <a href="https://html.spec.whatwg.org/multipage/custom-elements.html">Web Standard</a>, more libraries are being
+created with Web Components instead of just exposing the API of said library.</p>
+<p>But what about the libraries created before the rise of
+Web Components? Can they be ported into Web Components, and what kind of a workload would this be? This is what we&rsquo;ll be discussing today.</p>
+<h3 id="preface">Preface</h3>
+<p>So why would we want to create a Web Component equivalent of a library if there already is an existing implementation?
+Well the first thing that comes to mind is the ease-of-use and ease-of-implementation. By creating a Web Component of a library the
+implementation of said functionality changes from</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html">&lt;<span style="color:#f92672">p</span> <span style="color:#a6e22e">id</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;paragraph-to-highlight&#34;</span>&gt;Please highlight me with the library&lt;/<span style="color:#f92672">p</span>&gt;
+
+&lt;<span style="color:#f92672">script</span> <span style="color:#a6e22e">src</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;/library/api.js&#34;</span>&gt;&lt;/<span style="color:#f92672">script</span>&gt;
+&lt;<span style="color:#f92672">script</span>&gt;
+    window.<span style="color:#a6e22e">onload</span> <span style="color:#f92672">=</span> () =&gt; {
+        <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">par</span> <span style="color:#f92672">=</span> document.<span style="color:#a6e22e">querySelector</span>(<span style="color:#e6db74">&#39;#paragraph-to-highlight&#39;</span>);
+        <span style="color:#a6e22e">HighlightLibrary</span>.<span style="color:#a6e22e">highlight</span>(<span style="color:#a6e22e">par</span>);
+    };
+&lt;/<span style="color:#f92672">script</span>&gt;
+</code></pre></div><p>To a more simplistic</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html">&lt;<span style="color:#f92672">highlight-library</span>&gt;
+    &lt;<span style="color:#f92672">p</span>&gt;Please highlight me with the library&lt;/<span style="color:#f92672">p</span>&gt;
+&lt;/<span style="color:#f92672">highlight-library</span>&gt;
+
+&lt;<span style="color:#f92672">script</span> <span style="color:#a6e22e">src</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;/library/wc.js&#34;</span> <span style="color:#a6e22e">type</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;module&#34;</span>&gt;&lt;/<span style="color:#f92672">script</span>&gt;
+</code></pre></div><p>There are multiple pro&rsquo;s to this:</p>
+<ul>
+<li>Less code</li>
+<li>No pollution of the ID/class space</li>
+<li>No arbitary code snippets tied to window load events etc.</li>
+</ul>
+<p>And many more. Of course some of these problems might be eliminated by using modern frameworks or libraries, in which case
+the javascript is located in seperate files and not in the HTML, but still in that case you would need to write something like
+<code>initializeHighlights()</code> and call it on page load either way.</p>
+<p>By automatic this process inside the Web Component, and making the component responsible of it&rsquo;s work, we can ease the development
+process by a lot.</p>
+<h3 id="getting-started">Getting started</h3>
+<p>In this post I&rsquo;ll use my port of a library called <a href="https://github.com/pshihn/rough-notation">Rough Notation</a> as an example.</p>
+<p>Rough Notation is a small library used for highlighting content on a html page with nice hand drawn animations.</p>
+<p>The regular use of Rough Notation looks like this:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#66d9ef">import</span> { <span style="color:#a6e22e">annotate</span> } <span style="color:#a6e22e">from</span> <span style="color:#e6db74">&#39;rough-notation&#39;</span>;
+
+<span style="color:#66d9ef">const</span> <span style="color:#a6e22e">element</span> <span style="color:#f92672">=</span> document.<span style="color:#a6e22e">querySelector</span>(<span style="color:#e6db74">&#39;#myElement&#39;</span>);
+<span style="color:#66d9ef">const</span> <span style="color:#a6e22e">annotation</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">annotate</span>(<span style="color:#a6e22e">element</span>, { <span style="color:#a6e22e">type</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;underline&#39;</span> });
+<span style="color:#a6e22e">annoation</span>.<span style="color:#a6e22e">show</span>();
+</code></pre></div><p>To get the same functionality with <a href="https://github.com/Matsuuu/vanilla-rough-notation">Vanilla Rough Notation</a>, the Web Component port I wrote,
+you would only need to write:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html">&lt;<span style="color:#f92672">rough-notation</span> <span style="color:#a6e22e">showOnLoad</span> <span style="color:#a6e22e">type</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;underline&#34;</span>&gt;
+    &lt;<span style="color:#f92672">p</span>&gt;Please underline me&lt;/<span style="color:#f92672">p</span>&gt;
+&lt;/<span style="color:#f92672">rough-notation</span>&gt;
+</code></pre></div><p>This creates a nice environment for developing using the library, since no extra javascript is necessary. You can just wrap the elements in a
+Web Component, and the functionality is applied out of the box.</p>
+<p>This makes for a faster workflow since the developer will not have to write initializing functions in their codebase, and can just apply the effect on the
+element as the element is created.</p>
+<p>This way of working is also more beginner-friendly, since it required 0 javascript knowledge to get started, making it easy to use in for example CMS services.</p>
+<p>So how is this functionality achieved?</p>
+<h3 id="setting-the-stage">Setting the stage</h3>
+<p>For developing the Web Component, I wanted to stay as Vanilla as possible, making Rough Notation the only dependency in the project.</p>
+<p>To make the development a bit easier, I also added <a href="https://www.npmjs.com/package/es-dev-server">es-dev-server</a> as a Dev Dependency.
+Es Dev Server enabled us to have a buildless environment with hot reloads.</p>
+<p>At release the <code>package.json</code> looked something along the lines of:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-json" data-lang="json">{
+    <span style="color:#f92672">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;vanilla-rough-notation&#34;</span>,
+    <span style="color:#f92672">&#34;version&#34;</span>: <span style="color:#e6db74">&#34;0.4.2&#34;</span>,
+    <span style="color:#f92672">&#34;description&#34;</span>: <span style="color:#e6db74">&#34;A vanilla implementation of the Rough Notation library&#34;</span>,
+    <span style="color:#f92672">&#34;main&#34;</span>: <span style="color:#e6db74">&#34;index.js&#34;</span>,
+    <span style="color:#f92672">&#34;module&#34;</span>: <span style="color:#e6db74">&#34;index.js&#34;</span>,
+    <span style="color:#f92672">&#34;type&#34;</span>: <span style="color:#e6db74">&#34;module&#34;</span>,
+    <span style="color:#f92672">&#34;files&#34;</span>: [<span style="color:#e6db74">&#34;*.js&#34;</span>],
+    <span style="color:#f92672">&#34;scripts&#34;</span>: {
+        <span style="color:#f92672">&#34;start&#34;</span>: <span style="color:#e6db74">&#34;es-dev-server --app-index index.html --node-resolve --watch --open&#34;</span>
+    },
+    <span style="color:#f92672">&#34;author&#34;</span>: <span style="color:#e6db74">&#34;Matsuuu&#34;</span>,
+    <span style="color:#f92672">&#34;license&#34;</span>: <span style="color:#e6db74">&#34;MIT&#34;</span>,
+    <span style="color:#f92672">&#34;devDependencies&#34;</span>: {
+        <span style="color:#f92672">&#34;es-dev-server&#34;</span>: <span style="color:#e6db74">&#34;^1.54.0&#34;</span>
+    },
+    <span style="color:#f92672">&#34;dependencies&#34;</span>: {
+        <span style="color:#f92672">&#34;rough-notation&#34;</span>: <span style="color:#e6db74">&#34;^0.4.0&#34;</span>
+    }
+}
+</code></pre></div><p>Next let&rsquo;s jump into the code itself.</p>
+<h3 id="writing-the-web-component">Writing the Web Component</h3>
+<p>First things we want to do are</p>
+<ul>
+<li>Import the library we are porting</li>
+<li>Create a Class containing our code</li>
+<li>Make our class extend the HTMLElement class</li>
+<li>Declare the Web Component as a custom element</li>
+</ul>
+<p>Once we&rsquo;ve done this, the code should look like this</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#66d9ef">import</span> { <span style="color:#a6e22e">annotate</span> } <span style="color:#a6e22e">from</span> <span style="color:#e6db74">&#39;rough-notation&#39;</span>;
+
+<span style="color:#66d9ef">export</span> <span style="color:#66d9ef">default</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">VanillaRoughNotation</span> <span style="color:#66d9ef">extends</span> <span style="color:#a6e22e">HTMLElement</span> {}
+
+<span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span><span style="color:#a6e22e">customElements</span>.<span style="color:#a6e22e">get</span>(<span style="color:#e6db74">&#39;rough-notation&#39;</span>)) {
+    <span style="color:#a6e22e">customElements</span>.<span style="color:#a6e22e">define</span>(<span style="color:#e6db74">&#39;rough-notation&#39;</span>, <span style="color:#a6e22e">VanillaRoughNotation</span>);
+}
+</code></pre></div><p>Now if we used the html tag <code>&lt;rough-notation&gt;&lt;/rough-notation&gt;</code>, the code inside our class would be executed, if there was any.</p>
+<p>Let&rsquo;s add some initial settings next.</p>
+<h3 id="lets-start-shadow-boxing">Let&rsquo;s start shadow boxing</h3>
+<p>One of the big pro&rsquo;s of Web Components are encapsulation of styles and code. This is done by attaching a ShadowRoot to the Web Component.</p>
+<p>A <a href="https://developer.mozilla.org/en-US/docs/Web/API/ShadowRoot">Shadow Root</a> is a part of the Shadow DOM API, and functions as a sort of subtree of the main DOM tree.
+The Shadow Root is rendered separately from the document&rsquo;s main DOM tree, and is unaffected by the styles of the main DOM tree.</p>
+<p>Using the Shadow DOM is necessary in our component since on top of creating a encapsulated environment, the Shadow DOM enables the use of <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/slot">Slots</a>.</p>
+<p>Slots are relevant part of the Web Components tech suite. They function as a placeholder inside the web component that can be filled with markdown.</p>
+<p>Let&rsquo;s start our Web Component codebase by creating a shadow root and appending a slot inside it.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#66d9ef">export</span> <span style="color:#66d9ef">default</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">VanillaRoughNotation</span> <span style="color:#66d9ef">extends</span> <span style="color:#a6e22e">HTMLElement</span> {
+    <span style="color:#a6e22e">connectedCallback</span>() {
+        <span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span><span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">shadowRoot</span>) {
+            <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">attachShadow</span>({ <span style="color:#a6e22e">mode</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;open&#39;</span> });
+        }
+        <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">shadowRoot</span>.<span style="color:#a6e22e">innerHTML</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;&lt;slot&gt;&lt;/slot&gt;&#39;</span>;
+    }
+}
+</code></pre></div><p>The <code>connectedCallback</code> method is part of the HTMLElement API we are extending.
+<code>connectedCallback</code> is called each time the custom element is appended into a document-connected element</p>
+<p>Inside the function we check if the element already has a shadowRoot, and in a case that a shadowRoot is missing, we attach one with <code>this.attachShadow({mode: 'open'})</code></p>
+<p>By setting the mode as &lsquo;open&rsquo;, we make our element accessible from Javascript outside the shadow root.
+The contents of our element could be queried with <code>document.querySelector(&quot;rough-notation&quot;).shadowRoot</code></p>
+<p>If we set the mode as &lsquo;closed&rsquo;, we effectively deny all access to the nodes inside the shadow root from outside.</p>
+<p>We also set the <code>&lt;slot&gt;</code> element as the body of the shadowRoot. Now we can add other DOM elements inside the rough-notation html tags and they will be shown with the component.</p>
+<p>Allright. Now we can put elements inside our Web Component. Let&rsquo;s start implementing the library&rsquo;s functionality.</p>
+<h3 id="locked-and-noded">Locked and noded</h3>
+<p>To implement the features of the API we went through earlier, we first need a way to get all of the elements inside our Web Component.</p>
+<p>This can be done by querying the assigned nodes of our slot element.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">assignedNodes</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">shadowRoot</span>
+    .<span style="color:#a6e22e">querySelector</span>(<span style="color:#e6db74">&#39;slot&#39;</span>)
+    .<span style="color:#a6e22e">assignedNodes</span>()
+    .<span style="color:#a6e22e">filter</span>((<span style="color:#a6e22e">node</span>) =&gt; <span style="color:#a6e22e">node</span> <span style="color:#66d9ef">instanceof</span> <span style="color:#a6e22e">HTMLElement</span>);
+</code></pre></div><p>When querying the assignedNodes, we might also catch some <code>#text</code> elements, since line breaks generate text nodes. We want to filter those out and can be
+easily done by just filtering the nodes to instances of HTMLElement.</p>
+<p>Next up we want to apply the library&rsquo;s functionality to all of the nodes. Different to normally calling the API, in a Web Component we need to take all
+of the possible variables into account.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#a6e22e">assignedNodes</span>.<span style="color:#a6e22e">forEach</span>((<span style="color:#a6e22e">an</span>) =&gt; {
+    <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">annotation</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">annotate</span>(<span style="color:#a6e22e">an</span>, {
+        <span style="color:#a6e22e">type</span><span style="color:#f92672">:</span> <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">type</span>,
+        <span style="color:#a6e22e">animate</span><span style="color:#f92672">:</span> <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">animate</span>,
+        <span style="color:#a6e22e">animationDuration</span><span style="color:#f92672">:</span> <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">animationDuration</span>,
+        <span style="color:#a6e22e">color</span><span style="color:#f92672">:</span> <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">color</span>,
+        <span style="color:#a6e22e">strokeWidth</span><span style="color:#f92672">:</span> <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">strokeWidth</span>,
+        <span style="color:#a6e22e">padding</span><span style="color:#f92672">:</span> <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">padding</span>,
+        <span style="color:#a6e22e">multiline</span><span style="color:#f92672">:</span> <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">multiline</span>,
+        <span style="color:#a6e22e">iterations</span><span style="color:#f92672">:</span> <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">iterations</span>,
+    });
+});
+</code></pre></div><hr>
+<h4 id="attributes-and-properties">Attributes and properties</h4>
+<p>But wait, you might ask. We haven&rsquo;t declared these variables yet. That&rsquo;s true. Next we will look at setting the properties.</p>
+<p>The base values of a Web Component&rsquo;s properties are set in the <code>constructor</code> method of the element.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"> <span style="color:#a6e22e">constructor</span>() {
+    <span style="color:#66d9ef">super</span>();
+    <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">type</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;underline&#39;</span>;
+    <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">animation</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">true</span>;
+    <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">animationDuration</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">800</span>;
+    <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">color</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;currentColor&#39;</span>;
+    <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">strokeWidth</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;
+    <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">padding</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">5</span>;
+    <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">showOnLoad</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">false</span>;
+    <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">order</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+    <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">multiline</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">true</span>;
+    <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">iterations</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span>;
+
+    <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">annotation</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">null</span>;
+}
+</code></pre></div><p>Here we can either use the defaults of the library, or declare a default case of our choice. I decided to implement the default
+values from the library, but also set <code>underline</code> as the default type of notation.</p>
+<p>Currently we are rocking with the default values, but we of course want the user to be able to declare the attributes themselves.</p>
+<p>Let&rsquo;s create a method for setting the variables from the HTML element attributes.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#a6e22e">setAttributes</span>() {
+    <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">type</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">getAttribute</span>(<span style="color:#e6db74">&#39;type&#39;</span>) <span style="color:#f92672">||</span> <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">type</span>;
+    <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">animation</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">hasAttribute</span>(<span style="color:#e6db74">&#39;animation&#39;</span>) <span style="color:#f92672">?</span> <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">getAttribute</span>(<span style="color:#e6db74">&#39;animation&#39;</span>) <span style="color:#f92672">===</span> <span style="color:#e6db74">&#39;true&#39;</span> <span style="color:#f92672">:</span> <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">animation</span>;
+    <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">animationDuration</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">getAttribute</span>(<span style="color:#e6db74">&#39;animationDuration&#39;</span>) <span style="color:#f92672">||</span> <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">animationDuration</span>;
+    <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">color</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">getAttribute</span>(<span style="color:#e6db74">&#39;color&#39;</span>) <span style="color:#f92672">||</span> <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">color</span>;
+    <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">strokeWidth</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">getAttribute</span>(<span style="color:#e6db74">&#39;strokeWidth&#39;</span>) <span style="color:#f92672">||</span> <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">strokeWidth</span>;
+    <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">padding</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">getAttribute</span>(<span style="color:#e6db74">&#39;padding&#39;</span>) <span style="color:#f92672">||</span> <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">padding</span>;
+    <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">showOnLoad</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">hasAttribute</span>(<span style="color:#e6db74">&#39;showOnLoad&#39;</span>);
+    <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">order</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">getAttribute</span>(<span style="color:#e6db74">&#39;order&#39;</span>) <span style="color:#f92672">||</span> <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">order</span>;
+    <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">multiline</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">hasAttribute</span>(<span style="color:#e6db74">&#39;multiline&#39;</span>) <span style="color:#f92672">?</span> <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">getAttribute</span>(<span style="color:#e6db74">&#39;multiline&#39;</span>) <span style="color:#f92672">===</span> <span style="color:#e6db74">&#39;true&#39;</span> <span style="color:#f92672">:</span> <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">multiline</span>;
+    <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">brackets</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">getBrackets</span>();
+    <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">iterations</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">getAttribute</span>(<span style="color:#e6db74">&#39;iterations&#39;</span>) <span style="color:#f92672">||</span> <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">iterations</span>;
+}
+</code></pre></div><p>Normal attributes we can fetched by just using the <code>this.getAttribute(attr)</code> method. But we also have a couple of boolean properties in our component.
+These are a bit more trickier, since the HTML attributes can only be strings. In those cases we need to check for the existence of the attribute.</p>
+<p>This can be done with <code>this.hasAttribute(attr)</code>. So now we can use the boolean operators by omitting the value part of the attribute like so:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html">&lt;<span style="color:#f92672">rough-notation</span> <span style="color:#a6e22e">showOnLoad</span>&gt;&lt;/<span style="color:#f92672">rough-notation</span>&gt;
+</code></pre></div><p>But if the default value of the property is true, this won&rsquo;t work. In these cases we want to check if the attribute is a string valued <code>true</code>.
+So in this case if we want to disable the animation, we can just write.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html">&lt;<span style="color:#f92672">rough-notation</span> <span style="color:#a6e22e">animation</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;false&#34;</span>&gt;&lt;/<span style="color:#f92672">rough-notation</span>&gt;
+</code></pre></div><p>If we wanted to observe the changes inside these properties, we could employ the use of <code>attributeChangedCallback</code> function and
+custom setters for our properties. However our Web Component&rsquo;s values are set in the element initialization itself so this
+won&rsquo;t be needed here.</p>
+<hr>
+<h4 id="back-on-track">Back on track</h4>
+<p>Now let&rsquo;s get back to our initialization code.</p>
+<p>As you might have noticed, we added a new attribute to the API: <code>showOnLoad</code>. This can be used to easily enable the animation to show
+as soon as it&rsquo;s ready, instead of running the animation when the <code>show()</code> method is called.
+Now let&rsquo;s implement the functionality:</p>
+<p>The Rough Notation library appends a style element into the main DOM, which has some crucial animation keyframes we want to make sure are
+applied to our slotted elements too. Remember: Shadow Root encapsulates styles, so if our slotted elements are inside a shadow Root, the styles from
+the main DOM won&rsquo;t affect them.</p>
+<p>A fast tour through the source code of the library shows that the style element is assigned to a global variable <code>__rno_kf_s</code>.
+Short for &ldquo;Rough Notation Keyframe styles&rdquo;.</p>
+<p>We can just clone that node inside our element:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">append</span>(window.<span style="color:#a6e22e">__rno_kf_s</span>.<span style="color:#a6e22e">cloneNode</span>(<span style="color:#66d9ef">true</span>));
+</code></pre></div><p>We want to make sure we clone it, and not just yank it from the main DOM.</p>
+<p>Now if we immediately call <code>show()</code> after cloning the node everything should work, right?</p>
+<p>But now we notice that the animation doesn&rsquo;t seem to play. What gives?</p>
+<p>If we take a look at the Styles we want to clone, we notice that it&rsquo;s a keyframes styling along the lines of:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-css" data-lang="css">@<span style="color:#66d9ef">keyframes</span> <span style="color:#f92672">rough-notation-dash</span> {
+    <span style="color:#f92672">to</span> {
+        stroke-dashoffset: <span style="color:#ae81ff">0</span>;
+    }
+}
+</code></pre></div><p>This means that this gives our library elements an end state for their animation. But with how Javascript works, by just cloning the node and
+immediately calling the show method, the style element hasn&rsquo;t had time to initialize itself in the DOM, meaning that it&rsquo;s styles won&rsquo;t apply just yet.</p>
+<p>One of the first solutions you might think of could be</p>
+<blockquote>
+<p>But if I&rsquo;ll just add a <code>setTimeout</code> that should fix it, right?</p>
+</blockquote>
+<p>Well.. Yes, but no.</p>
+<p>SetTimeout is all sorts of yucky and shouldn&rsquo;t be overused for situations like these. It&rsquo;s true that it would fix the problem but it might
+introduce some new bugs into our component.</p>
+<p>Instead we can just tell our code to wait for <em>the next</em> animation frame, and then run the <code>show()</code> command. This should fix our issue.</p>
+<p>To do that, we just write</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js">window.<span style="color:#a6e22e">requestAnimationFrame</span>(() =&gt; {
+    <span style="color:#66d9ef">if</span> (<span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">showOnLoad</span>) {
+        <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">annotation</span>.<span style="color:#a6e22e">show</span>();
+    }
+});
+</code></pre></div><p>The <code>requestAnimationFrame</code> takes a callback as an parameter, which it then calls after a frame has been shipped by the browser.</p>
+<hr>
+<h4 id="closing-in-on-the-target">Closing in on the target</h4>
+<p>So right now we should have a somewhat functional port of the Web Component. Our source code looks something along the lines of:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#66d9ef">import</span> { <span style="color:#a6e22e">annotate</span> } <span style="color:#a6e22e">from</span> <span style="color:#e6db74">&#39;rough-notation&#39;</span>;
+
+<span style="color:#66d9ef">export</span> <span style="color:#66d9ef">default</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">VanillaRoughNotation</span> <span style="color:#66d9ef">extends</span> <span style="color:#a6e22e">HTMLElement</span> {
+    <span style="color:#a6e22e">constructor</span>() {
+        <span style="color:#66d9ef">super</span>();
+        <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">type</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;underline&#39;</span>;
+        <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">animation</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">true</span>;
+        <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">animationDuration</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">800</span>;
+        <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">color</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;currentColor&#39;</span>;
+        <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">strokeWidth</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;
+        <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">padding</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">5</span>;
+        <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">showOnLoad</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">false</span>;
+        <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">order</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+        <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">multiline</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">true</span>;
+        <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">iterations</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span>;
+
+        <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">annotation</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">null</span>;
+    }
+
+    <span style="color:#a6e22e">setAttributes</span>() {
+        <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">type</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">getAttribute</span>(<span style="color:#e6db74">&#39;type&#39;</span>) <span style="color:#f92672">||</span> <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">type</span>;
+        <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">animation</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">hasAttribute</span>(<span style="color:#e6db74">&#39;animation&#39;</span>) <span style="color:#f92672">?</span> <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">getAttribute</span>(<span style="color:#e6db74">&#39;animation&#39;</span>) <span style="color:#f92672">===</span> <span style="color:#e6db74">&#39;true&#39;</span> <span style="color:#f92672">:</span> <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">animation</span>;
+        <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">animationDuration</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">getAttribute</span>(<span style="color:#e6db74">&#39;animationDuration&#39;</span>) <span style="color:#f92672">||</span> <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">animationDuration</span>;
+        <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">color</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">getAttribute</span>(<span style="color:#e6db74">&#39;color&#39;</span>) <span style="color:#f92672">||</span> <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">color</span>;
+        <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">strokeWidth</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">getAttribute</span>(<span style="color:#e6db74">&#39;strokeWidth&#39;</span>) <span style="color:#f92672">||</span> <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">strokeWidth</span>;
+        <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">padding</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">getAttribute</span>(<span style="color:#e6db74">&#39;padding&#39;</span>) <span style="color:#f92672">||</span> <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">padding</span>;
+        <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">showOnLoad</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">hasAttribute</span>(<span style="color:#e6db74">&#39;showOnLoad&#39;</span>);
+        <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">order</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">getAttribute</span>(<span style="color:#e6db74">&#39;order&#39;</span>) <span style="color:#f92672">||</span> <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">order</span>;
+        <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">multiline</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">hasAttribute</span>(<span style="color:#e6db74">&#39;multiline&#39;</span>) <span style="color:#f92672">?</span> <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">getAttribute</span>(<span style="color:#e6db74">&#39;multiline&#39;</span>) <span style="color:#f92672">===</span> <span style="color:#e6db74">&#39;true&#39;</span> <span style="color:#f92672">:</span> <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">multiline</span>;
+        <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">iterations</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">getAttribute</span>(<span style="color:#e6db74">&#39;iterations&#39;</span>) <span style="color:#f92672">||</span> <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">iterations</span>;
+    }
+
+    <span style="color:#a6e22e">connectedCallback</span>() {
+        <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">setAttributes</span>();
+        <span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span><span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">shadowRoot</span>) {
+            <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">attachShadow</span>({ <span style="color:#a6e22e">mode</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;open&#39;</span> });
+        }
+        <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">shadowRoot</span>.<span style="color:#a6e22e">innerHTML</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;&lt;slot&gt;&lt;/slot&gt;&#39;</span>;
+        <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">assignedNodes</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">shadowRoot</span>
+            .<span style="color:#a6e22e">querySelector</span>(<span style="color:#e6db74">&#39;slot&#39;</span>)
+            .<span style="color:#a6e22e">assignedNodes</span>()
+            .<span style="color:#a6e22e">filter</span>((<span style="color:#a6e22e">node</span>) =&gt; <span style="color:#a6e22e">node</span> <span style="color:#66d9ef">instanceof</span> <span style="color:#a6e22e">HTMLElement</span>);
+
+        <span style="color:#a6e22e">assignedNodes</span>.<span style="color:#a6e22e">forEach</span>((<span style="color:#a6e22e">an</span>) =&gt; {
+            <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">annotation</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">annotate</span>(<span style="color:#a6e22e">an</span>, {
+                <span style="color:#a6e22e">type</span><span style="color:#f92672">:</span> <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">type</span>,
+                <span style="color:#a6e22e">animate</span><span style="color:#f92672">:</span> <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">animate</span>,
+                <span style="color:#a6e22e">animationDuration</span><span style="color:#f92672">:</span> <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">animationDuration</span>,
+                <span style="color:#a6e22e">color</span><span style="color:#f92672">:</span> <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">color</span>,
+                <span style="color:#a6e22e">strokeWidth</span><span style="color:#f92672">:</span> <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">strokeWidth</span>,
+                <span style="color:#a6e22e">padding</span><span style="color:#f92672">:</span> <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">padding</span>,
+                <span style="color:#a6e22e">brackets</span><span style="color:#f92672">:</span> <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">brackets</span>,
+                <span style="color:#a6e22e">multiline</span><span style="color:#f92672">:</span> <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">multiline</span>,
+                <span style="color:#a6e22e">iterations</span><span style="color:#f92672">:</span> <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">iterations</span>,
+            });
+        });
+        <span style="color:#75715e">// Clone the style element from the windows styles to shadow dom.
+</span><span style="color:#75715e"></span>        <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">append</span>(window.<span style="color:#a6e22e">__rno_kf_s</span>.<span style="color:#a6e22e">cloneNode</span>(<span style="color:#66d9ef">true</span>));
+
+        window.<span style="color:#a6e22e">requestAnimationFrame</span>(() =&gt; {
+            <span style="color:#66d9ef">if</span> (<span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">showOnLoad</span>) {
+                <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">annotation</span>.<span style="color:#a6e22e">show</span>();
+            }
+        });
+    }
+}
+
+<span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span><span style="color:#a6e22e">customElements</span>.<span style="color:#a6e22e">get</span>(<span style="color:#e6db74">&#39;rough-notation&#39;</span>)) {
+    <span style="color:#a6e22e">customElements</span>.<span style="color:#a6e22e">define</span>(<span style="color:#e6db74">&#39;rough-notation&#39;</span>, <span style="color:#a6e22e">VanillaRoughNotation</span>);
+}
+</code></pre></div><p>Now the finishing touches before we ship this.</p>
+<hr>
+<h3 id="exposing-the-api">Exposing the API</h3>
+<p>As you might have noticed, the Rough Notation library exposes a set functions for us to call. We want to enable our users to use
+these functions as well. Luckily we can just expose those API&rsquo;s the same way that the original library does.</p>
+<p>We see that there are 4 main functions the library has:</p>
+<ul>
+<li>show()</li>
+<li>hide()</li>
+<li>remove()</li>
+<li>isShowing()</li>
+</ul>
+<p>To expose these API&rsquo;s we can just create wrapper functions for those inside our component:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#a6e22e">isShowing</span>() {
+    <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">annotation</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span> <span style="color:#f92672">&amp;&amp;</span> <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">annotation</span>.<span style="color:#a6e22e">isShowing</span>();
+}
+
+<span style="color:#a6e22e">show</span>() {
+    <span style="color:#66d9ef">if</span> (<span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">annotation</span>) {
+        <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">annotation</span>.<span style="color:#a6e22e">show</span>();
+    }
+}
+
+<span style="color:#a6e22e">hide</span>() {
+    <span style="color:#66d9ef">if</span> (<span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">annotation</span>) {
+        <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">annotation</span>.<span style="color:#a6e22e">hide</span>();
+    }
+}
+
+<span style="color:#a6e22e">remove</span>() {
+    <span style="color:#66d9ef">if</span> (<span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">annotation</span>) {
+        <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">annotation</span>.<span style="color:#a6e22e">remove</span>();
+    }
+}
+</code></pre></div><p>Now our users can just call the functions by selecting our web components from the DOM and calling it.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js">document.<span style="color:#a6e22e">querySelector</span>(<span style="color:#e6db74">&#39;rough-notation&#39;</span>).<span style="color:#a6e22e">show</span>();
+</code></pre></div><hr>
+<h3 id="wrapping-things-up">Wrapping things up</h3>
+<p>Now we should have a functional Web Component we can use in our projects, no matter the framework.</p>
+<p>The best thing about pure Vanilla Web Components are that they are framework agnostic, and don&rsquo;t rely on for example
+React or LitElement to be imported into the project, making them really just Plug-and-Play.</p>
+<p>Of course in this case, we are still relying on the rough notation libary, but there are plenty of Web Components built without
+any dependencies.</p>
+<p>Porting existing libraries is a great way to get into the feel of writing Web Components. They also make the world a little bit
+simpler at the same time, since there is no more need for all that calling of library API&rsquo;s since the component does it already.</p>
+<hr>
+<h5 id="links">Links</h5>
+<ul>
+<li><a href="https://github.com/rough-stuff/rough-notation">Original Library</a></li>
+<li><a href="https://github.com/Matsuuu/vanilla-rough-notation">Web Component Port</a></li>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/Web_Components/Using_custom_elements">MDN Resource on Web Components</a></li>
+<li><a href="https://www.npmjs.com/package/es-dev-server">ES Dev Server</a></li>
+</ul>
+]]></content>
+        </item>
+        
+        <item>
+            <title>How I Stopped Being Scared and Started Loving Vim</title>
+            <link>/posts/how-i-stopped-being-scared-and-started-loving-vim/</link>
+            <pubDate>Tue, 19 May 2020 15:48:32 +0300</pubDate>
+            
+            <guid>/posts/how-i-stopped-being-scared-and-started-loving-vim/</guid>
+            <description>Vim. It&amp;rsquo;s the editor in the center of all freshman Computer Science student memes.
+ It&amp;rsquo;s something almost every developer has seen at some part of their career. The most usual first touch to Vim is when new developers start using Git from the command line, and there is a merge conflict, or you forget to type a commit message.
+ Oh no what is this how do I escape &amp;lt;esc&amp;gt; &amp;lt;esc&amp;gt; &amp;lt;CTRL-C&amp;gt;</description>
+            <content type="html"><![CDATA[<p>Vim. It&rsquo;s the editor in the center of all freshman Computer Science student memes.</p>
+<h2 id="scientist-meme-vimscientist-vim-memepng"><img src="/scientist-vim-meme.png" alt="Scientist meme vim"></h2>
+<p><img src="/galaxy-brain-vim-meme.png" alt="Galaxy brain vim meme"></p>
+<p>It&rsquo;s something almost every developer has seen at some part of their career.
+The most usual first touch to Vim is when new developers start using Git from
+the command line, and there is a merge conflict, or you forget to type a commit message.</p>
+<p><img src="/git-commit-vim.png" alt="Vim in git commit screen"></p>
+<blockquote>
+<p>Oh no what is this how do I escape <code>&lt;esc&gt;</code> <code>&lt;esc&gt;</code> <code>&lt;CTRL-C&gt;</code></p>
+</blockquote>
+<p>And that&rsquo;s when you learn the holy combination of keys:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">ESC
+:wq
+Enter
+</code></pre></div><p>And just like that, you&rsquo;ve exited Vim, and are on your way to change the default
+editor to nano. ( Don&rsquo;t worry, I did that too )</p>
+<h2 id="adoption">Adoption</h2>
+<p>A lot of programmers these days use IDE&rsquo;s or text editors depending on the language
+and according to the <a href="https://insights.stackoverflow.com/survey/2018/#technology-_-most-popular-development-environments">Stack Overflow Developer Survery in 2018</a>,
+Vim isn barely in the top 5.</p>
+<p>A lot of people have moved from heavier IDE&rsquo;s to fast editors with plugins like
+<a href="https://code.visualstudio.com/">VS Code</a> and <a href="https://atom.io/">Atom</a>.</p>
+<p>For more demanding tasks or just for people who want a better tooling from their
+editor, products of <a href="https://www.jetbrains.com/">JetBrains</a> have been popular.</p>
+<p>I used to use the JetBrains product family for all of my projects.
+Webstorm for Javascript, IntelliJ for Java, Rider for Unity etc.
+The problem with IDE&rsquo;s is that them beeing beefier than regular editors,
+their startup time and system overhead are also usually higher.
+On lower end pc&rsquo;s this might mean opening the IDE and leaving to grab a coffee
+while the editor starts.</p>
+<blockquote>
+<p>So if these editors already provide the necessary tooling, why would I want to move to Vim?</p>
+</blockquote>
+<h3 id="vim-users">Vim Users</h3>
+<p>Vim users are usually something you don&rsquo;t see too much in the wild.
+VSCode supporting more and more languages by the day due to numerous plugins
+has been taking over the ecosystem, wether you&rsquo;re writing C or Javascript.</p>
+<p>But when you see one, typing away away in <em>just a terminal window</em>, it can be
+sort of a confusing sight. That&rsquo;s mainly because of the customizability
+of Vim. Most Vim users configure their editor to <strong>work</strong> and <strong>look</strong> the way <em>they</em> want it to,
+as opposed to for example VSCode, in which a lot of users go with the default settings.</p>
+<p>Another difference between Vim and other popular editors is that vim lacks a proper GUI.
+When you open up VSCode, you are greeted with a nice file tree and action dropdowns
+in the top bar. When you open Vim, you are greeted with <del>pain and agony</del> either a
+basic file tree or just a text file. And worst of all, you can&rsquo;t click anywhere.</p>
+<h3 id="so-what-makes-vim-such-a-good-editor">So what makes Vim such a good editor</h3>
+<p>Many people who have not used Vim, or have had short ettempts at using Vim usually
+dislike Vim, but people who have used it for multiple months or years usually praise it,
+why could this be? What are the benefits of Vim?</p>
+<hr>
+<h3 id="using-vim-the-performance-perspective">Using Vim: The performance perspective</h3>
+<p>I&rsquo;ll try to remain objective here, but some of the main benefits, without going to the
+actual usage include:</p>
+<ul>
+<li>
+<p>It&rsquo;s already installed in most operating systems</p>
+<ul>
+<li>Vim comes preinstalled on almost all popular Linux distributions and also on OSX.</li>
+<li>Whenever SSHing to a new server on a cloud provider, the editor installed is usually vim.</li>
+</ul>
+</li>
+<li>
+<p>It runs in the terminal, causing close to no overhead on the system.</p>
+<ul>
+<li>Vim is extremely lightweight, and will run on even the oldest of laptops.</li>
+</ul>
+</li>
+<li>
+<p>Vim utilizes the keyboard</p>
+<ul>
+<li>Vim uses the keyboard for all of it&rsquo;s actions, meaning you don&rsquo;t have to switch
+between the mouse and keyboard all of the time.</li>
+</ul>
+</li>
+</ul>
+<p>These are some of the great things about having vim as your editor.
+How about the pro&rsquo;s of Vim from the perspective of the user?</p>
+<hr>
+<h4 id="using-vim-the-developer-experience">Using Vim: The developer experience</h4>
+<p><img src="https://i.stack.imgur.com/7Cu9Z.jpg" alt="Vim learning curve"></p>
+<p>The learning curve of Vim has to be the biggest reason of a smaller adoption of the editor.
+It is true, that Vim can be hard to learn, but as soon as you learn the &ldquo;language&rdquo; of Vim and
+some of the basic commands, you are on your way to a greater development experience.</p>
+<p>Learning Vim is a skill that helps with a lot of applications, especially if working with Linux, since
+you learn some of the basic commands of Unix systems along the way.</p>
+<p>Wherein learning a normal text editor, some of it&rsquo;s shortcuts and gimmicks might take an afternoon,
+learning Vim is a bit lengthier of a process, but I promise you, it&rsquo;s worth it.</p>
+<p>A quote in a Reddit thread discussing Vim described the process well:</p>
+<blockquote>
+<p>Vi/Vim echoes the design philosophy of Unix.
+In both Unix and in Vi, you have a collection of atomic commands, which perform one task.
+More complicated tasks are done by combining the smaller predefined tasks.</p>
+</blockquote>
+<p>And example of this could be combining two simple commands:</p>
+<p>Say a user wants to empty a file of its contents. In a normal editor the easiest way would be to select all text,
+and then remove it by pressing delete or the backspace.</p>
+<p>In Vim you would use 2 commands for this:</p>
+<ul>
+<li>The <code>d</code> command to tell Vim you&rsquo;re about to delete something</li>
+<li>the <code>G</code> command, to tell Vim to go to the last line of the file.</li>
+</ul>
+<p>These commands combined will tell Vim to &ldquo;Delete everything from my current position until the last line of the file&rdquo;.</p>
+<p>Nothing too out of the ordinary here, but let&rsquo;s get into some more powerful command combinations:</p>
+<hr>
+<h4 id="using-vim-the-speed">Using Vim: The speed</h4>
+<p>The speed of Vim comes when you learn some of the basic commands, and start using them in conjunction with each other.</p>
+<p>Let&rsquo;s look at a few use cases.</p>
+<p>In Vim, you can use the <code>w</code> key to move to the start of the next word. This functionality is fimiliar to the one of
+using CTRL + Right arrow on your keyboard, but it can be done with just one keystroke.
+Moving backwards is done by pressing the <code>b</code> key. These can be memorized by &ldquo;Move to the next <strong>W</strong>ord&rdquo; and &ldquo;Move to the word <strong>B</strong>efore&rdquo;</p>
+<p>Now let&rsquo;s see them in action.</p>
+<p>Say we wanted to move forwards 10 words. In normal situations we would need to hold CTRL and type Right arrow 10 times.
+With Vim we only need to tell Vim to execute the <code>w</code> command 10 times with <code>10w</code>. Now that&rsquo;s handy!</p>
+<p>Now let&rsquo;s say we wanted to change the word our cursor is currently at the start of. In a normal editor. we would again need to paint the word,
+and type something on top of it, or even worse: delete the word letter by letter. In Vim, we can issue 2 commands.</p>
+<ul>
+<li>The <code>c</code> command, which acts almost the same to the <code>d</code> command, but <strong>C</strong>hanges the content instead of <strong>D</strong>eleting it</li>
+<li>The <code>w</code> command we already discussed.</li>
+</ul>
+<p>What this will do is remove the word our cursor is currently at the start of, and go into Insert mode, in which you do your typing in Vim.</p>
+<p>This can also be combined with the movement we learned earlier. If we type <code>c3w</code>, we are able to replace the next 3 words.</p>
+<blockquote>
+<p>Okay okay those are some neat tricks, but I don&rsquo;t see the time save in these yet.</p>
+</blockquote>
+<p>Then it&rsquo;s time for the <strong>even more powerful</strong> vim commands.</p>
+<hr>
+<h4 id="using-vim-the-extreme-speed">Using Vim: The extreme speed</h4>
+<p>Say we&rsquo;re in a situation, in which we need to remove all of the content inside curly braces ({}).</p>
+<p>On a normal text editor, you would most likely just paint the contents with a mouse, and then delete.
+Trying not to paint the opening or closing brace while you&rsquo;re at it</p>
+<p>In Vim, this kind of editing is what Vim shines in. There are determined boundaries and rules.</p>
+<p>To delete everything inside the curly braces in Vim, you only need to position your cursor inside the curly braces. Can be anywhere really.</p>
+<p>Then you just type <code>di{</code> or <code>di}</code>, whichever is fine.</p>
+<p>What this will do is it tells Vim to &ldquo;<strong>D</strong>elete everything <strong>I</strong>nside the boundary&rdquo;, in which the boundary is <code>{</code>.</p>
+<p>Now that&rsquo;s real speed. From multiple movements to just 3 keystrokes.</p>
+<hr>
+<h3 id="the-vim-language">The Vim Language</h3>
+<p>As you might have noticed, I usually wrote the Vim commands as &ldquo;What I tell Vim to do&rdquo;.
+That&rsquo;s something that Vim users call the Vim Language. Memorizing the shortcuts and commands by
+issuing meaning and &ldquo;motion&rdquo; to the words.</p>
+<p>A great talk about the Vim language can be found <a href="https://www.youtube.com/watch?v=wlR5gYd6um0">here</a></p>
+<hr>
+<h3 id="the-verdict">The verdict</h3>
+<p>I only scratched the surface of how movement commands and basic text editing work in Vim, but there&rsquo;s so much more
+under the surface. Vim being open source, and fully customizable, the limits are endless on what you can do with it.</p>
+<p>I started using Vim about a month ago, and it&rsquo;s now my daily driver as a code editor. With the help of a few plugins, I&rsquo;m
+getting the same, if not even better developer experience as I would get from using for example VSCode.</p>
+<p>On top of that, the vim commands provide me with big a huge utility of tools to use for editing, navigating and formatting my code.</p>
+<p>So if you&rsquo;re on the edge of checking out Vim, I urge you to try it out. You can do so easily on any device supporting vim by typing <code>vimtutor</code> in the terminal.</p>
+<p>For any questions about my configurations or comments, you can DM me in twitter.</p>
+]]></content>
+        </item>
+        
+        <item>
+            <title>Introducing Bulle</title>
+            <link>/posts/introducing-bulle/</link>
+            <pubDate>Sat, 16 May 2020 12:06:50 +0300</pubDate>
+            
+            <guid>/posts/introducing-bulle/</guid>
+            <description>/bull-E/
+ Bulle is a modern solution for mocking HTTP API&amp;rsquo;s.
+Bulle can be utilized to create mock API endpoints for development purposes or for general testing.
+ Preface I found myself developing applications where we had decided on the front-end technology, but were still contemplating on the backend technology. In these situtations, we started work on the front-end nontheless, and as with almost any modern web application, the front-end utilizes data acquired from the API.</description>
+            <content type="html"><![CDATA[<p><em>/bull-E/</em></p>
+<blockquote>
+<p>Bulle is a modern solution for mocking HTTP API&rsquo;s.</p>
+<p>Bulle can be utilized to create mock API endpoints for development purposes or for general testing.</p>
+</blockquote>
+<h3 id="preface">Preface</h3>
+<p>I found myself developing applications where we had decided on the front-end technology, but were still contemplating on the backend technology.
+In these situtations, we started work on the front-end nontheless, and as with almost any modern web application, the front-end
+utilizes data acquired from the API. However we did not have a API built yet, nor had we decided what it should be written in.</p>
+<p>In this situation we had 2 choices:</p>
+<ul>
+<li>Fill the front-end code with mocked JSON objects, which would act as they were the value acquired from the API</li>
+<li>Mocking an API, and fetching the data from it, like we would in the finalized product</li>
+</ul>
+<p>I Dislike having my code filled with temporary javascript objects, which will have to be replaced with AJAX calls down the line,
+and so decided to go with the latter approach.</p>
+<p>However, I was not able to find many good tools for quickly mocking an API for the use cases I needed. Most of them usually required a
+setup process, or a full on project strucured around them, and I found that as a huge waste of time and resources.</p>
+<blockquote>
+<p>In comes Bulle</p>
+</blockquote>
+<p>After not finding a solution fitting for me, I started work on <a href="https://github.com/Matsuuu/Bulle">Bulle</a>.</p>
+<p>The aim with Bulle was to create a tool that could be started in the matter of seconds from the command line,
+but could also be expanded for larger testing.</p>
+<hr>
+<h2 id="introduction-to-bulle">Introduction to Bulle</h2>
+<p>The main focus on Bulle was ease of use, and that is noticeable from the start.</p>
+<p>To get started with Bulle, you just need to install it through <code>npm</code></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">npm install -g bulle
+</code></pre></div><p>Bulle being a cli tool written in Javascript, it requires <a href="https://nodejs.org/en/">NodeJS</a> to be installed to be able to run.</p>
+<h4 id="hello-bulle">Hello Bulle</h4>
+<p>We can now test out that Bulle functions properly setting it up with a single route.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">bulle -r ping <span style="color:#e6db74">&#39;{&#34;message&#34;: &#34;pong&#34;}&#39;</span>
+</code></pre></div><p>After running the command, we are greeted with the GUI for Bulle, displaying all of the endpoints mocked, port number of Bulle, and the
+amount of requests each of the endpoints has received.</p>
+<p><img src="/bulle-startup.png" alt="Bulle Startup screen"></p>
+<p>Now if we check out our localhost port 3000 (default address for Bulle), we should see the endpoint active.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#75715e"># -v for more verbose example</span>
+curl -v http://localhost:3000/ping
+</code></pre></div><p>We get a return value of</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">*   Trying 127.0.0.1...
+* TCP_NODELAY set
+* Connected to localhost <span style="color:#f92672">(</span>127.0.0.1<span style="color:#f92672">)</span> port <span style="color:#ae81ff">3000</span> <span style="color:#f92672">(</span><span style="color:#75715e">#0)</span>
+&gt; GET /ping HTTP/1.1
+&gt; Host: localhost:3000
+&gt; User-Agent: curl/7.58.0
+&gt; Accept: */*
+&gt;
+&lt; HTTP/1.1 <span style="color:#ae81ff">200</span> OK
+&lt; content-type: text/plain; charset<span style="color:#f92672">=</span>utf-8
+&lt; content-length: <span style="color:#ae81ff">19</span>
+&lt; Date: Sat, <span style="color:#ae81ff">16</span> May <span style="color:#ae81ff">2020</span> 11:04:22 GMT
+&lt; Connection: keep-alive
+&lt;
+* Connection <span style="color:#75715e">#0 to host localhost left intact</span>
+<span style="color:#f92672">{</span><span style="color:#e6db74">&#34;message&#34;</span>: <span style="color:#e6db74">&#34;pong&#34;</span><span style="color:#f92672">}</span>
+</code></pre></div><p>And just like that, we have a mocked API which returns JSON data.</p>
+<p>Next let&rsquo;s look at some real world applications</p>
+<hr>
+<h2 id="bulle-as-the-developers-best-friend">Bulle as the Developers&rsquo; best friend</h2>
+<p>Let&rsquo;s create a common developer scenario:</p>
+<blockquote>
+<p>You are developing the user profile page, but do not have the backend API for the user profiles built yet.</p>
+<p>You, however want to create the data retrieval as a part of the page from the start, instead of just mocking the data in the code
+and worrying about the AJAX later on.</p>
+</blockquote>
+<p>Let&rsquo;s say we have our normal user profile page. It will contain the following user information:</p>
+<ul>
+<li>User Name</li>
+<li>User email address</li>
+<li>User phone number</li>
+<li>Has the user subscribed to the email letter</li>
+</ul>
+<p>Meaning that our data model would look something like</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript">{
+  <span style="color:#a6e22e">id</span><span style="color:#f92672">:</span> <span style="color:#ae81ff">1</span>,
+  <span style="color:#a6e22e">name</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;Foo Bar&#34;</span>,
+  <span style="color:#a6e22e">email</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;foobar@foo.bar&#34;</span>,
+  <span style="color:#a6e22e">phone</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;+123 555 555&#34;</span>,
+  <span style="color:#a6e22e">subscribedToLetter</span><span style="color:#f92672">:</span> <span style="color:#66d9ef">true</span>
+}
+</code></pre></div><p>Let&rsquo;s see how we could go about creating the necessary API&rsquo;s for this page.</p>
+<p>We would need a:</p>
+<ul>
+<li>Route for the user data (GET)</li>
+<li>Route for updating the user data (PUT)</li>
+<li>Route for deleting the user (DELETE)</li>
+</ul>
+<p>We can create a mock API for this page extremely easily with Bulle.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">bulle -p <span style="color:#ae81ff">1234</span> <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>-r user/1 <span style="color:#e6db74">&#39;{&#34;id&#34;: 1, &#34;name&#34;: &#34;Foo Bar&#34;, &#34;email&#34;: &#34;foobar@foo.bar&#34;, &#34;phone&#34;: &#34;+123 555 555&#34;, &#34;subscribedToLetter&#34;: true}&#39;</span> <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>-r user PUT <span style="color:#ae81ff">204</span> <span style="color:#e6db74">&#39;id=number;name=string;email=string;phone=string;subscribedToLetter=boolean&#39;</span> <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>-r user/1 DELETE <span style="color:#ae81ff">202</span> <span style="color:#e6db74">&#39;{&#34;success&#34;: true}&#39;</span>
+</code></pre></div><p>Let&rsquo;s go through the command line by line</p>
+<h2 id="the-initialization">The Initialization</h2>
+<p>Here we just call Bulle, and specify the port to be 1234 instead of the default 3000</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">bulle -p <span style="color:#ae81ff">1234</span>
+</code></pre></div><h2 id="the-get-route">The GET route</h2>
+<p>First we specify the GET route. Since GET is the default method, and 200 is the default return code, those can be omitted.</p>
+<p>We specify the return value of the request as the same JSON object we came up with earlier. This will be sent back to the
+requester on a successful GET request.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">-r user/1 <span style="color:#e6db74">&#39;{&#34;id&#34;: 1, &#34;name&#34;: &#34;Foo Bar&#34;, &#34;email&#34;: &#34;foobar@foo.bar&#34;, &#34;phone&#34;: &#34;+123 555 555&#34;, &#34;subscribedToLetter&#34;: true}&#39;</span>
+</code></pre></div><h2 id="the-put-route">The PUT route</h2>
+<p>Next we specify the PUT route, which is the route we use for updating the user&rsquo;s data.</p>
+<p>When updating entities, we usually want to check that the entity field types match what we want. This is where we apply
+the Bulle validation pattern.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">-r user PUT <span style="color:#ae81ff">204</span> <span style="color:#e6db74">&#39;id=number;name=string;email=string;phone=string;subscribedToLetter=boolean&#39;</span>
+</code></pre></div><p>The pattern is a semicolon-seperated pattern of key-value pairs, where the key is the key of the entity we want to check,
+and the value is the variable type we want the sent data to be.</p>
+<p>For example here we want to make sure that the sent <code>id</code> is a number, <code>name</code>, <code>email</code> and <code>phone</code>
+fields are strings and that the <code>subscribedToLetter</code> variable is a boolean.</p>
+<p>On a invalid data type, Bulle will return with a response code <code>422 Unprocessable Entity</code></p>
+<p>If some of the specified fields are missing from the sent data, Bulle will return with a <code>500 Internal Server Error</code></p>
+<h2 id="the-delete-route">The DELETE route</h2>
+<p>Last we specify the DELETE route. This one is a simple task of specifying a response code and a simple response body.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">-r user/1 DELETE <span style="color:#ae81ff">202</span> <span style="color:#e6db74">&#39;{&#34;success&#34;: true}&#39;</span>
+</code></pre></div><h2 id="testing">Testing</h2>
+<p>Now if we test the API, on a GET request, we should get the user profile information.</p>
+<p><img src="/bulle-get-result.png" alt="Bulle GET request result"></p>
+<p>Next up we can try out the update (PUT) route.</p>
+<p>We can try out if our type checking works, but wrapping our boolean <code>subscribedToLetter</code> in quotes, making it a string
+instead of a boolean.</p>
+<p><img src="/bulle-put-error.png" alt="Bulle PUT getting a validation error"></p>
+<p>Seems that the validation works.</p>
+<p>If we fix the error we should get a successful request through:</p>
+<p><img src="/bulle-put-success.png" alt="Bulle PUT successful request"></p>
+<p>And we received a 204, which was the return value we wanted to see.</p>
+<p>Last we can test out our delete path:</p>
+<p><img src="/bulle-delete-success.png" alt="Bulle DELETE succesful request"></p>
+<p>And as we could have guessed, the DELETE path works just like it should.</p>
+<h2 id="verdict">Verdict</h2>
+<p>By using Bulle, we were able to mock a simple API with different methods with just a single small command from the command line.</p>
+<p>When used in real development, we would save a lot of time in refactoring, since we wouldn&rsquo;t need to rewrite our data
+acquisition methods all over again after transferring from test data to a real API.</p>
+<p>This was just a simple example of how to use Bulle in front-end development. Bulle is still a really early in development and
+will be updated and expanded upon as new needs rise.</p>
+<p>You can start using Bulle today by getting it from <a href="https://www.npmjs.com/package/bulle">npm</a>.</p>
+<p>Contributions to the project are also welcome in the <a href="https://github.com/Matsuuu/Bulle">Bulle Github Repository</a></p>
+]]></content>
+        </item>
         
     </channel>
 </rss>

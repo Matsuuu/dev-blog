@@ -40,7 +40,7 @@ Before we get started, I&rsquo;ll clear out some possible misconceptions from th
  OpenWC is not LitElement. LitElement is a Open source library written by the Polymer team and the open source contributors while OpenWC is a community aimed at providing recommendations for web component development. LitElement is a base class that makes use of the lit-html library.">
 <meta itemprop="datePublished" content="2020-08-19T15:00:00&#43;03:00" />
 <meta itemprop="dateModified" content="2020-08-19T15:00:00&#43;03:00" />
-<meta itemprop="wordCount" content="4178">
+<meta itemprop="wordCount" content="4194">
 <meta itemprop="image" content=""/>
 
 
@@ -644,14 +644,17 @@ rendering thrown in there, and our components handle events with event listener 
 <p>Meaning in short that we can ship our Web Component <em>as is</em>. Isn&rsquo;t that cool?</p>
 <p>Also since we&rsquo;re not building our package, we don&rsquo;t need to ship any source maps.</p>
 <p>If we were to ship our Web Component, we would only need to ship the one js file, and tag LitElement as the dependency.
-LitElement being a fairly small library (318kB unpacked), our total project size would be in total around 320kB.</p>
+LitElement being a fairly small library (<a href="https://bundlephobia.com/result?p=lit-element@2.4.0">23.2kB minified, 7.4kB minified + Gzipped</a>),
+our total project size would be in total around 30kB if we don&rsquo;t compress anything.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">&gt; du -sh src/CatImageLitViewer.js
 
 4.0K    CatImageLitViewer.js
 </code></pre></div><p>This is, if we were not already using LitElement in our project. If we are already writing a LitElement project, our new package would
 only bring the 4KB with it to the project. And this is unminified.</p>
 <p><em>For comparison</em>: If we wanted to add a single React Component to a non-react project, the minimal setup would require both React
-and React-DOM, which together weight in at 204kB + 3MB unpackaged.</p>
+and React-DOM, which together weight in at
+<a href="https://bundlephobia.com/result?p=react@16.13.1">6.3kB, 2.6 gzipped</a> + <a href="https://bundlephobia.com/result?p=react-dom@16.13.1">114.6kB, 35.9kB gzipped</a>
+totaling around 120kB uncompressed.</p>
 <p>Also a plus in the LitElement approach is that we won&rsquo;t have to build the project in the implementing side either, since
 the css in baked into the js file, therefore eliminating the need for a css loader (unlike in the React version).</p>
 <p>Overall when creating Web Components with LitElement, we ended up with 6x smaller package size (4kb vs 24kb total), and
@@ -874,7 +877,7 @@ send me a DM and let me know :)</p>
 
         <div class="post-info">
 
-            <p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>4178 Words</p>
+            <p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>4194 Words</p>
 
             <p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>2020-08-19 15:00 &#43;0300</p>
         </div>
