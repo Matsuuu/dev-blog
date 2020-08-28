@@ -1,0 +1,16 @@
+Comparing React and Web Components Part 3: Accessibility and Performance
+
+- Compare using inputs in Web Components and React.
+    - Using Forms to parse the data instead of using props for everything.
+    - "It's so common now to use click handlers instead of submit handlers" ~ Westbrook
+        - Delve into the A11y differences here and 
+    - Using forms in Shadow Dom. How does the form get input data from normal and custom inputs.
+    - Replace all inline code with handler methods
+    - No need to sync input properties on input with HTML Element vs React element
+        - React has to change state every input, whereas WC doesn't
+    - Passing methods as parameters
+
+- Discuss Inter-Component interactions.
+    - How Parent and Child Elements interact, e.g. Via events or calling methods.
+
+- Some data differences in a more readable form would be nice

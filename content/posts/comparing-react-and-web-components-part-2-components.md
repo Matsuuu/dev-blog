@@ -27,7 +27,7 @@ In today's post we'll be comparing building Javascript components in 3 different
 We will go through a simple implementation of a small form, in which the user can insert the desired width and height
 of a random cat picture they desire and then receive it by our code querying the [PlaceKitten](https://placekitten.com/) API
 
-Our finished application will be look something along the lines of the picture below.
+Our finished application will look something along the lines of the picture below.
 
 ![Cat Image Viewer](/cat-viewer-example.png)
 
@@ -585,7 +585,8 @@ Meaning in short that we can ship our Web Component _as is_. Isn't that cool?
 Also since we're not building our package, we don't need to ship any source maps.
 
 If we were to ship our Web Component, we would only need to ship the one js file, and tag LitElement as the dependency.
-LitElement being a fairly small library (318kB unpacked), our total project size would be in total around 320kB.
+LitElement being a fairly small library ([23.2kB minified, 7.4kB minified + Gzipped](https://bundlephobia.com/result?p=lit-element@2.4.0)),
+our total project size would be in total around 30kB if we don't compress anything.
 
 ```bash
 > du -sh src/CatImageLitViewer.js
@@ -597,7 +598,9 @@ This is, if we were not already using LitElement in our project. If we are alrea
 only bring the 4KB with it to the project. And this is unminified.
 
 _For comparison_: If we wanted to add a single React Component to a non-react project, the minimal setup would require both React
-and React-DOM, which together weight in at 204kB + 3MB unpackaged.
+and React-DOM, which together weight in at
+[6.3kB, 2.6 gzipped](https://bundlephobia.com/result?p=react@16.13.1) + [114.6kB, 35.9kB gzipped](https://bundlephobia.com/result?p=react-dom@16.13.1)
+totaling around 120kB uncompressed.
 
 Also a plus in the LitElement approach is that we won't have to build the project in the implementing side either, since
 the css in baked into the js file, therefore eliminating the need for a css loader (unlike in the React version).
