@@ -262,11 +262,75 @@ const router = new SimplrRouter({ routes });
 router.init();
 ```
 
+And Horaaah! We have our router already up and running!
+
 ![Demo](/router-demo.gif)
+
+**_As you might have noticed, we didn't need to alternate our anchor tags at all to get the routing functional._**
+
+**_The router handles the events on anchors itself and doesn't require developer interferance_**
+
+Next we'll look into customizing our router a bit!
 
 ---
 
 ### Customizing
+
+Now that we have Simplr Router up and running, we are ready to customize it a bit. Let's start by modifying the transitions
+
+#### Removing transitions
+
+If one wanted to remove the transitions alltogether, there's a option to do just that.
+
+```javascript
+const router = new SimplrRouter({ routes, disableTransition: true });
+```
+
+This will make the page changes instant, instead of the default sliding animation the router provides out of the box.
+
+#### Changing transitions
+
+If however we wanted a transition, but didn't want it to be the default, we can easily modify it.
+
+The first modification type would be the transition speed. This can be easily set in the initial configuration:
+
+```javascript
+// Transition speed is calculated in milliseconds
+const router = new SimplrRouter({ routes, transitionSpeed: 1000 });
+```
+
+If the sliding transition is not something we want, we can also animate the whole transition ourselves.
+
+First we disable the default transition, and set the transitionSpeed to a slower speed.
+
+```javascript
+const router = new SimplrRouter({
+  routes,
+  disableTransition: true,
+  transitionSpeed: 1000,
+});
+```
+
+After that, we modify the CSS of our router's container elements. We modify the entering and leaving
+elements so that the fade-in-out effect applies to both of the views.
+
+```css
+simplr-router-container[entering-view],
+simplr-router-container[leaving-view] {
+  opacity: 0;
+}
+```
+
+And now we have a nice slow fade-in-out animation for our page.
+
+![Transition demo](/router-transition.gif)
+
+#### Custom error pages
+
+In many cases we want to display a error page when the user navigates to a faulty path.
+For these cases we can declare a `not-found` path and a `forbidden` path.
+
+####
 
 ---
 
