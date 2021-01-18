@@ -18,8 +18,11 @@ keep it that way. The idea of adding a router to your project, without
 
 1. Adding multiple dependencies with it
 2. Adding kilobytes upon kilobytes of arbitrary code to your project
+3. Introducing a whole lot of refactoring or a high learning curve
 
 was something I really enjoyed.
+
+#
 
 The design idea going forward with the router is to keep it as lightweight as possible, and to utilize
 the latest features of the Web.
@@ -46,7 +49,7 @@ npm install @simplr-wc/router
 ```
 
 And after that we are ready to go! As the router is written in vanilla Javascript, we don't even need
-any build tools to get up and working.
+any build tools to get up and running.
 
 However to make development easier, I usually use the [@web/dev-server](https://modern-web.dev/docs/dev-server/overview/) by [Modern Web](https://modern-web.dev/)
 
@@ -56,7 +59,7 @@ Next let's write some views to navigate to!
 
 ### Getting started
 
-In these examples we will go through a setup with _Vanilla Web Components_, but we'll go through a Preact example [at the end of the post](#preact-example).
+In these examples we will go through a setup with _Vanilla Web Components_, but we'll show a Preact example [at the end of the post](#preact-example).
 
 First we want to create our views, into which we will be navigating to with the Router.
 
@@ -97,6 +100,8 @@ class HomePage extends HTMLElement {
   }
 }
 
+// Declare a custom Component for our view, so that
+// we can call it as <home-page></home-page>
 if (!customElements.get("home-page")) {
   customElements.define("home-page", HomePage);
 }
@@ -139,12 +144,14 @@ class ProfilePage extends HTMLElement {
   }
 }
 
+// Declare a custom Component for our view, so that
+// we can call it as <profile-page></profile-page>
 if (!customElements.get("profile-page")) {
   customElements.define("profile-page", ProfilePage);
 }
 ```
 
-On top of these views, we will have a navbar in just pure HTML.
+On top of these views, we will have a navbar in just pure HTML prepended at the start of the index.html file.
 
 ```html
 <nav>
@@ -154,9 +161,9 @@ On top of these views, we will have a navbar in just pure HTML.
 </nav>
 ```
 
-You don't need to fully understand Web Components to understand this demo, but the main part you
+**⚠️ You don't need to fully understand Web Components to understand this demo, but the main part you
 need to understand is that our views are now HTML elements, and can be rendered into the DOM
-by using `<home-page></home-page>` and `<profile-page></profile-page>`.
+by using `<home-page></home-page>` and `<profile-page></profile-page>`.⚠️**
 
 ---
 
@@ -199,10 +206,10 @@ const routes = [
   {
     path: "profile",
     component: "profile-page",
-    // Initialize the sub routes for the profile page
-    // in this case /profile/:user, where :user is replaced with
-    // the user's name
     routes: [
+      // Initialize the sub routes for the profile page
+      // in this case /profile/:user, where :user is replaced with
+      // the user's name
       {
         path: ":user",
         component: "profile-page",
@@ -218,7 +225,7 @@ Sub-routes inherit the base path from their parent, and can be static or dynamic
 
 The parameter from the URL is mapped onto the view, and is easily usable from within the view
 
-Inside our view component, we can access the name of the user through the keyword `this`.
+Inside our view component, we can access the name of the user in it's property through the keyword `this`.
 
 ```javascript
 // When navigating to /profile/John
@@ -266,9 +273,9 @@ And Horaaah! We have our router already up and running!
 
 ![Demo](/router-demo.gif)
 
-**_As you might have noticed, we didn't need to alternate our anchor tags at all to get the routing functional._**
+**As you might have noticed, we didn't need to alternate our anchor tags at all to get the routing functional.**
 
-**_The router handles the events on anchors itself and doesn't require developer interferance_**
+**The router handles the events on anchors itself and doesn't require developer interferance**
 
 Next we'll look into customizing our router a bit!
 
@@ -323,23 +330,172 @@ simplr-router-container[leaving-view] {
 
 And now we have a nice slow fade-in-out animation for our page.
 
+These can be of course modified in any way you like. These are just some simple examples to get started.
+
 ![Transition demo](/router-transition.gif)
 
 #### Custom error pages
 
 In many cases we want to display a error page when the user navigates to a faulty path.
-For these cases we can declare a `not-found` path and a `forbidden` path.
+For these cases we can declare a `not-found` path for when a view is not found and a `forbidden` path
+for when access to a certain view is denied by a guard.
 
-####
+##### Not Found
+
+A not found page can be configured by creating a path named ´not-found´ and assigning it a view:
+
+```javascript
+const routes = [
+  {
+    path: "/",
+    component: "main-page",
+  },
+  {
+    path: "not-found",
+    component: "not-found-page",
+  },
+];
+
+const router = new SimplrRouter({ routes });
+router.init();
+```
+
+Now every time a user navigates to a view not recognized by the router, they will be greeted by your "Not Found" -page.
+
+##### Forbidden
+
+A forbidden page can be configured in the same manner. A forbidden page is triggered when a
+[guard](https://router.matsu.fi/recipes/guards) fails it's check.
+
+```javascript
+const routes = [
+  {
+    path: "/",
+    component: "main-page",
+  },
+  {
+    path: "forbidden",
+    component: "forbidden-page",
+  },
+];
+
+const router = new SimplrRouter({ routes });
+router.init();
+```
+
+#### Custom Actions
+
+If however you would like to run a piece of code when a invalid page is loaded, that is fully possible too.
+
+```javascript
+const routes = [
+  {
+    path: "/",
+    component: "main-page",
+  },
+];
+
+const router = new SimplrRouter({
+  routes,
+  notFoundAction: () => alert("Page not found"),
+  forbiddenAction: () => alert("You are not allowed to view this page"),
+});
+router.init();
+```
 
 ---
 
 ### Code Splitting
 
+The next coolest thing Simplr Router provides is the possiblity for code splitting.
+
+What code splitting means is that you don't have to ship a huge bundle of javascript to your user
+on their initial page load, but instead you can only load the view component **when it's needed**.
+
+The best past is: You barely have to do any work to enable this. All you have to do is
+instead of importing your views at the top of your file as we've done in the examples, you will
+do it inside the routes.
+
+```javascript
+import SimplrRouter from "@simplr-wc/router";
+
+const routes = [
+  {
+    path: "/",
+    component: "home-page",
+    import: () => import("./home.js"),
+  },
+  {
+    path: "profile",
+    component: "profile-page",
+    import: () => import("./profile.js"),
+    routes: [
+      {
+        path: ":user",
+        component: "profile-page",
+        import: () => import("./profile.js"),
+      },
+    ],
+  },
+];
+
+const router = new SimplrRouter({ routes });
+router.init();
+```
+
+The pages will be imported on the first time they're loaded, saving you a lot of initial load time on your page.
+
+**This also works with most bundlers, like Rollup**
+
+To see this in action, you can open up the [Simplr Router docs](https://router.matsu.fi/) and look at the network tab in your dev tools.
+
+![Code splitting example](/router-code-splitting.gif)
+
 ---
 
 ### Middleware
 
----
+The last part of the Router I want to highlight in this blog is the extensibility.
 
-### Preact example
+With middleware support, the router can be easily modified without adding dependencies or extra code
+into the main project.
+
+Currently there are 2 official middlewares released:
+
+- [A Preact Middleware](https://github.com/Simplr/simplr-router-preact-middleware)
+  and
+- [A React Middleware](https://github.com/Simplr/simplr-router-react-middleware)
+
+These middlewares will add support for Preact and React projects respectively, and can be applied with just 2 lines of code:
+
+```javascript
+import SimplrRouter from "@simplr-wc/router";
+import SimplrRouterPreactMiddleware from "@simplr-wc/router-preact-middleware";
+
+const router = new SimplrRouter({ routes });
+router.use(SimplrRouterPreactMiddleware());
+router.init();
+```
+
+Adding these to the regular Simplr Router configuration will allow you to use the library in your
+Preact projects too :)
+
+A use case example can be found in the [Preact Middleware Repository](https://github.com/Simplr/simplr-router-preact-middleware/tree/main/example)
+or in [this Codesandbox](https://codesandbox.io/s/sweet-dawn-schqt?file=/src/index.js)
+
+More information about the Middlewares can be found in the [documentation](https://router.matsu.fi/recipes/middleware).
+
+### Final word
+
+Simplr Router is one of my most ambitious projects in open source Javascript and I really hope it
+provides others with value as it has provided me already.
+
+The aim of Simplr Router is to become one of the standard approaches in SPA routing, and to expands with
+user input to provide more functionality and speed for developers and users alike, while remaining lightweight.
+
+If you enjoyed this post, please make sure to check out Simplr Router in
+
+- [NPM](https://www.npmjs.com/package/@simplr-wc/router)
+- [GitHub](https://github.com/Simplr/simplr-router) (Maybe give it a ⭐ too ;) )
+- [The Docs](https://router.matsu.fi/)
+- Or [discuss it with me on Twitter](https://twitter.com/matsuuu_)
