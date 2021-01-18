@@ -1,60 +1,64 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-<meta http-equiv="X-UA-Compatible" content="ie=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<meta name="author" content="Matsu ">
-<meta name="description" content="" />
-<meta name="keywords" content="" />
+  <head>
+    
+      <title>
+        DX ::
+        Matsu — Abusing Javascript and The Web platform
+      </title>
+    
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta
+  name="description"
+  content=""
+/>
+<meta
+  name="keywords"
+  content=""
+/>
 <meta name="robots" content="noodp" />
-<meta name="theme-color" content="" />
 <link rel="canonical" href="/tags/dx/" />
 
 
-    <title>
-        
-            DX :: Matsu  — Abusing Javascript and The Web platform
-        
-    </title>
 
 
 
-<link href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.5.0/css/flag-icon.min.css" rel="stylesheet"
-    type="text/css">
+<link rel="stylesheet" href="/assets/style.css" />
+
+<link rel="stylesheet" href="/style.css" />
 
 
+<link
+  rel="apple-touch-icon-precomposed"
+  sizes="144x144"
+  href="/img/apple-touch-icon-144-precomposed.png"
+/>
+<link rel="shortcut icon" href="/img/favicon.png" />
 
-<link rel="stylesheet" href="/main.dede02da9537a98158079c023e83573e18127834838ef08172acce888341a797.css">
 
+<link href="/assets/fonts/Inter-Italic.woff2" rel="preload" type="font/woff2" as="font" crossorigin="">
+<link href="/assets/fonts/Inter-Regular.woff2" rel="preload" type="font/woff2" as="font" crossorigin="">
+<link href="/assets/fonts/Inter-Medium.woff2" rel="preload" type="font/woff2" as="font" crossorigin="">
+<link href="/assets/fonts/Inter-MediumItalic.woff2" rel="preload" type="font/woff2" as="font" crossorigin="">
+<link href="/assets/fonts/Inter-Bold.woff2" rel="preload" type="font/woff2" as="font" crossorigin="">
+<link href="/assets/fonts/Inter-BoldItalic.woff2" rel="preload" type="font/woff2" as="font" crossorigin="">
 
-
-
-
-
-<meta itemprop="name" content="DX">
-<meta itemprop="description" content="Matsu Blog - Blog about Javascript and abusing the web platform">
 
 <meta name="twitter:card" content="summary_large_image"/>
-<meta name="twitter:image" content=""/>
+<meta name="twitter:image" content="/"/>
 
 <meta name="twitter:title" content="DX"/>
 <meta name="twitter:description" content="Matsu Blog - Blog about Javascript and abusing the web platform"/>
 
 
 
-
-    <meta property="og:title" content="DX" />
+<meta property="og:title" content="DX" />
 <meta property="og:description" content="Matsu Blog - Blog about Javascript and abusing the web platform" />
 <meta property="og:type" content="website" />
 <meta property="og:url" content="/tags/dx/" />
-<meta property="og:image" content=""/>
+<meta property="og:image" content="/"/>
 <meta property="og:updated_time" content="2020-05-19T15:48:32+03:00" /><meta property="og:site_name" content="Matsu" />
-
-
-
-
-
 
 
 
@@ -62,128 +66,160 @@
 
 
 
-
-<script async src="https://www.googletagmanager.com/gtag/js?id=UA-85452649-2"></script>
-<script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag() {
-        dataLayer.push(arguments);
-    }
-    gtag('js', new Date());
-
-    gtag('config', 'UA-85452649-2');
-</script>
-
-
-    </head>
-
-    
-        <body>
-    
-    
-        <div class="container">
-            <header class="header">
-    <span class="header__inner">
-        <a href="/" style="text-decoration: none;">
-    <div class="logo">
-        
-            <span class="logo__mark">></span>
-            <span class="logo__text">:wq</span>
-            <span class="logo__cursor" style=
-                  "
-                   
-                   ">
-            </span>
-        
-    </div>
+  </head>
+  <body class="dark-theme">
+    <div class="container">
+      <header class="header">
+  <span class="header__inner">
+    <a
+  href="/"
+  class="logo"
+  style="text-decoration: none;"
+>
+  
+    <span class="logo__mark"><svg xmlns="http://www.w3.org/2000/svg" class="greater-icon" viewBox="0 0 44 44">
+  <path fill="none" d="M15 8l14.729 14.382L15 35.367" />
+</svg>
+</span>
+    <span class="logo__text"
+      >:wq</span
+    >
+    <span class="logo__cursor"></span>
+  
 </a>
 
+    <span class="header__right">
+      
+        <nav class="menu">
+  <ul class="menu__inner menu__inner--desktop">
+    
+      
+        
+          <li><a href="/posts">Blog</a></li>
+        
+      
+    
+  </ul>
 
-        <span class="header__right">
-            
-                <nav class="menu">
-    <ul class="menu__inner"><li><a href="/posts">Blog</a></li>
-    </ul>
+  <ul class="menu__inner menu__inner--mobile">
+    
+      
+        <li><a href="/posts">Blog</a></li>
+      
+    
+  </ul>
 </nav>
 
-                <span class="menu-trigger">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                        <path d="M0 0h24v24H0z" fill="none"/>
-                        <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/>
-                    </svg>
-                </span>
-            
+        <span class="menu-trigger">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M0 0h24v24H0z" fill="none" />
+            <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z" />
+          </svg>
         </span>
+      
+      <span class="theme-toggle">
+        <svg
+  class="theme-toggler"
+  width="24"
+  height="24"
+  viewBox="0 0 48 48"
+  fill="none"
+  xmlns="http://www.w3.org/2000/svg"
+>
+  <path
+    d="M22 41C32.4934 41 41 32.4934 41 22C41 11.5066 32.4934 3 22
+  3C11.5066 3 3 11.5066 3 22C3 32.4934 11.5066 41 22 41ZM7 22C7
+  13.7157 13.7157 7 22 7V37C13.7157 37 7 30.2843 7 22Z"
+  />
+</svg>
+
+      </span>
     </span>
+  </span>
 </header>
 
 
-            <div class="content">
-                
+      <div class="content">
+        
+  <div class="posts">
     
+      <div class="post on-list">
+        <h1 class="post-title"><a href="/posts/how-i-stopped-being-scared-and-started-loving-vim/">How I Stopped Being Scared and Started Loving Vim</a></h1>
+        <div class="post-meta">
+          
+            <span class="post-date">
+              2020-05-19
+            </span>
+
+            
+          
+          
+
+
+          
+        </div>
+
+        
+          <span class="post-tags">
+            
+              <a href="/tags/vim/">#Vim</a>&nbsp;
+            
+              <a href="/tags/dx/">#DX</a>&nbsp;
+            
+              <a href="/tags/editors/">#Editors</a>&nbsp;
+            
+          </span>
+        
+
+        
+
+        <div class="post-content">
+          
+            
+              Vim. It&rsquo;s the editor in the center of all freshman Computer Science student memes.
+ It&rsquo;s something almost every developer has seen at some part of their career. The most usual first touch to Vim is when new developers start using Git from the command line, and there is a merge conflict, or you forget to type a commit message.
+ Oh no what is this how do I escape &lt;esc&gt; &lt;esc&gt; &lt;CTRL-C&gt;
+            
+          
+        </div>
+        
+          <div>
+            <a class="read-more button" href="/posts/how-i-stopped-being-scared-and-started-loving-vim/"
+              >Read more →</a
+            >
+          </div>
+        
+      </div>
     
-    <main class="posts">
-        <h1>DX</h1>
-
-        
-
-        
-            <div class="posts-group">
-                <div class="post-year">2020</div>
-
-                <ul class="posts-list">
-                    
-                        <li class="post-item">
-                            <a href="/posts/how-i-stopped-being-scared-and-started-loving-vim/">
-                                <span class="post-title">How I Stopped Being Scared and Started Loving Vim</span>
-                                <span class="post-day">
-                                    
-                                        May 19
-                                    
-                                </span>
-                            </a>
-                        </li>
-                    
-                </ul>
-            </div>
-        
     <div class="pagination">
-    <div class="pagination__buttons">
-        
-        
-    </div>
+  <div class="pagination__buttons">
+    
+    
+  </div>
 </div>
 
-    </main>
+  </div>
 
-            </div>
+      </div>
 
-            
-                <footer class="footer">
-    <div class="footer__inner">
-        <div class="footer__content">
-            <span>&copy; 2021</span>
-            <span><a href="">Matsu</a></span>
-            <span><a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener">CC BY-NC 4.0</a></span><span><a href="posts/index.xml" target="_blank" title="rss"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-rss"><path d="M4 11a9 9 0 0 1 9 9"></path><path d="M4 4a16 16 0 0 1 16 16"></path><circle cx="5" cy="19" r="1"></circle></svg></a></span>
-        </div>
-    </div>
-    <div class="footer__inner">
-        <div class="footer__content">
-            <span>Powered by <a href="http://gohugo.io">Hugo</a></span>
-            <span>Made with &#10084; by <a href="https://github.com/rhazdon">Djordje Atlialp</a></span>
-          </div>
-    </div>
+      
+        <footer class="footer">
+  <div class="footer__inner">
+    
+      <div class="copyright copyright--user"><a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener">CC BY-NC 4.0</a></div>
+      
+  </div>
 </footer>
 
-            
-        </div>
-
-        
+<script src="/assets/main.js"></script>
+<script src="/assets/prism.js"></script>
 
 
+      
+    </div>
 
-<script type="text/javascript" src="/bundle.min.af435e44374f1e99a669ea8cd5bb9a2fceed80588941a451bfddb66b86a67c9f40b0f417e9543a763f809aa7e9300d7b1d69bf99615810ba02ac70396d50fad5.js" integrity="sha512-r0NeRDdPHpmmaeqM1buaL87tgFiJQaRRv922a4amfJ9AsPQX6VQ6dj&#43;AmqfpMA17HWm/mWFYELoCrHA5bVD61Q=="></script>
     
+      
 <script type="application/javascript">
 var doNotTrack = false;
 if (!doNotTrack) {
@@ -197,8 +233,6 @@ if (!doNotTrack) {
 }
 </script>
 
-
-
-
-    </body>
+    
+  </body>
 </html>
