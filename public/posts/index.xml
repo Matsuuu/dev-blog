@@ -6,13 +6,13 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>en-us</language>
         <copyright>&lt;a href=&#34;https://creativecommons.org/licenses/by-nc/4.0/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;CC BY-NC 4.0&lt;/a&gt;</copyright>
-        <lastBuildDate>Tue, 12 Jan 2021 10:52:38 +0200</lastBuildDate>
+        <lastBuildDate>Mon, 18 Jan 2021 10:12:38 +0200</lastBuildDate>
         <atom:link href="/posts/index.xml" rel="self" type="application/rss+xml" />
         
         <item>
             <title>Utilizing Simplr Router</title>
             <link>/posts/utilizing-simplr-router/</link>
-            <pubDate>Tue, 12 Jan 2021 10:52:38 +0200</pubDate>
+            <pubDate>Mon, 18 Jan 2021 10:12:38 +0200</pubDate>
             
             <guid>/posts/utilizing-simplr-router/</guid>
             <description>I started working on Simplr Router in September 2019. Back then I had just learned about Web Components and the power they enable for developers. We were working on our first bigger project and were using LitElement. We had great tooling, but were missing one thing: A router which suited our needs and customizability.
@@ -1782,7 +1782,7 @@ curl -v http://localhost:3000/ping
 </code></pre></div><p>And just like that, we have a mocked API which returns JSON data.</p>
 <p>Next let&rsquo;s look at some real world applications</p>
 <hr>
-<h2 id="bulle-as-the-developers-best-friend">Bulle as the Developers&rsquo; best friend</h2>
+<h2 id="bulle-as-the-developers-best-friend">Bulle as the Developers' best friend</h2>
 <p>Let&rsquo;s create a common developer scenario:</p>
 <blockquote>
 <p>You are developing the user profile page, but do not have the backend API for the user profiles built yet.</p>

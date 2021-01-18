@@ -1,7 +1,7 @@
-baseurl      = ""
+baseurl      = "/"
 title        = "Matsu Dev Blog"
 languageCode = "en-us"
-theme        = "hello-friend-ng"
+theme        = "hello-friend"
 paginate     = 10
 googleAnalytics = "UA-85452649-2"
 

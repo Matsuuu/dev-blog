@@ -23,7 +23,7 @@ Bulle can be utilized to create mock API endpoints for development purposes or f
 
 
 
-<link href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.2.1/css/flag-icon.min.css" rel="stylesheet"
+<link href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.5.0/css/flag-icon.min.css" rel="stylesheet"
     type="text/css">
 
 
@@ -40,14 +40,15 @@ Bulle can be utilized to create mock API endpoints for development purposes or f
  Bulle is a modern solution for mocking HTTP API&rsquo;s.
 Bulle can be utilized to create mock API endpoints for development purposes or for general testing.
  Preface I found myself developing applications where we had decided on the front-end technology, but were still contemplating on the backend technology. In these situtations, we started work on the front-end nontheless, and as with almost any modern web application, the front-end utilizes data acquired from the API.">
-<meta itemprop="datePublished" content="2020-05-16T12:06:50&#43;03:00" />
-<meta itemprop="dateModified" content="2020-05-16T12:06:50&#43;03:00" />
+<meta itemprop="datePublished" content="2020-05-16T12:06:50+03:00" />
+<meta itemprop="dateModified" content="2020-05-16T12:06:50+03:00" />
 <meta itemprop="wordCount" content="1200">
 <meta itemprop="image" content=""/>
 
 
 
 <meta itemprop="keywords" content="" />
+
 <meta name="twitter:card" content="summary_large_image"/>
 <meta name="twitter:image" content=""/>
 
@@ -56,6 +57,7 @@ Bulle can be utilized to create mock API endpoints for development purposes or f
  Bulle is a modern solution for mocking HTTP API&rsquo;s.
 Bulle can be utilized to create mock API endpoints for development purposes or for general testing.
  Preface I found myself developing applications where we had decided on the front-end technology, but were still contemplating on the backend technology. In these situtations, we started work on the front-end nontheless, and as with almost any modern web application, the front-end utilizes data acquired from the API."/>
+
 
 
 
@@ -94,9 +96,13 @@ Bulle can be utilized to create mock API endpoints for development purposes or f
     gtag('config', 'UA-85452649-2');
 </script>
 
+
     </head>
 
-    <body class="dark-theme">
+    
+        <body>
+    
+    
         <div class="container">
             <header class="header">
     <span class="header__inner">
@@ -129,13 +135,6 @@ Bulle can be utilized to create mock API endpoints for development purposes or f
                     </svg>
                 </span>
             
-
-            <span class="theme-toggle unselectable"><svg class="theme-toggler" width="24" height="24" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <path d="M22 41C32.4934 41 41 32.4934 41 22C41 11.5066 32.4934 3 22
-  3C11.5066 3 3 11.5066 3 22C3 32.4934 11.5066 41 22 41ZM7 22C7
-  13.7157 13.7157 7 22 7V37C13.7157 37 7 30.2843 7 22Z"/>
-</svg>
-</span>
         </span>
     </span>
 </header>
@@ -143,25 +142,31 @@ Bulle can be utilized to create mock API endpoints for development purposes or f
 
             <div class="content">
                 
-    <main class="post">
+  <main class="post">
 
-        <div class="post-info">
-            <p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-clock"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>6 minutes
+    <div class="post-info">
+      <p>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-clock">
+          <circle cx="12" cy="12" r="10"></circle>
+          <polyline points="12 6 12 12 16 14"></polyline>
+        </svg>
+        6 minutes
 
-            
+        
+      </p>
+    </div>
 
-            </p>
-        </div>
+    <article>
+      <h1 class="post-title">
+        <a href="/posts/introducing-bulle/">Introducing Bulle</a>
+      </h1>
 
-        <article>
-            <h1 class="post-title">
-                <a href="/posts/introducing-bulle/">Introducing Bulle</a>
-            </h1>
+      
 
-            
+      
 
-            <div class="post-content">
-                <p><em>/bull-E/</em></p>
+      <div class="post-content">
+        <p><em>/bull-E/</em></p>
 <blockquote>
 <p>Bulle is a modern solution for mocking HTTP API&rsquo;s.</p>
 <p>Bulle can be utilized to create mock API endpoints for development purposes or for general testing.</p>
@@ -220,7 +225,7 @@ curl -v http://localhost:3000/ping
 </code></pre></div><p>And just like that, we have a mocked API which returns JSON data.</p>
 <p>Next let&rsquo;s look at some real world applications</p>
 <hr>
-<h2 id="bulle-as-the-developers-best-friend">Bulle as the Developers&rsquo; best friend</h2>
+<h2 id="bulle-as-the-developers-best-friend">Bulle as the Developers' best friend</h2>
 <p>Let&rsquo;s create a common developer scenario:</p>
 <blockquote>
 <p>You are developing the user profile page, but do not have the backend API for the user profiles built yet.</p>
@@ -300,40 +305,71 @@ will be updated and expanded upon as new needs rise.</p>
 <p>You can start using Bulle today by getting it from <a href="https://www.npmjs.com/package/bulle">npm</a>.</p>
 <p>Contributions to the project are also welcome in the <a href="https://github.com/Matsuuu/Bulle">Bulle Github Repository</a></p>
 
-            </div>
-        </article>
+      </div>
+    </article>
 
-        <hr />
+    <hr />
 
-        <div class="post-info">
+    <div class="post-info">
+      
+      
 
-            <p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>1200 Words</p>
+      <p>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+          <polyline points="14 2 14 8 20 8"></polyline>
+          <line x1="16" y1="13" x2="8" y2="13"></line>
+          <line x1="16" y1="17" x2="8" y2="17"></line>
+          <polyline points="10 9 9 9 8 9"></polyline>
+        </svg>
+        1200 Words
+      </p>
 
-            <p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>2020-05-16 12:06 &#43;0300</p>
+      <p>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar">
+          <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+          <line x1="16" y1="2" x2="16" y2="6"></line>
+          <line x1="8" y1="2" x2="8" y2="6"></line>
+          <line x1="3" y1="10" x2="21" y2="10"></line>
+        </svg>
+        
+          2020-05-16 12:06 &#43;0300
+        
+
+         
+          
+        
+      </p>
+    </div>
+
+    
+      <div class="pagination">
+        <div class="pagination__title">
+          <span class="pagination__title-h">Read other posts</span>
+          <hr />
         </div>
 
-        
-            <div class="pagination">
-                <div class="pagination__title">
-                    <span class="pagination__title-h">Read other posts</span>
-                    <hr />
-                </div>
+        <div class="pagination__buttons">
+          
+            <span class="button previous">
+              <a href="/posts/how-i-stopped-being-scared-and-started-loving-vim/">
+                <span class="button__icon">←</span>
+                <span class="button__text">How I Stopped Being Scared and Started Loving Vim</span>
+              </a>
+            </span>
+          
 
-                <div class="pagination__buttons">
-                    
-                        <span class="button previous">
-                            <a href="/posts/how-i-stopped-being-scared-and-started-loving-vim/">
-                                <span class="button__icon">←</span>
-                                <span class="button__text">How I Stopped Being Scared and Started Loving Vim</span>
-                            </a>
-                        </span>
-                    
+          
+        </div>
+      </div>
+    
 
-                    
-                </div>
-            </div>
-        
-    </main>
+
+    
+
+    
+
+  </main>
 
             </div>
 
@@ -342,18 +378,15 @@ will be updated and expanded upon as new needs rise.</p>
     <div class="footer__inner">
         <div class="footer__content">
             <span>&copy; 2021</span>
-            
-                <span><a href="">Matsu</a></span>
-            
-            <span><a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener">CC BY-NC 4.0</a></span>
-            <span> <a href="posts/index.xml" target="_blank" title="rss"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-rss"><path d="M4 11a9 9 0 0 1 9 9"></path><path d="M4 4a16 16 0 0 1 16 16"></path><circle cx="5" cy="19" r="1"></circle></svg></a></span>
+            <span><a href="">Matsu</a></span>
+            <span><a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener">CC BY-NC 4.0</a></span><span><a href="posts/index.xml" target="_blank" title="rss"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-rss"><path d="M4 11a9 9 0 0 1 9 9"></path><path d="M4 4a16 16 0 0 1 16 16"></path><circle cx="5" cy="19" r="1"></circle></svg></a></span>
         </div>
     </div>
     <div class="footer__inner">
         <div class="footer__content">
             <span>Powered by <a href="http://gohugo.io">Hugo</a></span>
             <span>Made with &#10084; by <a href="https://github.com/rhazdon">Djordje Atlialp</a></span>
-        </div>
+          </div>
     </div>
 </footer>
 
@@ -364,8 +397,7 @@ will be updated and expanded upon as new needs rise.</p>
 
 
 
-
-<script type="text/javascript" src="/bundle.min.dc716e9092c9820b77f96da294d0120aeeb189b5bcea9752309ebea27fd53bbe6b13cffb2aca8ecf32525647ceb7001f76091de4199ac5a3caa432c070247f5b.js" integrity="sha512-3HFukJLJggt3&#43;W2ilNASCu6xibW86pdSMJ6&#43;on/VO75rE8/7KsqOzzJSVkfOtwAfdgkd5BmaxaPKpDLAcCR/Ww=="></script>
+<script type="text/javascript" src="/bundle.min.af435e44374f1e99a669ea8cd5bb9a2fceed80588941a451bfddb66b86a67c9f40b0f417e9543a763f809aa7e9300d7b1d69bf99615810ba02ac70396d50fad5.js" integrity="sha512-r0NeRDdPHpmmaeqM1buaL87tgFiJQaRRv922a4amfJ9AsPQX6VQ6dj&#43;AmqfpMA17HWm/mWFYELoCrHA5bVD61Q=="></script>
     
 <script type="application/javascript">
 var doNotTrack = false;

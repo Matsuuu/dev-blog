@@ -1,6 +1,6 @@
 ---
-title: "Utilizing Simplr Router"
-date: 2021-01-12T10:52:38+02:00
+title: 'Utilizing Simplr Router'
+date: 2021-01-18T10:12:38+02:00
 ---
 
 I started working on [Simplr Router](https://github.com/Simplr/simplr-router) in September 2019. Back then I had just learned about Web Components

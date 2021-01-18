@@ -7,11 +7,7 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>&lt;a href=&#34;https://creativecommons.org/licenses/by-nc/4.0/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;CC BY-NC 4.0&lt;/a&gt;</copyright>
-    <lastBuildDate>Tue, 19 May 2020 15:48:32 +0300</lastBuildDate>
-    
-	<atom:link href="/tags/editors/index.xml" rel="self" type="application/rss+xml" />
-    
-    
+    <lastBuildDate>Tue, 19 May 2020 15:48:32 +0300</lastBuildDate><atom:link href="/tags/editors/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>How I Stopped Being Scared and Started Loving Vim</title>
       <link>/posts/how-i-stopped-being-scared-and-started-loving-vim/</link>
