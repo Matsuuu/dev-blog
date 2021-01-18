@@ -68,17 +68,9 @@ Our base for the pages will be the following:
 **Home Page**
 
 ```javascript
-class HomePage extends HTMLElement {
-  constructor() {
-    super();
-    // Create Shadow Root
-    this.attachShadow({ mode: "open" });
-  }
-
-  connectedCallback() {
-    // Create Template for content
-    const template = document.createElement("template");
-    template.innerHTML = `
+// Create Template for content
+const template = document.createElement("template");
+template.innerHTML = `
       <style>
         :host {
           width: 100%;
@@ -95,13 +87,19 @@ class HomePage extends HTMLElement {
       <h1>Welcome to the home page</h1>
     `;
 
+class HomePage extends HTMLElement {
+  constructor() {
+    super();
+    // Create Shadow Root
+    this.attachShadow({ mode: "open" });
+  }
+
+  connectedCallback() {
     // Add Template content to the shadow Root of the element
     this.shadowRoot.appendChild(template.content.cloneNode(true));
   }
 }
 
-// Declare a custom Component for our view, so that
-// we can call it as <home-page></home-page>
 if (!customElements.get("home-page")) {
   customElements.define("home-page", HomePage);
 }
@@ -110,19 +108,9 @@ if (!customElements.get("home-page")) {
 And **Profile Page**
 
 ```javascript
-class ProfilePage extends HTMLElement {
-  constructor() {
-    super();
-    // Create Shadow Root
-    this.attachShadow({ mode: "open" });
-    // Initialize default value
-    this.user = "World";
-  }
-
-  connectedCallback() {
-    // Create Template for content
-    const template = document.createElement("template");
-    template.innerHTML = `
+// Create Template for content
+const template = document.createElement("template");
+template.innerHTML = `
       <style>
         :host {
           width: 100%;
@@ -136,16 +124,29 @@ class ProfilePage extends HTMLElement {
 
         }
       </style>
-      <h1>Welcome to the Profile page, ${this.user}</h1>
+      <h1>Welcome to the Profile page</h1>
     `;
 
+class ProfilePage extends HTMLElement {
+  constructor() {
+    super();
+    // Create Shadow Root
+    this.attachShadow({ mode: "open" });
+    // Initialize default value
+    this.user = "World";
+  }
+
+  connectedCallback() {
+    const content = template.content.cloneNode(true);
+    content.querySelector(
+      "h1"
+    ).innerText = `Welcome to the Profile page, ${this.user}`;
+
     // Add Template content to the shadow Root of the element
-    this.shadowRoot.appendChild(template.content.cloneNode(true));
+    this.shadowRoot.appendChild(content);
   }
 }
 
-// Declare a custom Component for our view, so that
-// we can call it as <profile-page></profile-page>
 if (!customElements.get("profile-page")) {
   customElements.define("profile-page", ProfilePage);
 }

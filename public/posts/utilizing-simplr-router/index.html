@@ -212,17 +212,9 @@ any build tools to get up and running.</p>
 <p>First we want to create our views, into which we will be navigating to with the Router.</p>
 <p>Our base for the pages will be the following:</p>
 <p><strong>Home Page</strong></p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">HomePage</span> <span style="color:#66d9ef">extends</span> <span style="color:#a6e22e">HTMLElement</span> {
-  <span style="color:#a6e22e">constructor</span>() {
-    <span style="color:#66d9ef">super</span>();
-    <span style="color:#75715e">// Create Shadow Root
-</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">attachShadow</span>({ <span style="color:#a6e22e">mode</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;open&#34;</span> });
-  }
-
-  <span style="color:#a6e22e">connectedCallback</span>() {
-    <span style="color:#75715e">// Create Template for content
-</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">template</span> <span style="color:#f92672">=</span> document.<span style="color:#a6e22e">createElement</span>(<span style="color:#e6db74">&#34;template&#34;</span>);
-    <span style="color:#a6e22e">template</span>.<span style="color:#a6e22e">innerHTML</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">`
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#75715e">// Create Template for content
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">template</span> <span style="color:#f92672">=</span> document.<span style="color:#a6e22e">createElement</span>(<span style="color:#e6db74">&#34;template&#34;</span>);
+<span style="color:#a6e22e">template</span>.<span style="color:#a6e22e">innerHTML</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">`
 </span><span style="color:#e6db74">      &lt;style&gt;
 </span><span style="color:#e6db74">        :host {
 </span><span style="color:#e6db74">          width: 100%;
@@ -239,30 +231,26 @@ any build tools to get up and running.</p>
 </span><span style="color:#e6db74">      &lt;h1&gt;Welcome to the home page&lt;/h1&gt;
 </span><span style="color:#e6db74">    `</span>;
 
+<span style="color:#66d9ef">class</span> <span style="color:#a6e22e">HomePage</span> <span style="color:#66d9ef">extends</span> <span style="color:#a6e22e">HTMLElement</span> {
+  <span style="color:#a6e22e">constructor</span>() {
+    <span style="color:#66d9ef">super</span>();
+    <span style="color:#75715e">// Create Shadow Root
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">attachShadow</span>({ <span style="color:#a6e22e">mode</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;open&#34;</span> });
+  }
+
+  <span style="color:#a6e22e">connectedCallback</span>() {
     <span style="color:#75715e">// Add Template content to the shadow Root of the element
 </span><span style="color:#75715e"></span>    <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">shadowRoot</span>.<span style="color:#a6e22e">appendChild</span>(<span style="color:#a6e22e">template</span>.<span style="color:#a6e22e">content</span>.<span style="color:#a6e22e">cloneNode</span>(<span style="color:#66d9ef">true</span>));
   }
 }
 
-<span style="color:#75715e">// Declare a custom Component for our view, so that
-</span><span style="color:#75715e">// we can call it as &lt;home-page&gt;&lt;/home-page&gt;
-</span><span style="color:#75715e"></span><span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span><span style="color:#a6e22e">customElements</span>.<span style="color:#a6e22e">get</span>(<span style="color:#e6db74">&#34;home-page&#34;</span>)) {
+<span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span><span style="color:#a6e22e">customElements</span>.<span style="color:#a6e22e">get</span>(<span style="color:#e6db74">&#34;home-page&#34;</span>)) {
   <span style="color:#a6e22e">customElements</span>.<span style="color:#a6e22e">define</span>(<span style="color:#e6db74">&#34;home-page&#34;</span>, <span style="color:#a6e22e">HomePage</span>);
 }
 </code></pre></div><p>And <strong>Profile Page</strong></p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">ProfilePage</span> <span style="color:#66d9ef">extends</span> <span style="color:#a6e22e">HTMLElement</span> {
-  <span style="color:#a6e22e">constructor</span>() {
-    <span style="color:#66d9ef">super</span>();
-    <span style="color:#75715e">// Create Shadow Root
-</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">attachShadow</span>({ <span style="color:#a6e22e">mode</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;open&#34;</span> });
-    <span style="color:#75715e">// Initialize default value
-</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">user</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;World&#34;</span>;
-  }
-
-  <span style="color:#a6e22e">connectedCallback</span>() {
-    <span style="color:#75715e">// Create Template for content
-</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">template</span> <span style="color:#f92672">=</span> document.<span style="color:#a6e22e">createElement</span>(<span style="color:#e6db74">&#34;template&#34;</span>);
-    <span style="color:#a6e22e">template</span>.<span style="color:#a6e22e">innerHTML</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">`
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#75715e">// Create Template for content
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">template</span> <span style="color:#f92672">=</span> document.<span style="color:#a6e22e">createElement</span>(<span style="color:#e6db74">&#34;template&#34;</span>);
+<span style="color:#a6e22e">template</span>.<span style="color:#a6e22e">innerHTML</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">`
 </span><span style="color:#e6db74">      &lt;style&gt;
 </span><span style="color:#e6db74">        :host {
 </span><span style="color:#e6db74">          width: 100%;
@@ -276,17 +264,30 @@ any build tools to get up and running.</p>
 </span><span style="color:#e6db74">
 </span><span style="color:#e6db74">        }
 </span><span style="color:#e6db74">      &lt;/style&gt;
-</span><span style="color:#e6db74">      &lt;h1&gt;Welcome to the Profile page, </span><span style="color:#e6db74">${</span><span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">user</span><span style="color:#e6db74">}</span><span style="color:#e6db74">&lt;/h1&gt;
+</span><span style="color:#e6db74">      &lt;h1&gt;Welcome to the Profile page&lt;/h1&gt;
 </span><span style="color:#e6db74">    `</span>;
 
+<span style="color:#66d9ef">class</span> <span style="color:#a6e22e">ProfilePage</span> <span style="color:#66d9ef">extends</span> <span style="color:#a6e22e">HTMLElement</span> {
+  <span style="color:#a6e22e">constructor</span>() {
+    <span style="color:#66d9ef">super</span>();
+    <span style="color:#75715e">// Create Shadow Root
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">attachShadow</span>({ <span style="color:#a6e22e">mode</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;open&#34;</span> });
+    <span style="color:#75715e">// Initialize default value
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">user</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;World&#34;</span>;
+  }
+
+  <span style="color:#a6e22e">connectedCallback</span>() {
+    <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">content</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">template</span>.<span style="color:#a6e22e">content</span>.<span style="color:#a6e22e">cloneNode</span>(<span style="color:#66d9ef">true</span>);
+    <span style="color:#a6e22e">content</span>.<span style="color:#a6e22e">querySelector</span>(
+      <span style="color:#e6db74">&#34;h1&#34;</span>
+    ).<span style="color:#a6e22e">innerText</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">`Welcome to the Profile page, </span><span style="color:#e6db74">${</span><span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">user</span><span style="color:#e6db74">}</span><span style="color:#e6db74">`</span>;
+
     <span style="color:#75715e">// Add Template content to the shadow Root of the element
-</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">shadowRoot</span>.<span style="color:#a6e22e">appendChild</span>(<span style="color:#a6e22e">template</span>.<span style="color:#a6e22e">content</span>.<span style="color:#a6e22e">cloneNode</span>(<span style="color:#66d9ef">true</span>));
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">shadowRoot</span>.<span style="color:#a6e22e">appendChild</span>(<span style="color:#a6e22e">content</span>);
   }
 }
 
-<span style="color:#75715e">// Declare a custom Component for our view, so that
-</span><span style="color:#75715e">// we can call it as &lt;profile-page&gt;&lt;/profile-page&gt;
-</span><span style="color:#75715e"></span><span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span><span style="color:#a6e22e">customElements</span>.<span style="color:#a6e22e">get</span>(<span style="color:#e6db74">&#34;profile-page&#34;</span>)) {
+<span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span><span style="color:#a6e22e">customElements</span>.<span style="color:#a6e22e">get</span>(<span style="color:#e6db74">&#34;profile-page&#34;</span>)) {
   <span style="color:#a6e22e">customElements</span>.<span style="color:#a6e22e">define</span>(<span style="color:#e6db74">&#34;profile-page&#34;</span>, <span style="color:#a6e22e">ProfilePage</span>);
 }
 </code></pre></div><p>On top of these views, we will have a navbar in just pure HTML prepended at the start of the index.html file.</p>
