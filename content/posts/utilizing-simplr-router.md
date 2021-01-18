@@ -1,5 +1,5 @@
 ---
-title: 'Utilizing Simplr Router'
+title: "Utilizing Simplr Router"
 date: 2021-01-18T10:12:38+02:00
 ---
 
@@ -14,13 +14,13 @@ That's when I started working on Simplr Router.
 ## The Dream
 
 From the beginning, I have wanted to keep Simplr Router at 0 dependecies, and so far we've been able to
-keep it that way. The idea of adding a router to your project, without
+keep it that way.
+
+We want to keep Simplr Router nice and simple, and try to keep away from:
 
 1. Adding multiple dependencies with it
 2. Adding kilobytes upon kilobytes of arbitrary code to your project
 3. Introducing a whole lot of refactoring or a high learning curve
-
-was something I really enjoyed.
 
 #
 
@@ -237,7 +237,7 @@ console.log(this.user);
 
 Now that we have our views, we have our navigation elements and our routes, we're ready to put it all together.
 
-We need to import the Simplr Router, and initialize it with out routes
+We need to import the Simplr Router, and initialize it with our routes
 
 ```javascript
 // Import the web components views
@@ -287,7 +287,7 @@ Now that we have Simplr Router up and running, we are ready to customize it a bi
 
 #### Removing transitions
 
-If one wanted to remove the transitions alltogether, there's a option to do just that.
+If one wanted to remove the transitions altogether, there's a option to do just that.
 
 ```javascript
 const router = new SimplrRouter({ routes, disableTransition: true });

@@ -182,13 +182,13 @@ We had great tooling, but were missing one thing: A router which suited our need
 <hr>
 <h2 id="the-dream">The Dream</h2>
 <p>From the beginning, I have wanted to keep Simplr Router at 0 dependecies, and so far we&rsquo;ve been able to
-keep it that way. The idea of adding a router to your project, without</p>
+keep it that way.</p>
+<p>We want to keep Simplr Router nice and simple, and try to keep away from:</p>
 <ol>
 <li>Adding multiple dependencies with it</li>
 <li>Adding kilobytes upon kilobytes of arbitrary code to your project</li>
 <li>Introducing a whole lot of refactoring or a high learning curve</li>
 </ol>
-<p>was something I really enjoyed.</p>
 <h1 id="heading"></h1>
 <p>The design idea going forward with the router is to keep it as lightweight as possible, and to utilize
 the latest features of the Web.</p>
@@ -347,7 +347,7 @@ easily configurable. It also allows us to ship the routing file as a separate fi
 <span style="color:#75715e">// prints out &#34;John&#34;
 </span></code></pre></div><h3 id="putting-it-all-together">Putting it all together</h3>
 <p>Now that we have our views, we have our navigation elements and our routes, we&rsquo;re ready to put it all together.</p>
-<p>We need to import the Simplr Router, and initialize it with out routes</p>
+<p>We need to import the Simplr Router, and initialize it with our routes</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#75715e">// Import the web components views
 </span><span style="color:#75715e"></span><span style="color:#66d9ef">import</span> <span style="color:#e6db74">&#34;./home.js&#34;</span>;
 <span style="color:#66d9ef">import</span> <span style="color:#e6db74">&#34;./profile.js&#34;</span>;
@@ -384,7 +384,7 @@ easily configurable. It also allows us to ship the routing file as a separate fi
 <h3 id="customizing">Customizing</h3>
 <p>Now that we have Simplr Router up and running, we are ready to customize it a bit. Let&rsquo;s start by modifying the transitions</p>
 <h4 id="removing-transitions">Removing transitions</h4>
-<p>If one wanted to remove the transitions alltogether, there&rsquo;s a option to do just that.</p>
+<p>If one wanted to remove the transitions altogether, there&rsquo;s a option to do just that.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">router</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> <span style="color:#a6e22e">SimplrRouter</span>({ <span style="color:#a6e22e">routes</span>, <span style="color:#a6e22e">disableTransition</span><span style="color:#f92672">:</span> <span style="color:#66d9ef">true</span> });
 </code></pre></div><p>This will make the page changes instant, instead of the default sliding animation the router provides out of the box.</p>
 <h4 id="changing-transitions">Changing transitions</h4>
