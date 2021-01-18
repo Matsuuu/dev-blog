@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="author" content="Matsu ">
+<meta name="description" content="I started working on Simplr Router in September 2019. Back then I had just learned about Web Components and the power they enable for developers. We were working on our first bigger project and were using LitElement. We had great tooling, but were missing one thing: A router which suited our needs and customizability.
+That&amp;rsquo;s when I started working on Simplr Router.
+ The Dream From the beginning, I have wanted to keep Simplr Router at 0 dependecies, and so far we&amp;rsquo;ve been able to keep it that way." />
+<meta name="keywords" content="" />
+<meta name="robots" content="noodp" />
+<meta name="theme-color" content="" />
+<link rel="canonical" href="/posts/utilizing-simplr-router/" />
+
+
+    <title>
+        
+            Utilizing Simplr Router :: Matsu  — Abusing Javascript and The Web platform
+        
+    </title>
+
+
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.2.1/css/flag-icon.min.css" rel="stylesheet"
+    type="text/css">
+
+
+
+<link rel="stylesheet" href="/main.dede02da9537a98158079c023e83573e18127834838ef08172acce888341a797.css">
+
+
+
+
+
+
+<meta itemprop="name" content="Utilizing Simplr Router">
+<meta itemprop="description" content="I started working on Simplr Router in September 2019. Back then I had just learned about Web Components and the power they enable for developers. We were working on our first bigger project and were using LitElement. We had great tooling, but were missing one thing: A router which suited our needs and customizability.
+That&rsquo;s when I started working on Simplr Router.
+ The Dream From the beginning, I have wanted to keep Simplr Router at 0 dependecies, and so far we&rsquo;ve been able to keep it that way.">
+<meta itemprop="datePublished" content="2021-01-12T10:52:38&#43;02:00" />
+<meta itemprop="dateModified" content="2021-01-12T10:52:38&#43;02:00" />
+<meta itemprop="wordCount" content="1981">
+<meta itemprop="image" content=""/>
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content=""/>
+
+<meta name="twitter:title" content="Utilizing Simplr Router"/>
+<meta name="twitter:description" content="I started working on Simplr Router in September 2019. Back then I had just learned about Web Components and the power they enable for developers. We were working on our first bigger project and were using LitElement. We had great tooling, but were missing one thing: A router which suited our needs and customizability.
+That&rsquo;s when I started working on Simplr Router.
+ The Dream From the beginning, I have wanted to keep Simplr Router at 0 dependecies, and so far we&rsquo;ve been able to keep it that way."/>
+
+
+
+    <meta property="og:title" content="Utilizing Simplr Router" />
+<meta property="og:description" content="I started working on Simplr Router in September 2019. Back then I had just learned about Web Components and the power they enable for developers. We were working on our first bigger project and were using LitElement. We had great tooling, but were missing one thing: A router which suited our needs and customizability.
+That&rsquo;s when I started working on Simplr Router.
+ The Dream From the beginning, I have wanted to keep Simplr Router at 0 dependecies, and so far we&rsquo;ve been able to keep it that way." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/posts/utilizing-simplr-router/" />
+<meta property="og:image" content=""/>
+<meta property="article:published_time" content="2021-01-12T10:52:38+02:00" />
+<meta property="article:modified_time" content="2021-01-12T10:52:38+02:00" /><meta property="og:site_name" content="Matsu" />
+
+
+
+
+
+
+    <meta property="article:published_time" content="2021-01-12 10:52:38 &#43;0200 EET" />
+
+
+
+
+
+
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-85452649-2"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+        dataLayer.push(arguments);
+    }
+    gtag('js', new Date());
+
+    gtag('config', 'UA-85452649-2');
+</script>
+
+    </head>
+
+    <body class="dark-theme">
+        <div class="container">
+            <header class="header">
+    <span class="header__inner">
+        <a href="/" style="text-decoration: none;">
+    <div class="logo">
+        
+            <span class="logo__mark">></span>
+            <span class="logo__text">:wq</span>
+            <span class="logo__cursor" style=
+                  "
+                   
+                   ">
+            </span>
+        
+    </div>
+</a>
+
+
+        <span class="header__right">
+            
+                <nav class="menu">
+    <ul class="menu__inner"><li><a href="/posts">Blog</a></li>
+    </ul>
+</nav>
+
+                <span class="menu-trigger">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <path d="M0 0h24v24H0z" fill="none"/>
+                        <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/>
+                    </svg>
+                </span>
+            
+
+            <span class="theme-toggle unselectable"><svg class="theme-toggler" width="24" height="24" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M22 41C32.4934 41 41 32.4934 41 22C41 11.5066 32.4934 3 22
+  3C11.5066 3 3 11.5066 3 22C3 32.4934 11.5066 41 22 41ZM7 22C7
+  13.7157 13.7157 7 22 7V37C13.7157 37 7 30.2843 7 22Z"/>
+</svg>
+</span>
+        </span>
+    </span>
+</header>
+
+
+            <div class="content">
+                
+    <main class="post">
+
+        <div class="post-info">
+            <p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-clock"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>10 minutes
+
+            
+
+            </p>
+        </div>
+
+        <article>
+            <h1 class="post-title">
+                <a href="/posts/utilizing-simplr-router/">Utilizing Simplr Router</a>
+            </h1>
+
+            
+
+            <div class="post-content">
+                <p>I started working on <a href="https://github.com/Simplr/simplr-router">Simplr Router</a> in September 2019. Back then I had just learned about Web Components
+and the power they enable for developers. We were working on our first bigger project and were using <a href="https://lit-element.polymer-project.org/">LitElement</a>.
+We had great tooling, but were missing one thing: A router which suited our needs and customizability.</p>
+<p>That&rsquo;s when I started working on Simplr Router.</p>
+<hr>
+<h2 id="the-dream">The Dream</h2>
+<p>From the beginning, I have wanted to keep Simplr Router at 0 dependecies, and so far we&rsquo;ve been able to
+keep it that way. The idea of adding a router to your project, without</p>
+<ol>
+<li>Adding multiple dependencies with it</li>
+<li>Adding kilobytes upon kilobytes of arbitrary code to your project</li>
+<li>Introducing a whole lot of refactoring or a high learning curve</li>
+</ol>
+<p>was something I really enjoyed.</p>
+<h1 id="heading"></h1>
+<p>The design idea going forward with the router is to keep it as lightweight as possible, and to utilize
+the latest features of the Web.</p>
+<p>Currently Simplr Router is powered by Web Components and therefore they are the main environment for it too.</p>
+<p>I didn&rsquo;t want to restrict it to just one ecosystem though. That&rsquo;s why late last year, I added support for middleware.</p>
+<p>And now there is already compatibility-packages for <a href="https://github.com/Simplr/simplr-router-react-middleware">React</a>
+and <a href="https://github.com/Simplr/simplr-router-preact-middleware">Preact</a>.</p>
+<hr>
+<h2 id="enough-talking-how-do-i-use-it">Enough talking. How do I use it?</h2>
+<p>Allright that&rsquo;s enough about the history of Simplr Router. Now let&rsquo;s get into the present: How to use it!</p>
+<h3 id="installation">Installation</h3>
+<p>Installing Simplr Router is the same as any other NPM package, so first we run</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">npm install @simplr-wc/router
+</code></pre></div><p>And after that we are ready to go! As the router is written in vanilla Javascript, we don&rsquo;t even need
+any build tools to get up and running.</p>
+<p>However to make development easier, I usually use the <a href="https://modern-web.dev/docs/dev-server/overview/">@web/dev-server</a> by <a href="https://modern-web.dev/">Modern Web</a></p>
+<p>Next let&rsquo;s write some views to navigate to!</p>
+<hr>
+<h3 id="getting-started">Getting started</h3>
+<p>In these examples we will go through a setup with <em>Vanilla Web Components</em>, but we&rsquo;ll show a Preact example <a href="#preact-example">at the end of the post</a>.</p>
+<p>First we want to create our views, into which we will be navigating to with the Router.</p>
+<p>Our base for the pages will be the following:</p>
+<p><strong>Home Page</strong></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">HomePage</span> <span style="color:#66d9ef">extends</span> <span style="color:#a6e22e">HTMLElement</span> {
+  <span style="color:#a6e22e">constructor</span>() {
+    <span style="color:#66d9ef">super</span>();
+    <span style="color:#75715e">// Create Shadow Root
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">attachShadow</span>({ <span style="color:#a6e22e">mode</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;open&#34;</span> });
+  }
+
+  <span style="color:#a6e22e">connectedCallback</span>() {
+    <span style="color:#75715e">// Create Template for content
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">template</span> <span style="color:#f92672">=</span> document.<span style="color:#a6e22e">createElement</span>(<span style="color:#e6db74">&#34;template&#34;</span>);
+    <span style="color:#a6e22e">template</span>.<span style="color:#a6e22e">innerHTML</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">`
+</span><span style="color:#e6db74">      &lt;style&gt;
+</span><span style="color:#e6db74">        :host {
+</span><span style="color:#e6db74">          width: 100%;
+</span><span style="color:#e6db74">          height: 100%;
+</span><span style="color:#e6db74">          background: darkgreen;
+</span><span style="color:#e6db74">          font-size: 28px;
+</span><span style="color:#e6db74">          color: #FFF;
+</span><span style="color:#e6db74">          display: flex;
+</span><span style="color:#e6db74">          align-items: center;
+</span><span style="color:#e6db74">          justify-content: center;
+</span><span style="color:#e6db74">
+</span><span style="color:#e6db74">        }
+</span><span style="color:#e6db74">      &lt;/style&gt;
+</span><span style="color:#e6db74">      &lt;h1&gt;Welcome to the home page&lt;/h1&gt;
+</span><span style="color:#e6db74">    `</span>;
+
+    <span style="color:#75715e">// Add Template content to the shadow Root of the element
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">shadowRoot</span>.<span style="color:#a6e22e">appendChild</span>(<span style="color:#a6e22e">template</span>.<span style="color:#a6e22e">content</span>.<span style="color:#a6e22e">cloneNode</span>(<span style="color:#66d9ef">true</span>));
+  }
+}
+
+<span style="color:#75715e">// Declare a custom Component for our view, so that
+</span><span style="color:#75715e">// we can call it as &lt;home-page&gt;&lt;/home-page&gt;
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span><span style="color:#a6e22e">customElements</span>.<span style="color:#a6e22e">get</span>(<span style="color:#e6db74">&#34;home-page&#34;</span>)) {
+  <span style="color:#a6e22e">customElements</span>.<span style="color:#a6e22e">define</span>(<span style="color:#e6db74">&#34;home-page&#34;</span>, <span style="color:#a6e22e">HomePage</span>);
+}
+</code></pre></div><p>And <strong>Profile Page</strong></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">ProfilePage</span> <span style="color:#66d9ef">extends</span> <span style="color:#a6e22e">HTMLElement</span> {
+  <span style="color:#a6e22e">constructor</span>() {
+    <span style="color:#66d9ef">super</span>();
+    <span style="color:#75715e">// Create Shadow Root
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">attachShadow</span>({ <span style="color:#a6e22e">mode</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;open&#34;</span> });
+    <span style="color:#75715e">// Initialize default value
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">user</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;World&#34;</span>;
+  }
+
+  <span style="color:#a6e22e">connectedCallback</span>() {
+    <span style="color:#75715e">// Create Template for content
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">template</span> <span style="color:#f92672">=</span> document.<span style="color:#a6e22e">createElement</span>(<span style="color:#e6db74">&#34;template&#34;</span>);
+    <span style="color:#a6e22e">template</span>.<span style="color:#a6e22e">innerHTML</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">`
+</span><span style="color:#e6db74">      &lt;style&gt;
+</span><span style="color:#e6db74">        :host {
+</span><span style="color:#e6db74">          width: 100%;
+</span><span style="color:#e6db74">          height: 100%;
+</span><span style="color:#e6db74">          background: darkblue;
+</span><span style="color:#e6db74">          font-size: 28px;
+</span><span style="color:#e6db74">          color: #FFF;
+</span><span style="color:#e6db74">          display: flex;
+</span><span style="color:#e6db74">          align-items: center;
+</span><span style="color:#e6db74">          justify-content: center;
+</span><span style="color:#e6db74">
+</span><span style="color:#e6db74">        }
+</span><span style="color:#e6db74">      &lt;/style&gt;
+</span><span style="color:#e6db74">      &lt;h1&gt;Welcome to the Profile page, </span><span style="color:#e6db74">${</span><span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">user</span><span style="color:#e6db74">}</span><span style="color:#e6db74">&lt;/h1&gt;
+</span><span style="color:#e6db74">    `</span>;
+
+    <span style="color:#75715e">// Add Template content to the shadow Root of the element
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">shadowRoot</span>.<span style="color:#a6e22e">appendChild</span>(<span style="color:#a6e22e">template</span>.<span style="color:#a6e22e">content</span>.<span style="color:#a6e22e">cloneNode</span>(<span style="color:#66d9ef">true</span>));
+  }
+}
+
+<span style="color:#75715e">// Declare a custom Component for our view, so that
+</span><span style="color:#75715e">// we can call it as &lt;profile-page&gt;&lt;/profile-page&gt;
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span><span style="color:#a6e22e">customElements</span>.<span style="color:#a6e22e">get</span>(<span style="color:#e6db74">&#34;profile-page&#34;</span>)) {
+  <span style="color:#a6e22e">customElements</span>.<span style="color:#a6e22e">define</span>(<span style="color:#e6db74">&#34;profile-page&#34;</span>, <span style="color:#a6e22e">ProfilePage</span>);
+}
+</code></pre></div><p>On top of these views, we will have a navbar in just pure HTML prepended at the start of the index.html file.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html">&lt;<span style="color:#f92672">nav</span>&gt;
+  &lt;<span style="color:#f92672">a</span> <span style="color:#a6e22e">href</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;/&#34;</span>&gt;Home&lt;/<span style="color:#f92672">a</span>&gt;
+  &lt;<span style="color:#f92672">a</span> <span style="color:#a6e22e">href</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;/profile&#34;</span>&gt;Profile&lt;/<span style="color:#f92672">a</span>&gt;
+  &lt;<span style="color:#f92672">a</span> <span style="color:#a6e22e">href</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;/profile/John&#34;</span>&gt;John&lt;/<span style="color:#f92672">a</span>&gt;
+&lt;/<span style="color:#f92672">nav</span>&gt;
+</code></pre></div><p><strong>⚠️ You don&rsquo;t need to fully understand Web Components to understand this demo, but the main part you
+need to understand is that our views are now HTML elements, and can be rendered into the DOM
+by using <code>&lt;home-page&gt;&lt;/home-page&gt;</code> and <code>&lt;profile-page&gt;&lt;/profile-page&gt;</code>.⚠️</strong></p>
+<hr>
+<h3 id="initializing-the-routes">Initializing the routes</h3>
+<p>Now we get to the fun part! We will be creating the routes for our router.</p>
+<p>The Simplr Router uses JSON as the routing table format due to it being widely used and
+easily configurable. It also allows us to ship the routing file as a separate file if we wanted to.</p>
+<p>There is a lot of configurable parts for the routes, but we can get by with just a few JSON properties</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#75715e">// Initialize a array of routes, each route being it&#39;s own JSON object
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">routes</span> <span style="color:#f92672">=</span> [
+  {
+    <span style="color:#a6e22e">path</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;/&#34;</span>,
+    <span style="color:#a6e22e">component</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;home-page&#34;</span>,
+  },
+  {
+    <span style="color:#a6e22e">path</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;profile&#34;</span>,
+    <span style="color:#a6e22e">component</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;profile-page&#34;</span>,
+  },
+];
+</code></pre></div><p>We can get by with just declaring a path for our view, and the component used to render the view.</p>
+<p>What if we wanted to create a dynamic profile page, in which the user&rsquo;s name would be given as a URL parameter?</p>
+<p>That&rsquo;s fully possible, and quite simple.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#75715e">// Initialize a array of routes, each route being it&#39;s own JSON object
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">routes</span> <span style="color:#f92672">=</span> [
+  {
+    <span style="color:#a6e22e">path</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;/&#34;</span>,
+    <span style="color:#a6e22e">component</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;home-page&#34;</span>,
+  },
+  {
+    <span style="color:#a6e22e">path</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;profile&#34;</span>,
+    <span style="color:#a6e22e">component</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;profile-page&#34;</span>,
+    <span style="color:#a6e22e">routes</span><span style="color:#f92672">:</span> [
+      <span style="color:#75715e">// Initialize the sub routes for the profile page
+</span><span style="color:#75715e"></span>      <span style="color:#75715e">// in this case /profile/:user, where :user is replaced with
+</span><span style="color:#75715e"></span>      <span style="color:#75715e">// the user&#39;s name
+</span><span style="color:#75715e"></span>      {
+        <span style="color:#a6e22e">path</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;:user&#34;</span>,
+        <span style="color:#a6e22e">component</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;profile-page&#34;</span>,
+      },
+    ],
+  },
+];
+</code></pre></div><p>By declaring a <code>routes</code> -property in our route, we can declare sub-routes for our route.</p>
+<p>Sub-routes inherit the base path from their parent, and can be static or dynamic, like in our example above.</p>
+<p>The parameter from the URL is mapped onto the view, and is easily usable from within the view</p>
+<p>Inside our view component, we can access the name of the user in it&rsquo;s property through the keyword <code>this</code>.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#75715e">// When navigating to /profile/John
+</span><span style="color:#75715e"></span><span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">log</span>(<span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">user</span>);
+<span style="color:#75715e">// prints out &#34;John&#34;
+</span></code></pre></div><h3 id="putting-it-all-together">Putting it all together</h3>
+<p>Now that we have our views, we have our navigation elements and our routes, we&rsquo;re ready to put it all together.</p>
+<p>We need to import the Simplr Router, and initialize it with out routes</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#75715e">// Import the web components views
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">import</span> <span style="color:#e6db74">&#34;./home.js&#34;</span>;
+<span style="color:#66d9ef">import</span> <span style="color:#e6db74">&#34;./profile.js&#34;</span>;
+<span style="color:#66d9ef">import</span> <span style="color:#a6e22e">SimplrRouter</span> <span style="color:#a6e22e">from</span> <span style="color:#e6db74">&#34;@simplr-wc/router&#34;</span>;
+
+<span style="color:#66d9ef">const</span> <span style="color:#a6e22e">routes</span> <span style="color:#f92672">=</span> [
+  {
+    <span style="color:#a6e22e">path</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;/&#34;</span>,
+    <span style="color:#a6e22e">component</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;home-page&#34;</span>,
+  },
+  {
+    <span style="color:#a6e22e">path</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;profile&#34;</span>,
+    <span style="color:#a6e22e">component</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;profile-page&#34;</span>,
+    <span style="color:#a6e22e">routes</span><span style="color:#f92672">:</span> [
+      {
+        <span style="color:#a6e22e">path</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;:user&#34;</span>,
+        <span style="color:#a6e22e">component</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;profile-page&#34;</span>,
+      },
+    ],
+  },
+];
+
+<span style="color:#75715e">// Create a instance of SimplrRouter. Pass routes as a JSON property
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">router</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> <span style="color:#a6e22e">SimplrRouter</span>({ <span style="color:#a6e22e">routes</span> });
+<span style="color:#75715e">// Initialize the router.
+</span><span style="color:#75715e">// The router won&#39;t start before the init command is run.
+</span><span style="color:#75715e"></span><span style="color:#a6e22e">router</span>.<span style="color:#a6e22e">init</span>();
+</code></pre></div><p>And Horaaah! We have our router already up and running!</p>
+<p><img src="/router-demo.gif" alt="Demo"></p>
+<p><strong>As you might have noticed, we didn&rsquo;t need to alternate our anchor tags at all to get the routing functional.</strong></p>
+<p><strong>The router handles the events on anchors itself and doesn&rsquo;t require developer interferance</strong></p>
+<p>Next we&rsquo;ll look into customizing our router a bit!</p>
+<hr>
+<h3 id="customizing">Customizing</h3>
+<p>Now that we have Simplr Router up and running, we are ready to customize it a bit. Let&rsquo;s start by modifying the transitions</p>
+<h4 id="removing-transitions">Removing transitions</h4>
+<p>If one wanted to remove the transitions alltogether, there&rsquo;s a option to do just that.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">router</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> <span style="color:#a6e22e">SimplrRouter</span>({ <span style="color:#a6e22e">routes</span>, <span style="color:#a6e22e">disableTransition</span><span style="color:#f92672">:</span> <span style="color:#66d9ef">true</span> });
+</code></pre></div><p>This will make the page changes instant, instead of the default sliding animation the router provides out of the box.</p>
+<h4 id="changing-transitions">Changing transitions</h4>
+<p>If however we wanted a transition, but didn&rsquo;t want it to be the default, we can easily modify it.</p>
+<p>The first modification type would be the transition speed. This can be easily set in the initial configuration:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#75715e">// Transition speed is calculated in milliseconds
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">router</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> <span style="color:#a6e22e">SimplrRouter</span>({ <span style="color:#a6e22e">routes</span>, <span style="color:#a6e22e">transitionSpeed</span><span style="color:#f92672">:</span> <span style="color:#ae81ff">1000</span> });
+</code></pre></div><p>If the sliding transition is not something we want, we can also animate the whole transition ourselves.</p>
+<p>First we disable the default transition, and set the transitionSpeed to a slower speed.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">router</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> <span style="color:#a6e22e">SimplrRouter</span>({
+  <span style="color:#a6e22e">routes</span>,
+  <span style="color:#a6e22e">disableTransition</span><span style="color:#f92672">:</span> <span style="color:#66d9ef">true</span>,
+  <span style="color:#a6e22e">transitionSpeed</span><span style="color:#f92672">:</span> <span style="color:#ae81ff">1000</span>,
+});
+</code></pre></div><p>After that, we modify the CSS of our router&rsquo;s container elements. We modify the entering and leaving
+elements so that the fade-in-out effect applies to both of the views.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-css" data-lang="css"><span style="color:#f92672">simplr-router-container</span><span style="color:#f92672">[</span><span style="color:#f92672">entering-view</span><span style="color:#f92672">],</span>
+<span style="color:#f92672">simplr-router-container</span><span style="color:#f92672">[</span><span style="color:#f92672">leaving-view</span><span style="color:#f92672">]</span> {
+  <span style="color:#66d9ef">opacity</span>: <span style="color:#ae81ff">0</span>;
+}
+</code></pre></div><p>And now we have a nice slow fade-in-out animation for our page.</p>
+<p>These can be of course modified in any way you like. These are just some simple examples to get started.</p>
+<p><img src="/router-transition.gif" alt="Transition demo"></p>
+<h4 id="custom-error-pages">Custom error pages</h4>
+<p>In many cases we want to display a error page when the user navigates to a faulty path.
+For these cases we can declare a <code>not-found</code> path for when a view is not found and a <code>forbidden</code> path
+for when access to a certain view is denied by a guard.</p>
+<h5 id="not-found">Not Found</h5>
+<p>A not found page can be configured by creating a path named ´not-found´ and assigning it a view:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">routes</span> <span style="color:#f92672">=</span> [
+  {
+    <span style="color:#a6e22e">path</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;/&#34;</span>,
+    <span style="color:#a6e22e">component</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;main-page&#34;</span>,
+  },
+  {
+    <span style="color:#a6e22e">path</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;not-found&#34;</span>,
+    <span style="color:#a6e22e">component</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;not-found-page&#34;</span>,
+  },
+];
+
+<span style="color:#66d9ef">const</span> <span style="color:#a6e22e">router</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> <span style="color:#a6e22e">SimplrRouter</span>({ <span style="color:#a6e22e">routes</span> });
+<span style="color:#a6e22e">router</span>.<span style="color:#a6e22e">init</span>();
+</code></pre></div><p>Now every time a user navigates to a view not recognized by the router, they will be greeted by your &ldquo;Not Found&rdquo; -page.</p>
+<h5 id="forbidden">Forbidden</h5>
+<p>A forbidden page can be configured in the same manner. A forbidden page is triggered when a
+<a href="https://router.matsu.fi/recipes/guards">guard</a> fails it&rsquo;s check.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">routes</span> <span style="color:#f92672">=</span> [
+  {
+    <span style="color:#a6e22e">path</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;/&#34;</span>,
+    <span style="color:#a6e22e">component</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;main-page&#34;</span>,
+  },
+  {
+    <span style="color:#a6e22e">path</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;forbidden&#34;</span>,
+    <span style="color:#a6e22e">component</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;forbidden-page&#34;</span>,
+  },
+];
+
+<span style="color:#66d9ef">const</span> <span style="color:#a6e22e">router</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> <span style="color:#a6e22e">SimplrRouter</span>({ <span style="color:#a6e22e">routes</span> });
+<span style="color:#a6e22e">router</span>.<span style="color:#a6e22e">init</span>();
+</code></pre></div><h4 id="custom-actions">Custom Actions</h4>
+<p>If however you would like to run a piece of code when a invalid page is loaded, that is fully possible too.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">routes</span> <span style="color:#f92672">=</span> [
+  {
+    <span style="color:#a6e22e">path</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;/&#34;</span>,
+    <span style="color:#a6e22e">component</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;main-page&#34;</span>,
+  },
+];
+
+<span style="color:#66d9ef">const</span> <span style="color:#a6e22e">router</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> <span style="color:#a6e22e">SimplrRouter</span>({
+  <span style="color:#a6e22e">routes</span>,
+  <span style="color:#a6e22e">notFoundAction</span><span style="color:#f92672">:</span> () =&gt; <span style="color:#a6e22e">alert</span>(<span style="color:#e6db74">&#34;Page not found&#34;</span>),
+  <span style="color:#a6e22e">forbiddenAction</span><span style="color:#f92672">:</span> () =&gt; <span style="color:#a6e22e">alert</span>(<span style="color:#e6db74">&#34;You are not allowed to view this page&#34;</span>),
+});
+<span style="color:#a6e22e">router</span>.<span style="color:#a6e22e">init</span>();
+</code></pre></div><hr>
+<h3 id="code-splitting">Code Splitting</h3>
+<p>The next coolest thing Simplr Router provides is the possiblity for code splitting.</p>
+<p>What code splitting means is that you don&rsquo;t have to ship a huge bundle of javascript to your user
+on their initial page load, but instead you can only load the view component <strong>when it&rsquo;s needed</strong>.</p>
+<p>The best past is: You barely have to do any work to enable this. All you have to do is
+instead of importing your views at the top of your file as we&rsquo;ve done in the examples, you will
+do it inside the routes.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#66d9ef">import</span> <span style="color:#a6e22e">SimplrRouter</span> <span style="color:#a6e22e">from</span> <span style="color:#e6db74">&#34;@simplr-wc/router&#34;</span>;
+
+<span style="color:#66d9ef">const</span> <span style="color:#a6e22e">routes</span> <span style="color:#f92672">=</span> [
+  {
+    <span style="color:#a6e22e">path</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;/&#34;</span>,
+    <span style="color:#a6e22e">component</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;home-page&#34;</span>,
+    <span style="color:#66d9ef">import</span><span style="color:#f92672">:</span> () =&gt; <span style="color:#66d9ef">import</span>(<span style="color:#e6db74">&#34;./home.js&#34;</span>),
+  },
+  {
+    <span style="color:#a6e22e">path</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;profile&#34;</span>,
+    <span style="color:#a6e22e">component</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;profile-page&#34;</span>,
+    <span style="color:#66d9ef">import</span><span style="color:#f92672">:</span> () =&gt; <span style="color:#66d9ef">import</span>(<span style="color:#e6db74">&#34;./profile.js&#34;</span>),
+    <span style="color:#a6e22e">routes</span><span style="color:#f92672">:</span> [
+      {
+        <span style="color:#a6e22e">path</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;:user&#34;</span>,
+        <span style="color:#a6e22e">component</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;profile-page&#34;</span>,
+        <span style="color:#66d9ef">import</span><span style="color:#f92672">:</span> () =&gt; <span style="color:#66d9ef">import</span>(<span style="color:#e6db74">&#34;./profile.js&#34;</span>),
+      },
+    ],
+  },
+];
+
+<span style="color:#66d9ef">const</span> <span style="color:#a6e22e">router</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> <span style="color:#a6e22e">SimplrRouter</span>({ <span style="color:#a6e22e">routes</span> });
+<span style="color:#a6e22e">router</span>.<span style="color:#a6e22e">init</span>();
+</code></pre></div><p>The pages will be imported on the first time they&rsquo;re loaded, saving you a lot of initial load time on your page.</p>
+<p><strong>This also works with most bundlers, like Rollup</strong></p>
+<p>To see this in action, you can open up the <a href="https://router.matsu.fi/">Simplr Router docs</a> and look at the network tab in your dev tools.</p>
+<p><img src="/router-code-splitting.gif" alt="Code splitting example"></p>
+<hr>
+<h3 id="middleware">Middleware</h3>
+<p>The last part of the Router I want to highlight in this blog is the extensibility.</p>
+<p>With middleware support, the router can be easily modified without adding dependencies or extra code
+into the main project.</p>
+<p>Currently there are 2 official middlewares released:</p>
+<ul>
+<li><a href="https://github.com/Simplr/simplr-router-preact-middleware">A Preact Middleware</a>
+and</li>
+<li><a href="https://github.com/Simplr/simplr-router-react-middleware">A React Middleware</a></li>
+</ul>
+<p>These middlewares will add support for Preact and React projects respectively, and can be applied with just 2 lines of code:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#66d9ef">import</span> <span style="color:#a6e22e">SimplrRouter</span> <span style="color:#a6e22e">from</span> <span style="color:#e6db74">&#34;@simplr-wc/router&#34;</span>;
+<span style="color:#66d9ef">import</span> <span style="color:#a6e22e">SimplrRouterPreactMiddleware</span> <span style="color:#a6e22e">from</span> <span style="color:#e6db74">&#34;@simplr-wc/router-preact-middleware&#34;</span>;
+
+<span style="color:#66d9ef">const</span> <span style="color:#a6e22e">router</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> <span style="color:#a6e22e">SimplrRouter</span>({ <span style="color:#a6e22e">routes</span> });
+<span style="color:#a6e22e">router</span>.<span style="color:#a6e22e">use</span>(<span style="color:#a6e22e">SimplrRouterPreactMiddleware</span>());
+<span style="color:#a6e22e">router</span>.<span style="color:#a6e22e">init</span>();
+</code></pre></div><p>Adding these to the regular Simplr Router configuration will allow you to use the library in your
+Preact projects too :)</p>
+<p>A use case example can be found in the <a href="https://github.com/Simplr/simplr-router-preact-middleware/tree/main/example">Preact Middleware Repository</a>
+or in <a href="https://codesandbox.io/s/sweet-dawn-schqt?file=/src/index.js">this Codesandbox</a></p>
+<p>More information about the Middlewares can be found in the <a href="https://router.matsu.fi/recipes/middleware">documentation</a>.</p>
+<h3 id="final-word">Final word</h3>
+<p>Simplr Router is one of my most ambitious projects in open source Javascript and I really hope it
+provides others with value as it has provided me already.</p>
+<p>The aim of Simplr Router is to become one of the standard approaches in SPA routing, and to expands with
+user input to provide more functionality and speed for developers and users alike, while remaining lightweight.</p>
+<p>If you enjoyed this post, please make sure to check out Simplr Router in</p>
+<ul>
+<li><a href="https://www.npmjs.com/package/@simplr-wc/router">NPM</a></li>
+<li><a href="https://github.com/Simplr/simplr-router">GitHub</a> (Maybe give it a ⭐ too ;) )</li>
+<li><a href="https://router.matsu.fi/">The Docs</a></li>
+<li>Or <a href="https://twitter.com/matsuuu_">discuss it with me on Twitter</a></li>
+</ul>
+
+            </div>
+        </article>
+
+        <hr />
+
+        <div class="post-info">
+
+            <p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>1981 Words</p>
+
+            <p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>2021-01-12 10:52 &#43;0200</p>
+        </div>
+
+        
+            <div class="pagination">
+                <div class="pagination__title">
+                    <span class="pagination__title-h">Read other posts</span>
+                    <hr />
+                </div>
+
+                <div class="pagination__buttons">
+                    
+
+                    
+                        <span class="button next">
+                            <a href="/posts/comparing-react-and-web-components-part-2-components/">
+                                <span class="button__text">Comparing React and Web Components. Part 2: Components</span>
+                                <span class="button__icon">→</span>
+                            </a>
+                        </span>
+                    
+                </div>
+            </div>
+        
+    </main>
+
+            </div>
+
+            
+                <footer class="footer">
+    <div class="footer__inner">
+        <div class="footer__content">
+            <span>&copy; 2021</span>
+            
+                <span><a href="">Matsu</a></span>
+            
+            <span><a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener">CC BY-NC 4.0</a></span>
+            <span> <a href="posts/index.xml" target="_blank" title="rss"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-rss"><path d="M4 11a9 9 0 0 1 9 9"></path><path d="M4 4a16 16 0 0 1 16 16"></path><circle cx="5" cy="19" r="1"></circle></svg></a></span>
+        </div>
+    </div>
+    <div class="footer__inner">
+        <div class="footer__content">
+            <span>Powered by <a href="http://gohugo.io">Hugo</a></span>
+            <span>Made with &#10084; by <a href="https://github.com/rhazdon">Djordje Atlialp</a></span>
+        </div>
+    </div>
+</footer>
+
+            
+        </div>
+
+        
+
+
+
+
+<script type="text/javascript" src="/bundle.min.dc716e9092c9820b77f96da294d0120aeeb189b5bcea9752309ebea27fd53bbe6b13cffb2aca8ecf32525647ceb7001f76091de4199ac5a3caa432c070247f5b.js" integrity="sha512-3HFukJLJggt3&#43;W2ilNASCu6xibW86pdSMJ6&#43;on/VO75rE8/7KsqOzzJSVkfOtwAfdgkd5BmaxaPKpDLAcCR/Ww=="></script>
+    
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-85452649-2', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+
+
+
+
+    </body>
+</html>

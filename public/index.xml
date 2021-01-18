@@ -7,10 +7,21 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>&lt;a href=&#34;https://creativecommons.org/licenses/by-nc/4.0/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;CC BY-NC 4.0&lt;/a&gt;</copyright>
-    <lastBuildDate>Wed, 19 Aug 2020 15:00:00 +0300</lastBuildDate>
+    <lastBuildDate>Tue, 12 Jan 2021 10:52:38 +0200</lastBuildDate>
     
 	<atom:link href="/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Utilizing Simplr Router</title>
+      <link>/posts/utilizing-simplr-router/</link>
+      <pubDate>Tue, 12 Jan 2021 10:52:38 +0200</pubDate>
+      
+      <guid>/posts/utilizing-simplr-router/</guid>
+      <description>I started working on Simplr Router in September 2019. Back then I had just learned about Web Components and the power they enable for developers. We were working on our first bigger project and were using LitElement. We had great tooling, but were missing one thing: A router which suited our needs and customizability.
+That&amp;rsquo;s when I started working on Simplr Router.
+ The Dream From the beginning, I have wanted to keep Simplr Router at 0 dependecies, and so far we&amp;rsquo;ve been able to keep it that way.</description>
+    </item>
     
     <item>
       <title>Comparing React and Web Components. Part 2: Components</title>
