@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    
+      <title>
+        Creating a Offline First Stock Price Tracker With Stoxy ::
+        Matsu — Abusing Javascript and The Web platform
+      </title>
+    
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta
+  name="description"
+  content="At the start of this week, I released my state management library, Stoxy to the wild.
+After gaining some tracktion from different outlets, I decided I should create a small demo project showcasing the best parts about using Stoxy.
+That&amp;rsquo;s why I decided to create a small Offline-first application for tracking stock prices. It will be built with Web Components and utilize the Stoxy library for handling the state, online and offline."
+/>
+<meta
+  name="keywords"
+  content=""
+/>
+<meta name="robots" content="noodp" />
+<link rel="canonical" href="/posts/creating-a-offline-first-stock-price-tracker-with-stoxy/" />
+
+
+
+
+
+<link rel="stylesheet" href="/assets/style.css" />
+
+<link rel="stylesheet" href="/style.css" />
+
+
+<link
+  rel="apple-touch-icon-precomposed"
+  sizes="144x144"
+  href="/img/apple-touch-icon-144-precomposed.png"
+/>
+<link rel="shortcut icon" href="/img/favicon.png" />
+
+
+<link href="/assets/fonts/Inter-Italic.woff2" rel="preload" type="font/woff2" as="font" crossorigin="">
+<link href="/assets/fonts/Inter-Regular.woff2" rel="preload" type="font/woff2" as="font" crossorigin="">
+<link href="/assets/fonts/Inter-Medium.woff2" rel="preload" type="font/woff2" as="font" crossorigin="">
+<link href="/assets/fonts/Inter-MediumItalic.woff2" rel="preload" type="font/woff2" as="font" crossorigin="">
+<link href="/assets/fonts/Inter-Bold.woff2" rel="preload" type="font/woff2" as="font" crossorigin="">
+<link href="/assets/fonts/Inter-BoldItalic.woff2" rel="preload" type="font/woff2" as="font" crossorigin="">
+
+
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="/"/>
+
+<meta name="twitter:title" content="Creating a Offline First Stock Price Tracker With Stoxy"/>
+<meta name="twitter:description" content="At the start of this week, I released my state management library, Stoxy to the wild.
+After gaining some tracktion from different outlets, I decided I should create a small demo project showcasing the best parts about using Stoxy.
+That&rsquo;s why I decided to create a small Offline-first application for tracking stock prices. It will be built with Web Components and utilize the Stoxy library for handling the state, online and offline."/>
+
+
+
+<meta property="og:title" content="Creating a Offline First Stock Price Tracker With Stoxy" />
+<meta property="og:description" content="At the start of this week, I released my state management library, Stoxy to the wild.
+After gaining some tracktion from different outlets, I decided I should create a small demo project showcasing the best parts about using Stoxy.
+That&rsquo;s why I decided to create a small Offline-first application for tracking stock prices. It will be built with Web Components and utilize the Stoxy library for handling the state, online and offline." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/posts/creating-a-offline-first-stock-price-tracker-with-stoxy/" />
+<meta property="og:image" content="/"/>
+<meta property="article:published_time" content="2021-03-13T14:01:19+02:00" />
+<meta property="article:modified_time" content="2021-03-13T14:01:19+02:00" /><meta property="og:site_name" content="Matsu" />
+
+
+
+
+
+
+  </head>
+  <body class="dark-theme">
+    <div class="container">
+      <header class="header">
+  <span class="header__inner">
+    <a
+  href="/"
+  class="logo"
+  style="text-decoration: none;"
+>
+  
+    <span class="logo__mark"><svg xmlns="http://www.w3.org/2000/svg" class="greater-icon" viewBox="0 0 44 44">
+  <path fill="none" d="M15 8l14.729 14.382L15 35.367" />
+</svg>
+</span>
+    <span class="logo__text"
+      >:wq</span
+    >
+    <span class="logo__cursor"></span>
+  
+</a>
+
+    <span class="header__right">
+      
+        <nav class="menu">
+  <ul class="menu__inner menu__inner--desktop">
+    
+      
+        
+          <li><a href="/posts">Blog</a></li>
+        
+      
+    
+  </ul>
+
+  <ul class="menu__inner menu__inner--mobile">
+    
+      
+        <li><a href="/posts">Blog</a></li>
+      
+    
+  </ul>
+</nav>
+
+        <span class="menu-trigger">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M0 0h24v24H0z" fill="none" />
+            <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z" />
+          </svg>
+        </span>
+      
+      <span class="theme-toggle">
+        <svg
+  class="theme-toggler"
+  width="24"
+  height="24"
+  viewBox="0 0 48 48"
+  fill="none"
+  xmlns="http://www.w3.org/2000/svg"
+>
+  <path
+    d="M22 41C32.4934 41 41 32.4934 41 22C41 11.5066 32.4934 3 22
+  3C11.5066 3 3 11.5066 3 22C3 32.4934 11.5066 41 22 41ZM7 22C7
+  13.7157 13.7157 7 22 7V37C13.7157 37 7 30.2843 7 22Z"
+  />
+</svg>
+
+      </span>
+    </span>
+  </span>
+</header>
+
+
+      <div class="content">
+        
+  
+  
+
+  <div class="post">
+    <h1 class="post-title">Creating a Offline First Stock Price Tracker With Stoxy</h1>
+    <div class="post-meta">
+      
+        <span class="post-date">
+          2021-03-13
+        </span>
+
+        
+          
+        
+      
+
+      
+
+
+      
+    </div>
+
+    
+
+    
+
+    <div class="post-content">
+      
+      <p>At the start of this week, I released my state management library, Stoxy to the wild.</p>
+<p>After gaining some tracktion from different outlets, I decided I should create a small demo project showcasing
+the best parts about using Stoxy.</p>
+<p>That&rsquo;s why I decided to create a small Offline-first application for tracking stock prices. It will be built
+with Web Components and utilize the Stoxy library for handling the state, online and offline.</p>
+<h2 id="features">Features</h2>
+<p>The app will be a installable PWA site, in which the user can enter different stocks
+to follow the price of. The app will not have a separate backend, but only store the data in the
+indexedDB via Stoxy.</p>
+<p>After having entered stocks the user wants to follow, he can fetch the latest stock data with a
+press of a button.</p>
+<h2 id="requirements">Requirements</h2>
+<p>We&rsquo;re going to be creating a offline functional PWA web app, which means we&rsquo;re going to need the following:</p>
+<ul>
+<li>A manifest.json for creating the PWA</li>
+<li>A service worker for caching our pages and serving them offline</li>
+<li>An API key for our stock API</li>
+</ul>
+<p>Let&rsquo;s get those two out of the way first before we get into development of the actual app.</p>
+<h2 id="initialization">Initialization</h2>
+<p>I scaffolded my project using out own in-house scaffolding tool, <code>@simplr-wc/create</code> with the command <code>npm init @simplr-wc</code>.</p>
+<p>This scaffolding tool is quite refined for our use cases and if you&rsquo;re following this post and developing yourself, I highly
+recommend going with the <a href="https://open-wc.org/">Open-WC</a> initializer</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">npm init @open-wc
+</code></pre></div><p>Then selecting to scaffold a new application with linting and building tools pre-setup.</p>
+<p>I named my project <code>stoxy-stock-project</code> so all the references to that name during this post will have to be changed
+to match your naming scheme.</p>
+<p>Now let&rsquo;s create the first file</p>
+<h4 id="manifestjson">Manifest.json</h4>
+<p>The manifest.json file is a required file for the web app to be recognized as a PWA.</p>
+<p>The file specifies basic metadata about our PWA app for the device.</p>
+<p>Following the MVP for the manifest.json file we end up with</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-json" data-lang="json"><span style="color:#960050;background-color:#1e0010">//</span> <span style="color:#960050;background-color:#1e0010">manifest.json</span>
+
+{
+  <span style="color:#f92672">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;Stoxy Stock App Demo&#34;</span>,
+  <span style="color:#f92672">&#34;short_name&#34;</span>: <span style="color:#e6db74">&#34;Stoxy Stock&#34;</span>,
+  <span style="color:#f92672">&#34;lang&#34;</span>: <span style="color:#e6db74">&#34;en-US&#34;</span>,
+  <span style="color:#f92672">&#34;start_url&#34;</span>: <span style="color:#e6db74">&#34;/index.html&#34;</span>,
+  <span style="color:#f92672">&#34;display&#34;</span>: <span style="color:#e6db74">&#34;standalone&#34;</span>,
+  <span style="color:#f92672">&#34;theme_color&#34;</span>: <span style="color:#e6db74">&#34;#FFFFFF&#34;</span>,
+  <span style="color:#f92672">&#34;background_color&#34;</span>: <span style="color:#e6db74">&#34;#108ad4&#34;</span>,
+  <span style="color:#f92672">&#34;icons&#34;</span>: [
+    {
+      <span style="color:#f92672">&#34;src&#34;</span>: <span style="color:#e6db74">&#34;icons/android-chrome-192x192.png&#34;</span>,
+      <span style="color:#f92672">&#34;sizes&#34;</span>: <span style="color:#e6db74">&#34;192x192&#34;</span>
+    },
+    {
+      <span style="color:#f92672">&#34;src&#34;</span>: <span style="color:#e6db74">&#34;icons/android-chrome-512x512.png&#34;</span>,
+      <span style="color:#f92672">&#34;sizes&#34;</span>: <span style="color:#e6db74">&#34;512x512&#34;</span>
+    }
+  ]
+}
+</code></pre></div><p>This will do fine since we&rsquo;re only going to be using this for only personal use :)</p>
+<h4 id="service-worker">Service Worker</h4>
+<p>Next up we will create a MVP of our service worker file to provide some offline functionality.</p>
+<p>For large scale products or anything that is going into production for people to use, I would always use
+<a href="https://developers.google.com/web/tools/workbox">Workbox</a>, since it makes everything a lot simpler,
+but for this simple app, we&rsquo;re just going to be writing our implementation ourselves.</p>
+<p>We will start by creating our service worker file, <code>worker.js</code>.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#75715e">// worker.js
+</span><span style="color:#75715e"></span>
+<span style="color:#66d9ef">const</span> <span style="color:#a6e22e">staticCacheName</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;stockapp-cache-v1&#34;</span>;
+<span style="color:#66d9ef">const</span> <span style="color:#a6e22e">filesToCache</span> <span style="color:#f92672">=</span> [
+  <span style="color:#e6db74">&#34;/&#34;</span>,
+  <span style="color:#e6db74">&#34;index.html&#34;</span>,
+  <span style="color:#e6db74">&#34;src/stoxy-stock-project.js&#34;</span>,
+  <span style="color:#e6db74">&#34;icons/android-chrome-192x192.png&#34;</span>,
+  <span style="color:#e6db74">&#34;icons/android-chrome-512x512.png&#34;</span>,
+];
+
+<span style="color:#a6e22e">self</span>.<span style="color:#a6e22e">addEventListener</span>(<span style="color:#e6db74">&#34;install&#34;</span>, (<span style="color:#a6e22e">e</span>) =&gt; {
+  <span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">log</span>(<span style="color:#e6db74">&#34;[Service Worker] Install&#34;</span>);
+  <span style="color:#a6e22e">e</span>.<span style="color:#a6e22e">waitUntil</span>(
+    <span style="color:#a6e22e">caches</span>.<span style="color:#a6e22e">open</span>(<span style="color:#a6e22e">staticCacheName</span>).<span style="color:#a6e22e">then</span>((<span style="color:#a6e22e">cache</span>) =&gt; {
+      <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">cache</span>.<span style="color:#a6e22e">addAll</span>(<span style="color:#a6e22e">filesToCache</span>);
+    })
+  );
+});
+
+<span style="color:#a6e22e">self</span>.<span style="color:#a6e22e">addEventListener</span>(<span style="color:#e6db74">&#34;activate&#34;</span>, (<span style="color:#a6e22e">e</span>) =&gt; {
+  <span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">log</span>(<span style="color:#e6db74">&#34;[Service Worker] actived&#34;</span>);
+});
+
+<span style="color:#a6e22e">self</span>.<span style="color:#a6e22e">addEventListener</span>(<span style="color:#e6db74">&#34;fetch&#34;</span>, (<span style="color:#a6e22e">event</span>) =&gt; {
+  <span style="color:#a6e22e">event</span>.<span style="color:#a6e22e">respondWith</span>(
+    <span style="color:#a6e22e">caches</span>.<span style="color:#a6e22e">match</span>(<span style="color:#a6e22e">event</span>.<span style="color:#a6e22e">request</span>).<span style="color:#a6e22e">then</span>((<span style="color:#a6e22e">cachedResponse</span>) =&gt; {
+      <span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">cachedResponse</span>) {
+        <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">cachedResponse</span>;
+      }
+      <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">fetch</span>(<span style="color:#a6e22e">event</span>.<span style="color:#a6e22e">request</span>);
+    })
+  );
+});
+</code></pre></div><p>First we declare the site cache name, then the files we want to cache in it.</p>
+<p>In the install event (when the service worker is installed), we grab the event, and wait until the site cache has been
+updated to contain all of the files we wanted to cache.</p>
+<p>Next we set up a event listener for all of our <code>fetch</code>-events and make our service worker respond to all of
+the requests matching our cached sites with the cached version. This is done so that when we have no internet
+connectivity, we can still serve all of the files we need.</p>
+<p>Next we will need to register our service worker.</p>
+<p>In the initialization of our javascript, we create a function to register our service worker, if possible</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#75715e">// src/service-worker-setup.js
+</span><span style="color:#75715e"></span>
+<span style="color:#66d9ef">export</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">register</span>() {
+  <span style="color:#66d9ef">if</span> (<span style="color:#e6db74">&#34;serviceWorker&#34;</span> <span style="color:#66d9ef">in</span> <span style="color:#a6e22e">navigator</span>) {
+    <span style="color:#a6e22e">navigator</span>.<span style="color:#a6e22e">serviceWorker</span>.<span style="color:#a6e22e">register</span>(<span style="color:#e6db74">&#34;/worker.js&#34;</span>).<span style="color:#a6e22e">then</span>(() =&gt; {
+      <span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">log</span>(<span style="color:#e6db74">&#34;Service worker registered&#34;</span>);
+    });
+  }
+}
+</code></pre></div><p>Now we&rsquo;re all set to start developing our offline-first stock app!</p>
+<h2 id="development">Development</h2>
+<p>For development, we are using <a href="https://lit-element.polymer-project.org/">LitElement</a> and <a href="https://lit-html.polymer-project.org/">lit-html</a>.
+They make the development process of Web Components a breeze and work really nicely together with Stoxy.</p>
+<p>So we are currently working with just 2 dependencies for the whole project: LitElement and Stoxy.</p>
+<h4 id="initializing-the-base-level-app">Initializing the base level app</h4>
+<p>First we are going to create the landing page for our app. It&rsquo;s going to contain all of the components required for
+our app to run.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#75715e">// stoxy-stock-project.js
+</span><span style="color:#75715e"></span>
+<span style="color:#66d9ef">import</span> { <span style="color:#a6e22e">LitElement</span>, <span style="color:#a6e22e">html</span>, <span style="color:#a6e22e">css</span> } <span style="color:#a6e22e">from</span> <span style="color:#e6db74">&#34;lit-element&#34;</span>;
+<span style="color:#66d9ef">import</span> { <span style="color:#a6e22e">getStockInfo</span> } <span style="color:#a6e22e">from</span> <span style="color:#e6db74">&#34;./stockApi&#34;</span>;
+<span style="color:#66d9ef">import</span> { <span style="color:#a6e22e">persistKey</span>, <span style="color:#a6e22e">read</span> } <span style="color:#a6e22e">from</span> <span style="color:#e6db74">&#34;@stoxy/stoxy&#34;</span>;
+<span style="color:#66d9ef">import</span> <span style="color:#e6db74">&#34;./stock-price-display&#34;</span>;
+<span style="color:#66d9ef">import</span> <span style="color:#e6db74">&#34;./stock-adder&#34;</span>;
+<span style="color:#66d9ef">import</span> <span style="color:#e6db74">&#34;@stoxy/repeat&#34;</span>;
+<span style="color:#66d9ef">import</span> { <span style="color:#a6e22e">register</span> } <span style="color:#a6e22e">from</span> <span style="color:#e6db74">&#34;./service-worker-setup&#34;</span>;
+
+<span style="color:#66d9ef">export</span> <span style="color:#66d9ef">default</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">StoxyStockProject</span> <span style="color:#66d9ef">extends</span> <span style="color:#a6e22e">LitElement</span> {
+  <span style="color:#a6e22e">constructor</span>() {
+    <span style="color:#66d9ef">super</span>();
+    <span style="color:#a6e22e">persistKey</span>(<span style="color:#e6db74">&#34;stockInfo&#34;</span>, <span style="color:#e6db74">&#34;stocks&#34;</span>);
+  }
+
+  <span style="color:#a6e22e">firstUpdated</span>() {
+    <span style="color:#a6e22e">register</span>();
+  }
+
+  <span style="color:#66d9ef">async</span> <span style="color:#a6e22e">fetchStockInfo</span>() {
+    <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">stocks</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">await</span> <span style="color:#a6e22e">read</span>(<span style="color:#e6db74">&#34;stocks&#34;</span>);
+    <span style="color:#a6e22e">stocks</span>.<span style="color:#a6e22e">forEach</span>((<span style="color:#a6e22e">s</span>) =&gt; <span style="color:#a6e22e">getStockInfo</span>(<span style="color:#a6e22e">s</span>));
+  }
+
+  <span style="color:#a6e22e">render</span>() {
+    <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">html</span><span style="color:#e6db74">`
+</span><span style="color:#e6db74">      &lt;stock-adder&gt;&lt;/stock-adder&gt;
+</span><span style="color:#e6db74">      &lt;button @click=</span><span style="color:#e6db74">${</span><span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">fetchStockInfo</span><span style="color:#e6db74">}</span><span style="color:#e6db74">&gt;
+</span><span style="color:#e6db74">        &lt;svg
+</span><span style="color:#e6db74">          xmlns=&#34;http://www.w3.org/2000/svg&#34;
+</span><span style="color:#e6db74">          width=&#34;24&#34;
+</span><span style="color:#e6db74">          height=&#34;24&#34;
+</span><span style="color:#e6db74">          viewBox=&#34;0 0 24 24&#34;
+</span><span style="color:#e6db74">        &gt;
+</span><span style="color:#e6db74">          &lt;path
+</span><span style="color:#e6db74">            d=&#34;M9 12l-4.463 4.969-4.537-4.969h3c0-4.97 4.03-9 9-9 2.395 0 4.565.942 6.179 2.468l-2.004 2.231c-1.081-1.05-2.553-1.699-4.175-1.699-3.309 0-6 2.691-6 6h3zm10.463-4.969l-4.463 4.969h3c0 3.309-2.691 6-6 6-1.623 0-3.094-.65-4.175-1.699l-2.004 2.231c1.613 1.526 3.784 2.468 6.179 2.468 4.97 0 9-4.03 9-9h3l-4.537-4.969z&#34;
+</span><span style="color:#e6db74">          /&gt;
+</span><span style="color:#e6db74">        &lt;/svg&gt;
+</span><span style="color:#e6db74">      &lt;/button&gt;
+</span><span style="color:#e6db74">      &lt;stoxy-repeat key=&#34;stocks&#34; id=&#34;iStock&#34; class=&#34;stock-area&#34;&gt;
+</span><span style="color:#e6db74">        &lt;stock-price-display stock=&#34;iStock&#34;&gt;&lt;/stock-price-display&gt;
+</span><span style="color:#e6db74">      &lt;/stoxy-repeat&gt;
+</span><span style="color:#e6db74">    `</span>;
+  }
+
+  <span style="color:#66d9ef">static</span> <span style="color:#a6e22e">get</span> <span style="color:#a6e22e">styles</span>() {
+    <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">css</span><span style="color:#e6db74">`
+</span><span style="color:#e6db74">      :host {
+</span><span style="color:#e6db74">        display: flex;
+</span><span style="color:#e6db74">        flex-direction: column;
+</span><span style="color:#e6db74">        font-size: 1.6rem;
+</span><span style="color:#e6db74">        width: 100%;
+</span><span style="color:#e6db74">        min-height: 100vh;
+</span><span style="color:#e6db74">        background: #108ad4;
+</span><span style="color:#e6db74">        align-items: center;
+</span><span style="color:#e6db74">        justify-content: center;
+</span><span style="color:#e6db74">        color: #fff;
+</span><span style="color:#e6db74">        overflow: hidden;
+</span><span style="color:#e6db74">      }
+</span><span style="color:#e6db74">
+</span><span style="color:#e6db74">      .stock-area {
+</span><span style="color:#e6db74">        width: 80%;
+</span><span style="color:#e6db74">        justify-content: space-between;
+</span><span style="color:#e6db74">        display: flex;
+</span><span style="color:#e6db74">        flex-wrap: wrap;
+</span><span style="color:#e6db74">      }
+</span><span style="color:#e6db74">
+</span><span style="color:#e6db74">      button {
+</span><span style="color:#e6db74">        border: none;
+</span><span style="color:#e6db74">        background: none;
+</span><span style="color:#e6db74">        margin-bottom: 5rem;
+</span><span style="color:#e6db74">        fill: #fff;
+</span><span style="color:#e6db74">        outline: none;
+</span><span style="color:#e6db74">      }
+</span><span style="color:#e6db74">
+</span><span style="color:#e6db74">      svg {
+</span><span style="color:#e6db74">        width: 50px;
+</span><span style="color:#e6db74">        height: 50px;
+</span><span style="color:#e6db74">        cursor: pointer;
+</span><span style="color:#e6db74">      }
+</span><span style="color:#e6db74">    `</span>;
+  }
+}
+
+<span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span><span style="color:#a6e22e">customElements</span>.<span style="color:#a6e22e">get</span>(<span style="color:#e6db74">&#34;stoxy-stock-project&#34;</span>)) {
+  <span style="color:#a6e22e">customElements</span>.<span style="color:#a6e22e">define</span>(<span style="color:#e6db74">&#34;stoxy-stock-project&#34;</span>, <span style="color:#a6e22e">StoxyStockProject</span>);
+}
+</code></pre></div><p>In our constructor function, we initialize all of your Stoxy keys that we want to persist through page loads. Since we want
+our stock data to be persisted for offline use, we want to persist the list of stocks we follow, and the stockinfo
+about all of those stocks.</p>
+<p>The firstUpdated method is called when the element is updated for the first time. At that point we can be fairly
+sure that we can initialize our Service worker, and that&rsquo;s what we are going to do. We call the <code>register()</code> method we just
+added to the <code>service-worker-setup.js</code> file.</p>
+<p>After the initialization functions, we declare just one function: <code>fetchStockInfo</code>. This function will be used
+for updating the stock data for the followed stocks. Inside the function we first read all of the stock names from
+our stoxy cache, and after that, we iterate through each of them, fething the latest stock info of each.</p>
+<p>Inside our render function we have our HTML which is going to build our site. We will go into further detail about the
+components later in this post.</p>
+<p>Here we saw our first look into using Stoxy. Inside the <code>fetchStockInfo</code> function we read the data from state with just
+a simple promise call.</p>
+<h4 id="adding-a-stock-to-follow">Adding a Stock to follow</h4>
+<p>Next up we are going to create the <code>stock-adder</code> component seen in the top level HTML.</p>
+<p>We want this to be a simple form component, which takes the stock name from the form and adds it to the state.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#75715e">// src/stock-adder.js
+</span><span style="color:#75715e"></span>
+<span style="color:#66d9ef">import</span> { <span style="color:#a6e22e">LitElement</span>, <span style="color:#a6e22e">html</span>, <span style="color:#a6e22e">css</span> } <span style="color:#a6e22e">from</span> <span style="color:#e6db74">&#34;lit-element&#34;</span>;
+<span style="color:#66d9ef">import</span> { <span style="color:#a6e22e">add</span> } <span style="color:#a6e22e">from</span> <span style="color:#e6db74">&#34;@stoxy/core&#34;</span>;
+<span style="color:#66d9ef">import</span> { <span style="color:#a6e22e">getStockInfo</span> } <span style="color:#a6e22e">from</span> <span style="color:#e6db74">&#34;./stockApi&#34;</span>;
+
+<span style="color:#66d9ef">class</span> <span style="color:#a6e22e">StockAdder</span> <span style="color:#66d9ef">extends</span> <span style="color:#a6e22e">LitElement</span> {
+  <span style="color:#a6e22e">constructor</span>() {
+    <span style="color:#66d9ef">super</span>();
+  }
+
+  <span style="color:#a6e22e">addStock</span>(<span style="color:#a6e22e">e</span>) {
+    <span style="color:#a6e22e">e</span>.<span style="color:#a6e22e">preventDefault</span>();
+    <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">formData</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> <span style="color:#a6e22e">FormData</span>(<span style="color:#a6e22e">e</span>.<span style="color:#a6e22e">target</span>);
+    <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">stockName</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">formData</span>.<span style="color:#a6e22e">get</span>(<span style="color:#e6db74">&#34;stock&#34;</span>);
+    <span style="color:#a6e22e">add</span>(<span style="color:#e6db74">&#34;stocks&#34;</span>, <span style="color:#a6e22e">stockName</span>);
+    <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">shadowRoot</span>.<span style="color:#a6e22e">querySelector</span>(<span style="color:#e6db74">&#34;input[type=&#39;text&#39;]&#34;</span>).<span style="color:#a6e22e">value</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;&#34;</span>;
+    <span style="color:#a6e22e">getStockInfo</span>(<span style="color:#a6e22e">stockName</span>);
+  }
+
+  <span style="color:#a6e22e">render</span>() {
+    <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">html</span><span style="color:#e6db74">`
+</span><span style="color:#e6db74">      &lt;form @submit=</span><span style="color:#e6db74">${</span><span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">addStock</span><span style="color:#e6db74">}</span><span style="color:#e6db74">&gt;
+</span><span style="color:#e6db74">        &lt;h2&gt;Add a stock to watch&lt;/h2&gt;
+</span><span style="color:#e6db74">        &lt;input type=&#34;text&#34; name=&#34;stock&#34; placeholder=&#34;AMZN&#34; /&gt;
+</span><span style="color:#e6db74">        &lt;input type=&#34;submit&#34; value=&#34;Add stock&#34; /&gt;
+</span><span style="color:#e6db74">      &lt;/form&gt;
+</span><span style="color:#e6db74">    `</span>;
+  }
+
+  <span style="color:#66d9ef">static</span> <span style="color:#a6e22e">get</span> <span style="color:#a6e22e">styles</span>() {
+    <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">css</span><span style="color:#e6db74">`
+</span><span style="color:#e6db74">      :host {
+</span><span style="color:#e6db74">        margin-bottom: 2rem;
+</span><span style="color:#e6db74">        width: 80%;
+</span><span style="color:#e6db74">        display: flex;
+</span><span style="color:#e6db74">        flex-direction: column;
+</span><span style="color:#e6db74">        align-items: center;
+</span><span style="color:#e6db74">        justify-content: center;
+</span><span style="color:#e6db74">      }
+</span><span style="color:#e6db74">
+</span><span style="color:#e6db74">      form {
+</span><span style="color:#e6db74">        display: flex;
+</span><span style="color:#e6db74">        flex-direction: column;
+</span><span style="color:#e6db74">        align-items: center;
+</span><span style="color:#e6db74">        justify-content: center;
+</span><span style="color:#e6db74">      }
+</span><span style="color:#e6db74">
+</span><span style="color:#e6db74">      input[type=&#34;text&#34;] {
+</span><span style="color:#e6db74">        width: 20rem;
+</span><span style="color:#e6db74">        font-size: 2rem;
+</span><span style="color:#e6db74">        text-align: center;
+</span><span style="color:#e6db74">        border: 2px solid #fff;
+</span><span style="color:#e6db74">        background: transparent;
+</span><span style="color:#e6db74">        color: #fff;
+</span><span style="color:#e6db74">      }
+</span><span style="color:#e6db74">
+</span><span style="color:#e6db74">      input::placeholder {
+</span><span style="color:#e6db74">        color: #fff;
+</span><span style="color:#e6db74">        opacity: 0.4;
+</span><span style="color:#e6db74">      }
+</span><span style="color:#e6db74">
+</span><span style="color:#e6db74">      input[type=&#34;submit&#34;] {
+</span><span style="color:#e6db74">        margin-top: 1rem;
+</span><span style="color:#e6db74">        border: 2px solid #fff;
+</span><span style="color:#e6db74">        background: none;
+</span><span style="color:#e6db74">        color: #fff;
+</span><span style="color:#e6db74">        font-size: 1.6rem;
+</span><span style="color:#e6db74">        cursor: pointer;
+</span><span style="color:#e6db74">      }
+</span><span style="color:#e6db74">    `</span>;
+  }
+}
+
+<span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span><span style="color:#a6e22e">customElements</span>.<span style="color:#a6e22e">get</span>(<span style="color:#e6db74">&#34;stock-adder&#34;</span>)) {
+  <span style="color:#a6e22e">customElements</span>.<span style="color:#a6e22e">define</span>(<span style="color:#e6db74">&#34;stock-adder&#34;</span>, <span style="color:#a6e22e">StockAdder</span>);
+}
+</code></pre></div><p>The component itself is quite a simple web component form: Some styling and a simple form with a single input field.</p>
+<p>The part in which Stoxy comes in is when we handle the form submit.</p>
+<p>Inside the <code>addStock</code> function which is called when the form submits, we first prevent the default submit of the
+form, and after getting the stock name from the form data, we add it into the stoxy state with the
+<a href="https://stoxy.dev/docs/methods/add/">add</a> method.</p>
+<p>Stoxy has many built in functions for handling state objects, and <code>add</code> is especially nice when you just want to
+add to the already existing state array, without having the first read the data and then rewrite it.</p>
+<p>After we have saved the stock name onto the state, we tell the stockApi class to fetch the stock data for the
+newly added stock.</p>
+<hr>
+<h5 id="note">Note!</h5>
+<p>Instead of using a classic form, we could also use <a href="https://stoxy.dev/docs/components/stoxy-form/">Stoxy Form</a>.</p>
+<p>In that case, we would have our state be represented by a array of JSON objects instead of just strings.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#75715e">// Using add &amp; normal form
+</span><span style="color:#75715e"></span>[<span style="color:#e6db74">&#34;GME&#34;</span>, <span style="color:#e6db74">&#34;TSLA&#34;</span>][
+  <span style="color:#75715e">// Using stoxy-form
+</span><span style="color:#75715e"></span>  ({ <span style="color:#a6e22e">stock</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;GME&#34;</span> }, { <span style="color:#a6e22e">stock</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;TSLA&#34;</span> })
+];
+</code></pre></div><p>For simplicity&rsquo;s sake, we&rsquo;ll just use the add method here.</p>
+<hr>
+<h4 id="fetching-the-stock-data">Fetching the stock data</h4>
+<p>Allright so now we have out basic view, and our add-stock-to-state -component. Next we will need to implement the API
+to call the stock API for us and save the information onto the Stoxy state.</p>
+<p>This is quite simple, since we get the exact examples from the API service.</p>
+<p>For this project we will be using <a href="https://rapidapi.com/">RapidAPI</a> to provide us with the API&rsquo;s we need.</p>
+<p>Inside RapidAPI service we will be utilizing the <a href="https://rapidapi.com/apidojo/api/yahoo-finance1?endpoint=apiendpoint_ef6248fb-33e7-42ea-a8a6-58a7ef7f2177">Yahoo Finance</a>
+&ldquo;get-summary&rdquo; -api.</p>
+<p>By changing the code snippet to fetch, we get the perfect example for our case:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#a6e22e">fetch</span>(
+  <span style="color:#e6db74">&#34;https://apidojo-yahoo-finance-v1.p.rapidapi.com/stock/v2/get-summary?symbol=AMRN&amp;region=US&#34;</span>,
+  {
+    <span style="color:#a6e22e">method</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;GET&#34;</span>,
+    <span style="color:#a6e22e">headers</span><span style="color:#f92672">:</span> {
+      <span style="color:#e6db74">&#34;x-rapidapi-key&#34;</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;YOUR_RAPIDAPI_KEY&#34;</span>,
+      <span style="color:#e6db74">&#34;x-rapidapi-host&#34;</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;YOUR_RAPIDAPI_HOST&#34;</span>,
+    },
+  }
+)
+  .<span style="color:#a6e22e">then</span>((<span style="color:#a6e22e">response</span>) =&gt; {
+    <span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">log</span>(<span style="color:#a6e22e">response</span>);
+  })
+  .<span style="color:#66d9ef">catch</span>((<span style="color:#a6e22e">err</span>) =&gt; {
+    <span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">error</span>(<span style="color:#a6e22e">err</span>);
+  });
+</code></pre></div><p>We can just copy and paste&hellip; I mean carefully type ourselves the code onto our stockApi.js file.
+Let&rsquo;s also modify a few things while we&rsquo;re at it.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#75715e">// src/stockApi.js
+</span><span style="color:#75715e"></span>
+<span style="color:#66d9ef">import</span> { <span style="color:#a6e22e">update</span> } <span style="color:#a6e22e">from</span> <span style="color:#e6db74">&#34;@stoxy/core&#34;</span>;
+
+<span style="color:#66d9ef">export</span> <span style="color:#66d9ef">async</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">getStockInfo</span>(<span style="color:#a6e22e">stockName</span>) {
+  <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">stockInfo</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">await</span> <span style="color:#a6e22e">fetch</span>(
+    <span style="color:#e6db74">`https://apidojo-yahoo-finance-v1.p.rapidapi.com/stock/v2/get-analysis?symbol=</span><span style="color:#e6db74">${</span><span style="color:#a6e22e">stockName</span><span style="color:#e6db74">}</span><span style="color:#e6db74">&amp;region=US`</span>,
+    {
+      <span style="color:#a6e22e">method</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;GET&#34;</span>,
+      <span style="color:#a6e22e">headers</span><span style="color:#f92672">:</span> {
+        <span style="color:#e6db74">&#34;x-rapidapi-key&#34;</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;YOUR_RAPIDAPI_KEY&#34;</span>,
+        <span style="color:#e6db74">&#34;x-rapidapi-host&#34;</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;YOUR_RAPIDAPI_HOST&#34;</span>,
+      },
+    }
+  )
+    .<span style="color:#a6e22e">then</span>((<span style="color:#a6e22e">response</span>) =&gt; <span style="color:#a6e22e">response</span>.<span style="color:#a6e22e">json</span>())
+    .<span style="color:#a6e22e">then</span>((<span style="color:#a6e22e">response</span>) =&gt; {
+      <span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">log</span>(<span style="color:#a6e22e">response</span>);
+      <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">response</span>;
+    })
+    .<span style="color:#66d9ef">catch</span>((<span style="color:#a6e22e">err</span>) =&gt; {
+      <span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">error</span>(<span style="color:#a6e22e">err</span>);
+    });
+
+  <span style="color:#a6e22e">update</span>(<span style="color:#e6db74">&#34;stockInfo&#34;</span>, (<span style="color:#a6e22e">si</span>) =&gt; {
+    <span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span><span style="color:#a6e22e">si</span>) <span style="color:#a6e22e">si</span> <span style="color:#f92672">=</span> {};
+    <span style="color:#a6e22e">si</span>[<span style="color:#a6e22e">stockName</span>] <span style="color:#f92672">=</span> <span style="color:#a6e22e">stockInfo</span>;
+    <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">si</span>;
+  });
+}
+</code></pre></div><p>First off we made the call into a function so that we can call it from anywhere in our codebase.</p>
+<p>In the API call we also replace the hardcoded stock name with a variable gained as a parameter.</p>
+<p>After we get our data from the API, we want to first pare it into JSON. After that we just console.log it to
+make it easier to debug. You can of course omit the console log and the whole <code>then</code> part.</p>
+<p>After we have gaines the stock info for the given stock, we call the <a href="https://stoxy.dev/docs/methods/update/">update</a> function of Stoxy.
+With the update function we can easily modify a part of a state object without explicitly reading the whole
+state object and then explicitly writing it.</p>
+<p>In the update delegate we check if we have <code>stockInfo</code> initialized in our state at all, and initialize it as needed.
+After that we set the stock data from the API onto the key of the stock&rsquo;s name for easy fetching later on.</p>
+<p>It was really easy to set the API data to be accessible across the whole application with just a quick <code>update</code> call to Stoxy.</p>
+<h4 id="wrapping-it-all-together">Wrapping it all together</h4>
+<p>Quickly going through what we&rsquo;ve built so far:</p>
+<ul>
+<li>Set up the application to function as a Offline ready PWA</li>
+<li>Created a form to submit a new Stock to follow</li>
+<li>Created main app component for our app</li>
+<li>Fetched the data from the API and saved it onto our persistent state</li>
+</ul>
+<p>The last thing we now have to do is wrap it all together by creating the component to display
+our stock price data.</p>
+<h4 id="repeating-data-with-stoxy">Repeating data with Stoxy</h4>
+<p>You might have already spotted the <a href="https://stoxy.dev/docs/components/stoxy-repeat/">stoxy-repeat</a> component
+in our main app file. Inside the file we were using it to repeat out stock display component.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html">&lt;<span style="color:#f92672">stoxy-repeat</span> <span style="color:#a6e22e">key</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;stocks&#34;</span> <span style="color:#a6e22e">id</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;iStock&#34;</span> <span style="color:#a6e22e">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;stock-area&#34;</span>&gt;
+  &lt;<span style="color:#f92672">stock-price-display</span> <span style="color:#a6e22e">stock</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;iStock&#34;</span>&gt;&lt;/<span style="color:#f92672">stock-price-display</span>&gt;
+&lt;/<span style="color:#f92672">stoxy-repeat</span>&gt;
+</code></pre></div><p>Let&rsquo;s disect a little bit what&rsquo;s going on here:</p>
+<p>With the stoxy-repeat -component we can easily repeat HTML structures according to our state data.</p>
+<p>In the code snippet above, we are iterating through the &ldquo;stocks&rdquo; state object, and naming our iterator
+objects &ldquo;iStock&rdquo; for &ldquo;iteratedStock&rdquo;.</p>
+<p>With the component we can now reference the &ldquo;iStock&rdquo; word, and the component will replace it with the value
+from the stock object itself. Since our stock state object is just a array of Strings, we don&rsquo;t need
+any accessors like <code>iStock.name</code>  etc.</p>
+<p>In the above example we set the <code>stock</code> attribute of our component to match the name of the current stock we&rsquo;re iterating through.</p>
+<p>Next let&rsquo;s see how our stock display component handles this.</p>
+<hr>
+<h4 id="stock-display-component">Stock display component</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#75715e">// src/stock-price-display.js
+</span><span style="color:#75715e"></span>
+<span style="color:#66d9ef">import</span> { <span style="color:#a6e22e">LitElement</span>, <span style="color:#a6e22e">html</span>, <span style="color:#a6e22e">css</span> } <span style="color:#a6e22e">from</span> <span style="color:#e6db74">&#39;lit-element&#39;</span>;
+<span style="color:#66d9ef">import</span> { <span style="color:#a6e22e">remove</span>, <span style="color:#a6e22e">update</span> } <span style="color:#a6e22e">from</span> <span style="color:#e6db74">&#39;@stoxy/core&#39;</span>;
+<span style="color:#66d9ef">import</span> <span style="color:#e6db74">&#39;@stoxy/object&#39;</span>;
+
+<span style="color:#66d9ef">class</span> <span style="color:#a6e22e">StockPriceDisplay</span> <span style="color:#66d9ef">extends</span> <span style="color:#a6e22e">LitElement</span> {
+    <span style="color:#66d9ef">static</span> <span style="color:#a6e22e">get</span> <span style="color:#a6e22e">properties</span>() {
+        <span style="color:#66d9ef">return</span> {
+            <span style="color:#a6e22e">stock</span><span style="color:#f92672">:</span> { <span style="color:#a6e22e">type</span><span style="color:#f92672">:</span> String },
+
+            <span style="color:#a6e22e">higher</span><span style="color:#f92672">:</span> { <span style="color:#a6e22e">type</span><span style="color:#f92672">:</span> Boolean, <span style="color:#a6e22e">reflect</span><span style="color:#f92672">:</span> <span style="color:#66d9ef">true</span> },
+            <span style="color:#a6e22e">lower</span><span style="color:#f92672">:</span> { <span style="color:#a6e22e">type</span><span style="color:#f92672">:</span> Boolean, <span style="color:#a6e22e">reflect</span><span style="color:#f92672">:</span> <span style="color:#66d9ef">true</span> },
+        };
+    }
+
+    <span style="color:#a6e22e">getCacheKey</span>() {
+        <span style="color:#66d9ef">return</span> <span style="color:#e6db74">`st.</span><span style="color:#e6db74">${</span><span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">stock</span><span style="color:#e6db74">}</span><span style="color:#e6db74">.price.regularMarketPrice.fmt`</span>;
+    }
+
+    <span style="color:#a6e22e">removeStock</span>() {
+        <span style="color:#a6e22e">remove</span>(<span style="color:#e6db74">&#39;stocks&#39;</span>, <span style="color:#a6e22e">s</span> =&gt; <span style="color:#a6e22e">s</span> <span style="color:#f92672">===</span> <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">stock</span>);
+        <span style="color:#a6e22e">update</span>(<span style="color:#e6db74">&#39;stockInfo&#39;</span>, <span style="color:#a6e22e">si</span> =&gt; {
+            <span style="color:#66d9ef">delete</span> <span style="color:#a6e22e">si</span>[<span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">stock</span>];
+            <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">si</span>;
+        });
+    }
+
+    <span style="color:#a6e22e">checkStockInfo</span>(<span style="color:#a6e22e">e</span>) {
+        <span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span><span style="color:#a6e22e">e</span>.<span style="color:#a6e22e">detail</span>[<span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">stock</span>]) <span style="color:#66d9ef">return</span>;
+        <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">stockPriceData</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">e</span>.<span style="color:#a6e22e">detail</span>[<span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">stock</span>].<span style="color:#a6e22e">price</span>;
+        <span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">stockPriceData</span>.<span style="color:#a6e22e">regularMarketPrice</span>.<span style="color:#a6e22e">raw</span> <span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">stockPriceData</span>.<span style="color:#a6e22e">regularMarketPreviousClose</span>.<span style="color:#a6e22e">raw</span>) {
+            <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">higher</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">true</span>;
+            <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">lower</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">false</span>;
+        } <span style="color:#66d9ef">else</span> {
+            <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">lower</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">true</span>;
+            <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">higher</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">false</span>;
+        }
+    }
+
+    <span style="color:#a6e22e">render</span>() {
+        <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">html</span><span style="color:#e6db74">`
+</span><span style="color:#e6db74">            &lt;stoxy-object key=&#34;stockInfo&#34; prefix=&#34;st.&#34; @updated=</span><span style="color:#e6db74">${</span><span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">checkStockInfo</span><span style="color:#e6db74">}</span><span style="color:#e6db74">&gt;
+</span><span style="color:#e6db74">                &lt;p&gt;</span><span style="color:#e6db74">${</span><span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">stock</span><span style="color:#e6db74">}</span><span style="color:#e6db74">&lt;/p&gt;
+</span><span style="color:#e6db74">                &lt;h2&gt;</span><span style="color:#e6db74">${</span><span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">getCacheKey</span>()<span style="color:#e6db74">}</span><span style="color:#e6db74">&lt;/h2&gt;
+</span><span style="color:#e6db74">
+</span><span style="color:#e6db74">                &lt;button @click=</span><span style="color:#e6db74">${</span><span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">removeStock</span><span style="color:#e6db74">}</span><span style="color:#e6db74">&gt;Unfollow stock&lt;/button&gt;
+</span><span style="color:#e6db74">            &lt;/stoxy-object&gt;
+</span><span style="color:#e6db74">        `</span>;
+    }
+
+    <span style="color:#66d9ef">static</span> <span style="color:#a6e22e">get</span> <span style="color:#a6e22e">styles</span>() {
+        <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">css</span><span style="color:#e6db74">`
+</span><span style="color:#e6db74">            :host {
+</span><span style="color:#e6db74">                border: 2px solid #fff;
+</span><span style="color:#e6db74">                flex-basis: 40%;
+</span><span style="color:#e6db74">                display: flex;
+</span><span style="color:#e6db74">                flex-direction: column;
+</span><span style="color:#e6db74">                align-items: center;
+</span><span style="color:#e6db74">                justify-content: center;
+</span><span style="color:#e6db74">                padding: 3rem 1rem;
+</span><span style="color:#e6db74">                position: relative;
+</span><span style="color:#e6db74">                background: rgba(255, 255, 255, 0.2);
+</span><span style="color:#e6db74">                animation: fade-in 500ms;
+</span><span style="color:#e6db74">                margin-bottom: 2rem;
+</span><span style="color:#e6db74">            }
+</span><span style="color:#e6db74">
+</span><span style="color:#e6db74">            @keyframes fade-in {
+</span><span style="color:#e6db74">                from {
+</span><span style="color:#e6db74">                    transform: translate(0, -50px);
+</span><span style="color:#e6db74">                    opacity: 0;
+</span><span style="color:#e6db74">                }
+</span><span style="color:#e6db74">            }
+</span><span style="color:#e6db74">
+</span><span style="color:#e6db74">            p,
+</span><span style="color:#e6db74">            h2 {
+</span><span style="color:#e6db74">                margin: 0.25rem;
+</span><span style="color:#e6db74">            }
+</span><span style="color:#e6db74">
+</span><span style="color:#e6db74">            :host([higher]) {
+</span><span style="color:#e6db74">                color: springgreen;
+</span><span style="color:#e6db74">            }
+</span><span style="color:#e6db74">
+</span><span style="color:#e6db74">            :host([lower]) {
+</span><span style="color:#e6db74">                color: #ff2929;
+</span><span style="color:#e6db74">            }
+</span><span style="color:#e6db74">
+</span><span style="color:#e6db74">            button {
+</span><span style="color:#e6db74">                font-size: 1rem;
+</span><span style="color:#e6db74">                position: absolute;
+</span><span style="color:#e6db74">                bottom: 0.5rem;
+</span><span style="color:#e6db74">                right: 0.5rem;
+</span><span style="color:#e6db74">                border: none;
+</span><span style="color:#e6db74">                background: none;
+</span><span style="color:#e6db74">                color: red;
+</span><span style="color:#e6db74">                font-weight: bold;
+</span><span style="color:#e6db74">                cursor: pointer;
+</span><span style="color:#e6db74">            }
+</span><span style="color:#e6db74">        `</span>;
+    }
+}
+
+<span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span><span style="color:#a6e22e">customElements</span>.<span style="color:#a6e22e">get</span>(<span style="color:#e6db74">&#39;stock-price-display&#39;</span>)) {
+    <span style="color:#a6e22e">customElements</span>.<span style="color:#a6e22e">define</span>(<span style="color:#e6db74">&#39;stock-price-display&#39;</span>, <span style="color:#a6e22e">StockPriceDisplay</span>);
+}
+
+</code></pre></div><p>At first we declare our LitElement properties. We have our stock name there, but we also have 2 other attributes:
+&ldquo;higher&rdquo; and &ldquo;lower&rdquo;. We will use these to tell the component if the stock price is higher or lower than the
+yesterday&rsquo;s close. The attributes have the property &ldquo;reflect&rdquo; set to true, which will make the component
+reflect it&rsquo;s property onto the attribute of the HTML node too. These will ease us when styling our coponent.</p>
+<p>After the properties we have our function which will construct us the cache key to access the stock
+price data from our cached data. The price data of the stock is located in the property <code>[stockName].price.regularMarketPrice.fmt</code>.</p>
+<p>Under our cache key function we have a function to remove said stock from being followed. Inside the function we have
+calls to the <a href="https://stoxy.dev/docs/methods/update/">update</a> and <a href="https://stoxy.dev/docs/methods/remove/">remove</a> -functions
+of Stoxy. The remove-function removes the stock from the stocks array matching the name of the current stock.
+The update method deleted the property from our stockInfo state object too, since we won&rsquo;t be needing that either.</p>
+<p>The last function is for determining if the stock price is higher or lower than at yesterday&rsquo;s close.
+The function call is triggered by the <a href="https://stoxy.dev/docs/components/stoxy-object/">stoxy-object</a> -component
+as it gets updated.</p>
+<hr>
+<h5 id="rendering-dynamic-data">Rendering dynamic data</h5>
+<p>We are using stoxy-object inside the render function of the component to render the
+data we want from the stock.</p>
+<p>In our case, we are accessing the price data, and building the cache key in the <code>getCacheKey</code> -method.</p>
+<p>We could add a infinite amount of accessors onto the state data inside our stoxy-object component and
+they would get replaced with the corresponding values, similiar to the stoxy-repeat component.</p>
+<h4 id="wrapping-it-all-up">Wrapping it all up</h4>
+<p>We now have our stock price tracking PWA ready to be used, and with it we could check the prices
+even when we&rsquo;re offline. We have a manual update button on our front page to update the data when
+we want to update it, instead of fetching it every time we open the app.</p>
+<p>Let&rsquo;s take a quick recap of how we achieved all of this and how Stoxy made it extremely simple:</p>
+<ul>
+<li>
+<p>Stoxy provided us with a global state for both the stocks to follow and the API data</p>
+<ul>
+<li>This allowed us to fetch the data from the API once, and then just re-use the same data, instead of capping
+our quota from just the development process.</li>
+<li>This allows us to access the data we have already fetched, even if we go offline</li>
+<li>It allows us to focus on the development instead of focusing on the data flow of a one-directional system</li>
+</ul>
+</li>
+<li>
+<p>Stoxy didn&rsquo;t create any extra over head</p>
+<ul>
+<li>With Stoxy we didn&rsquo;t need to create any centralized service to handle all of our state</li>
+<li>Neither did we need to setup any kind of environments or classes to get up and running</li>
+<li>Stoxy worked perfectly from the get-go with the plug and play system it was built to support.</li>
+</ul>
+</li>
+<li>
+<p>Stoxy allowed us to utilize th IndexedDB without the headache of using it directly</p>
+<ul>
+<li>A lot of developers might stray away from using API&rsquo;s like the IndexedDB due to the workflow it
+usually introduces to the app. With Stoxy the whole process is opt-in and abstracted behind the same
+functions you use for general state management</li>
+<li>By opting in to persist the data with the <code>persistKeys(&quot;stocks&quot;, &quot;stockInfo&quot;)</code>  we were all set
+for using the application&rsquo;s data offline on top of having the state react to all of the updates.</li>
+</ul>
+</li>
+<li>
+<p>Stoxy API didn&rsquo;t force a steep learning curve</p>
+<ul>
+<li>With a lot of libraries and posts being created about easing the use of pre-existing state management systems,
+there should be no need for any large tutorials on using Stoxy: The API is built with simple 1-2 parameter functions
+which do exactly what you think they would do.</li>
+<li>The <a href="https://stoxy.dev/docs/">docs</a> provide examples of every normal case of use, but doesn&rsquo;t limit the use of
+how far you can take Stoxy</li>
+</ul>
+</li>
+</ul>
+<h3 id="final-word">Final Word</h3>
+<p>I hope you enjoyed this quick look at how to create quick, reactive and functional Offline apps with Stoxy, and
+if you would like to try Stoxy today, you can easily get started by looking up the guides at <a href="https://stoxy.dev/">Stoxy.dev</a>.</p>
+<p>If you end up enjoying using Stoxy, give me a shout at <a href="https://twitter.com/matsuuu_">Twitter</a>, or <a href="https://github.com/Matsuuu/stoxy">GitHub</a>
+and if you really enjoy the library and would like to see it grow, give it a Star on the <a href="https://github.com/Matsuuu/stoxy">GitHub</a> page!</p>
+<p>Stoxy grew fast in popularity in the first week of it&rsquo;s release and I hope to keep up the growth with new features and
+even more powerful workflows. I will also be using Stoxy for all of my future projects which need a state management system
+and I&rsquo;d be humbled if you would give it a go too :)</p>
+
+    </div>
+    
+
+    
+      
+    
+  </div>
+
+      </div>
+
+      
+        <footer class="footer">
+  <div class="footer__inner">
+    
+      <div class="copyright copyright--user"><a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener">CC BY-NC 4.0</a></div>
+      
+  </div>
+</footer>
+
+<script src="/assets/main.js"></script>
+<script src="/assets/prism.js"></script>
+
+
+      
+    </div>
+
+    
+      
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-85452649-2', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+
+    
+  </body>
+</html>

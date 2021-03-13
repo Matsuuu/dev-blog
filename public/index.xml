@@ -10,10 +10,32 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>&lt;a href=&#34;https://creativecommons.org/licenses/by-nc/4.0/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;CC BY-NC 4.0&lt;/a&gt;</copyright>
-    <lastBuildDate>Mon, 18 Jan 2021 10:12:38 +0200</lastBuildDate>
+    <lastBuildDate>Sat, 13 Mar 2021 14:01:19 +0200</lastBuildDate>
     
 	<atom:link href="/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Creating a Offline First Stock Price Tracker With Stoxy</title>
+      <link>/posts/creating-a-offline-first-stock-price-tracker-with-stoxy/</link>
+      <pubDate>Sat, 13 Mar 2021 14:01:19 +0200</pubDate>
+      
+      <guid>/posts/creating-a-offline-first-stock-price-tracker-with-stoxy/</guid>
+      <description>
+        
+          
+          
+          
+        
+        
+        
+          At the start of this week, I released my state management library, Stoxy to the wild.
+After gaining some tracktion from different outlets, I decided I should create a small demo project showcasing the best parts about using Stoxy.
+That&amp;rsquo;s why I decided to create a small Offline-first application for tracking stock prices. It will be built with Web Components and utilize the Stoxy library for handling the state, online and offline.
+          
+        
+        </description>
+    </item>
     
     <item>
       <title>Utilizing Simplr Router</title>
