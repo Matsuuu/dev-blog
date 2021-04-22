@@ -10,10 +10,34 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>&lt;a href=&#34;https://creativecommons.org/licenses/by-nc/4.0/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;CC BY-NC 4.0&lt;/a&gt;</copyright>
-    <lastBuildDate>Sat, 13 Mar 2021 14:01:19 +0200</lastBuildDate>
+    <lastBuildDate>Thu, 22 Apr 2021 19:50:38 +0200</lastBuildDate>
     
 	<atom:link href="/posts/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Getting Hooked on Stoxy</title>
+      <link>/posts/getting-hooked-on-stoxy/</link>
+      <pubDate>Thu, 22 Apr 2021 19:50:38 +0200</pubDate>
+      
+      <guid>/posts/getting-hooked-on-stoxy/</guid>
+      <description>
+        
+          
+          
+          
+        
+        
+        
+          Stoxy is a modern state management library built around creating reactive, stateful and persistent web experiences.
+Stoxy allows you to easily control the global state of your application, and tap into said state when needed.
+The newest addition to Stoxy is a new add-on library: Stoxy Hooks.
+Stoxy Hooks are a easy way to integrate Stoxy to any React or Preact application.
+Examples Here I&amp;rsquo;ll show a few simple examples of Stoxy Hooks in action
+          
+        
+        </description>
+    </item>
     
     <item>
       <title>Creating a Offline First Stock Price Tracker With Stoxy</title>
