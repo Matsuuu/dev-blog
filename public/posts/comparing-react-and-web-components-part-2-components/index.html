@@ -63,8 +63,8 @@ Before we get started, I&rsquo;ll clear out some possible misconceptions from th
  OpenWC is not LitElement. LitElement is a Open source library written by the Polymer team and the open source contributors while OpenWC is a community aimed at providing recommendations for web component development. LitElement is a base class that makes use of the lit-html library." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="/posts/comparing-react-and-web-components-part-2-components/" /><meta property="og:image" content="/"/><meta property="article:section" content="posts" />
-<meta property="article:published_time" content="2020-08-19T15:00:00&#43;03:00" />
-<meta property="article:modified_time" content="2020-08-19T15:00:00&#43;03:00" /><meta property="og:site_name" content="Matsu" />
+<meta property="article:published_time" content="2020-08-19T15:00:00+03:00" />
+<meta property="article:modified_time" content="2020-08-19T15:00:00+03:00" /><meta property="og:site_name" content="Matsu" />
 
 
 
@@ -213,9 +213,9 @@ component in a &ldquo;real&rdquo; environment.</p>
 <p>This works by the first project building the component, and serving it with the other needed libraries
 by symlinking them to the node_modules of the example-directory.</p>
 <p>This allows our demo project to import it like a normal package would</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#66d9ef">import</span> <span style="color:#a6e22e">CatImageViewer</span> <span style="color:#a6e22e">from</span> <span style="color:#e6db74">&#39;cat-image-react-viewer&#39;</span>;
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#66d9ef">import</span> <span style="color:#a6e22e">CatImageViewer</span> <span style="color:#a6e22e">from</span> <span style="color:#e6db74">&#39;cat-image-react-viewer&#39;</span>;
 </code></pre></div><p>The node_modules of the demo project are symlinked from the top level project, which is the component project.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">&gt; ll example/node_modules/
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">&gt; ll example/node_modules/
 
 total <span style="color:#ae81ff">20</span>
 drwxrwxr-x <span style="color:#ae81ff">5</span> matsu matsu <span style="color:#ae81ff">4096</span> Aug <span style="color:#ae81ff">13</span> 13:56  ./
@@ -235,7 +235,7 @@ who solely use the VSCode terminal, making this quite a hassle.</p>
 Nevertheless the dev experience from here onwards was pretty painless.</p>
 <p>We are provided with a nice example configuration for the component, and we are able to easily get to work. Our final
 component source looked like this.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#66d9ef">import</span> <span style="color:#a6e22e">React</span>, { <span style="color:#a6e22e">useState</span> } <span style="color:#a6e22e">from</span> <span style="color:#e6db74">&#39;react&#39;</span>;
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#66d9ef">import</span> <span style="color:#a6e22e">React</span>, { <span style="color:#a6e22e">useState</span> } <span style="color:#a6e22e">from</span> <span style="color:#e6db74">&#39;react&#39;</span>;
 <span style="color:#66d9ef">import</span> <span style="color:#a6e22e">styles</span> <span style="color:#a6e22e">from</span> <span style="color:#e6db74">&#39;./index.module.css&#39;</span>;
 
 <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">placeKittenUrl</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;http://placekitten.com/{width}/{height}&#39;</span>;
@@ -277,7 +277,7 @@ component source looked like this.</p>
     );
 }
 </code></pre></div><p>with the css module looking like this:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-css" data-lang="css">.<span style="color:#a6e22e">formWrapper</span> <span style="color:#f92672">div</span> {
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-css" data-lang="css">.<span style="color:#a6e22e">formWrapper</span> <span style="color:#f92672">div</span> {
     <span style="color:#66d9ef">display</span>: <span style="color:#66d9ef">flex</span>;
     <span style="color:#66d9ef">flex-direction</span>: <span style="color:#66d9ef">column</span>;
 }
@@ -298,7 +298,7 @@ having the css in js).</p>
 <p>As you might remember from the last post, the <code>create-react-app</code> had a huge footprint in the
 package size on a vanilla installation. I was surprised and happy as I noticed that after building
 we weren&rsquo;t greeted by a 500KB package.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">&gt; npm run build
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">&gt; npm run build
 
 &gt; du -sh dist/
 24K     dist/
@@ -308,7 +308,7 @@ listed as a peerDependency meaning that our package is forever doomed to be run 
 other React projects.</p>
 <p>A quick look inside the dist folder also explains why the size of the package is 24K: the project
 builds itself as a commonjs and as and es package.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">&gt; ll dist/
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">&gt; ll dist/
 
 total <span style="color:#ae81ff">28</span>
 drwxrwxr-x <span style="color:#ae81ff">2</span> matsu matsu <span style="color:#ae81ff">4096</span> Aug <span style="color:#ae81ff">13</span> 13:55 ./
@@ -321,7 +321,7 @@ drwxrwxr-x <span style="color:#ae81ff">7</span> matsu matsu <span style="color:#
 </code></pre></div><p>This is fairly convenient, but also doubles the package size, in a case that both of these versions
 get published.</p>
 <p>If we take a look at our example folder, we can see how the project would be imported in a React environment:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#66d9ef">import</span> <span style="color:#a6e22e">React</span> <span style="color:#a6e22e">from</span> <span style="color:#e6db74">&#39;react&#39;</span>;
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#66d9ef">import</span> <span style="color:#a6e22e">React</span> <span style="color:#a6e22e">from</span> <span style="color:#e6db74">&#39;react&#39;</span>;
 
 <span style="color:#66d9ef">import</span> <span style="color:#a6e22e">CatImageViewer</span> <span style="color:#a6e22e">from</span> <span style="color:#e6db74">&#39;cat-image-react-viewer&#39;</span>;
 <span style="color:#66d9ef">import</span> <span style="color:#e6db74">&#39;cat-image-react-viewer/dist/index.css&#39;</span>;
@@ -348,7 +348,7 @@ only be used if React is used in the project.</p>
 <li>2 are js map files</li>
 </ul>
 <p>Let&rsquo;s get the easiest out of the way and look inside the css file:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-css" data-lang="css">.<span style="color:#a6e22e">_index-module__formWrapper__r8sB5</span> <span style="color:#f92672">div</span> {
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-css" data-lang="css">.<span style="color:#a6e22e">_index-module__formWrapper__r8sB5</span> <span style="color:#f92672">div</span> {
     <span style="color:#66d9ef">display</span>: <span style="color:#66d9ef">flex</span>;
     <span style="color:#66d9ef">flex-direction</span>: <span style="color:#66d9ef">column</span>;
 }
@@ -367,28 +367,28 @@ call <code>styles.formWrapper</code>, we can see that the build process generate
 <li><code>index-module__formWrapper__r8sB5</code> isn&rsquo;t really as descriptive to read if looking at the source from the browser as <code>form-wrapper</code> would be.</li>
 </ul>
 <p>Next we&rsquo;ll check out the <code>index.js</code> file:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#66d9ef">function</span> <span style="color:#a6e22e">_interopDefault</span>(<span style="color:#a6e22e">ex</span>) {
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#66d9ef">function</span> <span style="color:#ae81ff">_</span><span style="color:#a6e22e">interopDefault</span>(<span style="color:#a6e22e">ex</span>) {
     <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">ex</span> <span style="color:#f92672">&amp;&amp;</span> <span style="color:#66d9ef">typeof</span> <span style="color:#a6e22e">ex</span> <span style="color:#f92672">===</span> <span style="color:#e6db74">&#39;object&#39;</span> <span style="color:#f92672">&amp;&amp;</span> <span style="color:#e6db74">&#39;default&#39;</span> <span style="color:#66d9ef">in</span> <span style="color:#a6e22e">ex</span> <span style="color:#f92672">?</span> <span style="color:#a6e22e">ex</span>[<span style="color:#e6db74">&#39;default&#39;</span>] <span style="color:#f92672">:</span> <span style="color:#a6e22e">ex</span>;
 }
 
 <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">React</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">require</span>(<span style="color:#e6db74">&#39;react&#39;</span>);
-<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">React__default</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">_interopDefault</span>(<span style="color:#a6e22e">React</span>);
+<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">React__default</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">_</span><span style="color:#a6e22e">interopDefault</span>(<span style="color:#a6e22e">React</span>);
 
 <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">styles</span> <span style="color:#f92672">=</span> { <span style="color:#a6e22e">formWrapper</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;_index-module__formWrapper__r8sB5&#39;</span> };
 
 <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">placeKittenUrl</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;http://placekitten.com/{width}/{height}&#39;</span>;
 <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">CatImageViewer</span>() {
-    <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">_useState</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">React</span>.<span style="color:#a6e22e">useState</span>(<span style="color:#ae81ff">0</span>),
-        <span style="color:#a6e22e">imageWidth</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">_useState</span>[<span style="color:#ae81ff">0</span>],
-        <span style="color:#a6e22e">setImageWidth</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">_useState</span>[<span style="color:#ae81ff">1</span>];
+    <span style="color:#66d9ef">var</span> <span style="color:#ae81ff">_</span><span style="color:#a6e22e">useState</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">React</span>.<span style="color:#a6e22e">useState</span>(<span style="color:#ae81ff">0</span>),
+        <span style="color:#a6e22e">imageWidth</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">_</span><span style="color:#a6e22e">useState</span>[<span style="color:#ae81ff">0</span>],
+        <span style="color:#a6e22e">setImageWidth</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">_</span><span style="color:#a6e22e">useState</span>[<span style="color:#ae81ff">1</span>];
 
-    <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">_useState2</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">React</span>.<span style="color:#a6e22e">useState</span>(<span style="color:#ae81ff">0</span>),
-        <span style="color:#a6e22e">imageHeight</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">_useState2</span>[<span style="color:#ae81ff">0</span>],
-        <span style="color:#a6e22e">setImageHeight</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">_useState2</span>[<span style="color:#ae81ff">1</span>];
+    <span style="color:#66d9ef">var</span> <span style="color:#ae81ff">_</span><span style="color:#a6e22e">useState2</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">React</span>.<span style="color:#a6e22e">useState</span>(<span style="color:#ae81ff">0</span>),
+        <span style="color:#a6e22e">imageHeight</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">_</span><span style="color:#a6e22e">useState2</span>[<span style="color:#ae81ff">0</span>],
+        <span style="color:#a6e22e">setImageHeight</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">_</span><span style="color:#a6e22e">useState2</span>[<span style="color:#ae81ff">1</span>];
 
-    <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">_useState3</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">React</span>.<span style="color:#a6e22e">useState</span>(<span style="color:#66d9ef">null</span>),
-        <span style="color:#a6e22e">currentImage</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">_useState3</span>[<span style="color:#ae81ff">0</span>],
-        <span style="color:#a6e22e">setCurrentImage</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">_useState3</span>[<span style="color:#ae81ff">1</span>];
+    <span style="color:#66d9ef">var</span> <span style="color:#ae81ff">_</span><span style="color:#a6e22e">useState3</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">React</span>.<span style="color:#a6e22e">useState</span>(<span style="color:#66d9ef">null</span>),
+        <span style="color:#a6e22e">currentImage</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">_</span><span style="color:#a6e22e">useState3</span>[<span style="color:#ae81ff">0</span>],
+        <span style="color:#a6e22e">setCurrentImage</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">_</span><span style="color:#a6e22e">useState3</span>[<span style="color:#ae81ff">1</span>];
 
     <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">getNewCatImage</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">getNewCatImage</span>() {
         <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">searchUrl</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">placeKittenUrl</span>
@@ -462,7 +462,7 @@ what&rsquo;s going on with the hooks.
 </li>
 </ul>
 <p>Next let&rsquo;s look inside the other generated javascript file: <code>index.modern.js</code></p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#66d9ef">import</span> <span style="color:#a6e22e">React</span>, { <span style="color:#a6e22e">useState</span> } <span style="color:#a6e22e">from</span> <span style="color:#e6db74">&#39;react&#39;</span>;
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#66d9ef">import</span> <span style="color:#a6e22e">React</span>, { <span style="color:#a6e22e">useState</span> } <span style="color:#a6e22e">from</span> <span style="color:#e6db74">&#39;react&#39;</span>;
 
 <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">styles</span> <span style="color:#f92672">=</span> { <span style="color:#a6e22e">formWrapper</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;_index-module__formWrapper__r8sB5&#39;</span> };
 
@@ -534,7 +534,7 @@ you could find more to talk about these built files.</p>
 <p>Moving on to <a href="https://lit-element.polymer-project.org/">Lit Element</a>, we can make use of the same <a href="https://open-wc.org/">Open WC</a> init
 command we used when creating a sample project. The initializer will prompt us to create either an application or a component.
 In our case we want to obviously choose the Web Component -selection.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">npm init @open-wc
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">npm init @open-wc
 </code></pre></div><p>After running the initializer, and selecting our configuration, we have a nice sample project like we had in the React component
 example. The difference here is that we can get to developing with just running a single <code>npm start</code> instead of running our seperate demo
 instance. The twist is that we have to relatively call our component instead it being in our node_modules.</p>
@@ -543,7 +543,7 @@ instance. The twist is that we have to relatively call our component instead it 
 appending our newly initialized Web Component. In the case we would create a Typescript component, the command would run es-dev-server
 and tsc in parallel using concurrently. This is really nice allowing users to run the whole environment with just a single command.</p>
 <p>After running the project and cleaning up the example files, we ended up writing our LitElement implementation as follows:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#66d9ef">import</span> { <span style="color:#a6e22e">html</span>, <span style="color:#a6e22e">css</span>, <span style="color:#a6e22e">LitElement</span> } <span style="color:#a6e22e">from</span> <span style="color:#e6db74">&#39;lit-element&#39;</span>;
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#66d9ef">import</span> { <span style="color:#a6e22e">html</span>, <span style="color:#a6e22e">css</span>, <span style="color:#a6e22e">LitElement</span> } <span style="color:#a6e22e">from</span> <span style="color:#e6db74">&#39;lit-element&#39;</span>;
 
 <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">placeKittenUrl</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;http://placekitten.com/{width}/{height}&#39;</span>;
 
@@ -623,7 +623,7 @@ handling of styles.</p>
 <p>Also differentiating us from the react project is the resulting DOM tree. In the React project we were forced to have a <code>div</code> -element
 wrapping everything in our component. In the Web Component version, we will have a named Web Component wrapping our element, making
 the need for a wrapping div obselete.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html"><span style="color:#75715e">&lt;!-- React --&gt;</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html"><span style="color:#75715e">&lt;!-- React --&gt;</span>
 &lt;<span style="color:#f92672">div</span> <span style="color:#a6e22e">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;_index-module__formWrapper__r8sB5&#34;</span>&gt;
     &lt;<span style="color:#f92672">div</span>&gt;
         &lt;<span style="color:#f92672">p</span>&gt;Enter the dimensions of the desired cat image&lt;/<span style="color:#f92672">p</span>&gt;
@@ -664,7 +664,7 @@ rendering thrown in there, and our components handle events with event listener 
 <p>If we were to ship our Web Component, we would only need to ship the one js file, and tag LitElement as the dependency.
 LitElement being a fairly small library (<a href="https://bundlephobia.com/result?p=lit-element@2.4.0">23.2kB minified, 7.4kB minified + Gzipped</a>),
 our total project size would be in total around 30kB if we don&rsquo;t compress anything.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">&gt; du -sh src/CatImageLitViewer.js
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">&gt; du -sh src/CatImageLitViewer.js
 
 4.0K    CatImageLitViewer.js
 </code></pre></div><p>This is, if we were not already using LitElement in our project. If we are already writing a LitElement project, our new package would
@@ -683,12 +683,12 @@ about 9x smaller total size with dependencies.</p>
 <h4 id="creation-2">Creation</h4>
 <p>As we&rsquo;re building a project as vanilla as possible, we don&rsquo;t really need a initializer for this implementation.</p>
 <p>We can just start by creating a folder, running npm init and creating the necessary files</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">mkdir cat-image-vanilla-viewer
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">mkdir cat-image-vanilla-viewer
 cd cat-image-vanilla-viewer
 npm init
 touch index.html index.js
 </code></pre></div><p>Now we can populate our index.html with the minimal setup needed for development:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html">&lt;<span style="color:#f92672">html</span>&gt;
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html">&lt;<span style="color:#f92672">html</span>&gt;
     &lt;<span style="color:#f92672">head</span>&gt; &lt;/<span style="color:#f92672">head</span>&gt;
     &lt;<span style="color:#f92672">body</span>&gt;
         &lt;<span style="color:#f92672">cat-image-vanilla-viewer</span>&gt;&lt;/<span style="color:#f92672">cat-image-vanilla-viewer</span>&gt;
@@ -700,7 +700,7 @@ touch index.html index.js
 <a href="https://www.npmjs.com/package/es-dev-server">es-dev-server</a>, since it&rsquo;s just a simple html + js file setup. For this post
 I just added <code>es-dev-server</code> as a dev dependency, as it won&rsquo;t affect the package size that way.</p>
 <p>Our package.json is now also in it&rsquo;s minimal setup:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-json" data-lang="json">{
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-json" data-lang="json">{
     <span style="color:#f92672">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;cat-image-vanilla-viewer&#34;</span>,
     <span style="color:#f92672">&#34;version&#34;</span>: <span style="color:#e6db74">&#34;1.0.0&#34;</span>,
     <span style="color:#f92672">&#34;description&#34;</span>: <span style="color:#e6db74">&#34;&#34;</span>,
@@ -719,7 +719,7 @@ I just added <code>es-dev-server</code> as a dev dependency, as it won&rsquo;t a
 <p>As we use es-dev-server, the development setup and workflow are quite similiar to the Lit-Element example.</p>
 <p>Now that we have the environment setup, we can write our component. The implementation is just a tad bit longer than the
 ones we made using the libraries.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">template</span> <span style="color:#f92672">=</span> document.<span style="color:#a6e22e">createElement</span>(<span style="color:#e6db74">&#39;template&#39;</span>);
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">template</span> <span style="color:#f92672">=</span> document.<span style="color:#a6e22e">createElement</span>(<span style="color:#e6db74">&#39;template&#39;</span>);
 <span style="color:#a6e22e">template</span>.<span style="color:#a6e22e">innerHTML</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">`
 </span><span style="color:#e6db74">&lt;style&gt;
 </span><span style="color:#e6db74">    .form-wrapper {
@@ -835,7 +835,7 @@ src element manually.</p>
 <h4 id="output-2">Output</h4>
 <p>Once again, since this is fully vanilla, our component is supported by browsers without need for building.</p>
 <p>Let&rsquo;s look at the size of our package, which we are going to be shipping for comparison with the others:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">&gt; du -sh index.js
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">&gt; du -sh index.js
 
 4.0K    index.js
 </code></pre></div><p>Well look at that. It&rsquo;s the same size as our LitElement implementation, but without adding the LitElement and lit-html
@@ -854,7 +854,7 @@ No external tooling required.</p>
 </ul>
 </li>
 </ul>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#75715e">// Example
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#75715e">// Example
 </span><span style="color:#75715e"></span><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">profileObject</span> <span style="color:#f92672">=</span> { <span style="color:#a6e22e">id</span><span style="color:#f92672">:</span> <span style="color:#ae81ff">1</span>, <span style="color:#a6e22e">name</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;Matsu&#39;</span> };
 document.<span style="color:#a6e22e">querySelector</span>(<span style="color:#e6db74">&#39;my-element&#39;</span>).<span style="color:#a6e22e">profile</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">profileObject</span>;
 </code></pre></div><ul>

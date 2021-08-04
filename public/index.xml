@@ -10,10 +10,31 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>&lt;a href=&#34;https://creativecommons.org/licenses/by-nc/4.0/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;CC BY-NC 4.0&lt;/a&gt;</copyright>
-    <lastBuildDate>Thu, 22 Apr 2021 19:50:38 +0200</lastBuildDate>
+    <lastBuildDate>Wed, 04 Aug 2021 19:50:38 +0200</lastBuildDate>
     
 	<atom:link href="/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Writing JavaScript, but with types!</title>
+      <link>/posts/writing-typed-javascript/</link>
+      <pubDate>Wed, 04 Aug 2021 19:50:38 +0200</pubDate>
+      
+      <guid>/posts/writing-typed-javascript/</guid>
+      <description>
+        
+          
+          
+          
+        
+        
+        
+          As someone who has worked with strongly typed languages like Java and C# and loosely typed languages like JavaScript, I&amp;rsquo;ve often run into a situtation in which I&amp;rsquo;ve wished my JavaScript code would have types and they would be enforced. This would save me from a lot of runtime headache that can happen for example when a string variable is passed into a function expecting a number.
+The result is the dreaded situation every js developer has run into at some point of their carreer
+          
+        
+        </description>
+    </item>
     
     <item>
       <title>Getting Hooked on Stoxy</title>

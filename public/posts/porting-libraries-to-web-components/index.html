@@ -63,8 +63,8 @@ But what about the libraries created before the rise of Web Components? Can they
 Preface So why would we want to create a Web Component equivalent of a library if there already is an existing implementation?" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="/posts/porting-libraries-to-web-components/" /><meta property="og:image" content="/"/><meta property="article:section" content="posts" />
-<meta property="article:published_time" content="2020-06-27T11:00:00&#43;03:00" />
-<meta property="article:modified_time" content="2020-06-27T11:00:00&#43;03:00" /><meta property="og:site_name" content="Matsu" />
+<meta property="article:published_time" content="2020-06-27T11:00:00+03:00" />
+<meta property="article:modified_time" content="2020-06-27T11:00:00+03:00" /><meta property="og:site_name" content="Matsu" />
 
 
 
@@ -183,7 +183,7 @@ Web Components? Can they be ported into Web Components, and what kind of a workl
 <p>So why would we want to create a Web Component equivalent of a library if there already is an existing implementation?
 Well the first thing that comes to mind is the ease-of-use and ease-of-implementation. By creating a Web Component of a library the
 implementation of said functionality changes from</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html">&lt;<span style="color:#f92672">p</span> <span style="color:#a6e22e">id</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;paragraph-to-highlight&#34;</span>&gt;Please highlight me with the library&lt;/<span style="color:#f92672">p</span>&gt;
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html">&lt;<span style="color:#f92672">p</span> <span style="color:#a6e22e">id</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;paragraph-to-highlight&#34;</span>&gt;Please highlight me with the library&lt;/<span style="color:#f92672">p</span>&gt;
 
 &lt;<span style="color:#f92672">script</span> <span style="color:#a6e22e">src</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;/library/api.js&#34;</span>&gt;&lt;/<span style="color:#f92672">script</span>&gt;
 &lt;<span style="color:#f92672">script</span>&gt;
@@ -193,7 +193,7 @@ implementation of said functionality changes from</p>
     };
 &lt;/<span style="color:#f92672">script</span>&gt;
 </code></pre></div><p>To a more simplistic</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html">&lt;<span style="color:#f92672">highlight-library</span>&gt;
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html">&lt;<span style="color:#f92672">highlight-library</span>&gt;
     &lt;<span style="color:#f92672">p</span>&gt;Please highlight me with the library&lt;/<span style="color:#f92672">p</span>&gt;
 &lt;/<span style="color:#f92672">highlight-library</span>&gt;
 
@@ -213,14 +213,14 @@ process by a lot.</p>
 <p>In this post I&rsquo;ll use my port of a library called <a href="https://github.com/pshihn/rough-notation">Rough Notation</a> as an example.</p>
 <p>Rough Notation is a small library used for highlighting content on a html page with nice hand drawn animations.</p>
 <p>The regular use of Rough Notation looks like this:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#66d9ef">import</span> { <span style="color:#a6e22e">annotate</span> } <span style="color:#a6e22e">from</span> <span style="color:#e6db74">&#39;rough-notation&#39;</span>;
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#66d9ef">import</span> { <span style="color:#a6e22e">annotate</span> } <span style="color:#a6e22e">from</span> <span style="color:#e6db74">&#39;rough-notation&#39;</span>;
 
 <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">element</span> <span style="color:#f92672">=</span> document.<span style="color:#a6e22e">querySelector</span>(<span style="color:#e6db74">&#39;#myElement&#39;</span>);
 <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">annotation</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">annotate</span>(<span style="color:#a6e22e">element</span>, { <span style="color:#a6e22e">type</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;underline&#39;</span> });
 <span style="color:#a6e22e">annoation</span>.<span style="color:#a6e22e">show</span>();
 </code></pre></div><p>To get the same functionality with <a href="https://github.com/Matsuuu/vanilla-rough-notation">Vanilla Rough Notation</a>, the Web Component port I wrote,
 you would only need to write:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html">&lt;<span style="color:#f92672">rough-notation</span> <span style="color:#a6e22e">showOnLoad</span> <span style="color:#a6e22e">type</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;underline&#34;</span>&gt;
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html">&lt;<span style="color:#f92672">rough-notation</span> <span style="color:#a6e22e">showOnLoad</span> <span style="color:#a6e22e">type</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;underline&#34;</span>&gt;
     &lt;<span style="color:#f92672">p</span>&gt;Please underline me&lt;/<span style="color:#f92672">p</span>&gt;
 &lt;/<span style="color:#f92672">rough-notation</span>&gt;
 </code></pre></div><p>This creates a nice environment for developing using the library, since no extra javascript is necessary. You can just wrap the elements in a
@@ -234,7 +234,7 @@ element as the element is created.</p>
 <p>To make the development a bit easier, I also added <a href="https://www.npmjs.com/package/es-dev-server">es-dev-server</a> as a Dev Dependency.
 Es Dev Server enabled us to have a buildless environment with hot reloads.</p>
 <p>At release the <code>package.json</code> looked something along the lines of:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-json" data-lang="json">{
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-json" data-lang="json">{
     <span style="color:#f92672">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;vanilla-rough-notation&#34;</span>,
     <span style="color:#f92672">&#34;version&#34;</span>: <span style="color:#e6db74">&#34;0.4.2&#34;</span>,
     <span style="color:#f92672">&#34;description&#34;</span>: <span style="color:#e6db74">&#34;A vanilla implementation of the Rough Notation library&#34;</span>,
@@ -264,7 +264,7 @@ Es Dev Server enabled us to have a buildless environment with hot reloads.</p>
 <li>Declare the Web Component as a custom element</li>
 </ul>
 <p>Once we&rsquo;ve done this, the code should look like this</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#66d9ef">import</span> { <span style="color:#a6e22e">annotate</span> } <span style="color:#a6e22e">from</span> <span style="color:#e6db74">&#39;rough-notation&#39;</span>;
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#66d9ef">import</span> { <span style="color:#a6e22e">annotate</span> } <span style="color:#a6e22e">from</span> <span style="color:#e6db74">&#39;rough-notation&#39;</span>;
 
 <span style="color:#66d9ef">export</span> <span style="color:#66d9ef">default</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">VanillaRoughNotation</span> <span style="color:#66d9ef">extends</span> <span style="color:#a6e22e">HTMLElement</span> {}
 
@@ -280,7 +280,7 @@ The Shadow Root is rendered separately from the document&rsquo;s main DOM tree, 
 <p>Using the Shadow DOM is necessary in our component since on top of creating a encapsulated environment, the Shadow DOM enables the use of <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/slot">Slots</a>.</p>
 <p>Slots are relevant part of the Web Components tech suite. They function as a placeholder inside the web component that can be filled with markdown.</p>
 <p>Let&rsquo;s start our Web Component codebase by creating a shadow root and appending a slot inside it.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#66d9ef">export</span> <span style="color:#66d9ef">default</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">VanillaRoughNotation</span> <span style="color:#66d9ef">extends</span> <span style="color:#a6e22e">HTMLElement</span> {
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#66d9ef">export</span> <span style="color:#66d9ef">default</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">VanillaRoughNotation</span> <span style="color:#66d9ef">extends</span> <span style="color:#a6e22e">HTMLElement</span> {
     <span style="color:#a6e22e">connectedCallback</span>() {
         <span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span><span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">shadowRoot</span>) {
             <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">attachShadow</span>({ <span style="color:#a6e22e">mode</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;open&#39;</span> });
@@ -299,7 +299,7 @@ The contents of our element could be queried with <code>document.querySelector(&
 <h3 id="locked-and-noded">Locked and noded</h3>
 <p>To implement the features of the API we went through earlier, we first need a way to get all of the elements inside our Web Component.</p>
 <p>This can be done by querying the assigned nodes of our slot element.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">assignedNodes</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">shadowRoot</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">assignedNodes</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">shadowRoot</span>
     .<span style="color:#a6e22e">querySelector</span>(<span style="color:#e6db74">&#39;slot&#39;</span>)
     .<span style="color:#a6e22e">assignedNodes</span>()
     .<span style="color:#a6e22e">filter</span>((<span style="color:#a6e22e">node</span>) =&gt; <span style="color:#a6e22e">node</span> <span style="color:#66d9ef">instanceof</span> <span style="color:#a6e22e">HTMLElement</span>);
@@ -307,7 +307,7 @@ The contents of our element could be queried with <code>document.querySelector(&
 easily done by just filtering the nodes to instances of HTMLElement.</p>
 <p>Next up we want to apply the library&rsquo;s functionality to all of the nodes. Different to normally calling the API, in a Web Component we need to take all
 of the possible variables into account.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#a6e22e">assignedNodes</span>.<span style="color:#a6e22e">forEach</span>((<span style="color:#a6e22e">an</span>) =&gt; {
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#a6e22e">assignedNodes</span>.<span style="color:#a6e22e">forEach</span>((<span style="color:#a6e22e">an</span>) =&gt; {
     <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">annotation</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">annotate</span>(<span style="color:#a6e22e">an</span>, {
         <span style="color:#a6e22e">type</span><span style="color:#f92672">:</span> <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">type</span>,
         <span style="color:#a6e22e">animate</span><span style="color:#f92672">:</span> <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">animate</span>,
@@ -323,7 +323,7 @@ of the possible variables into account.</p>
 <h4 id="attributes-and-properties">Attributes and properties</h4>
 <p>But wait, you might ask. We haven&rsquo;t declared these variables yet. That&rsquo;s true. Next we will look at setting the properties.</p>
 <p>The base values of a Web Component&rsquo;s properties are set in the <code>constructor</code> method of the element.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"> <span style="color:#a6e22e">constructor</span>() {
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"> <span style="color:#a6e22e">constructor</span>() {
     <span style="color:#66d9ef">super</span>();
     <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">type</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;underline&#39;</span>;
     <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">animation</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">true</span>;
@@ -342,7 +342,7 @@ of the possible variables into account.</p>
 values from the library, but also set <code>underline</code> as the default type of notation.</p>
 <p>Currently we are rocking with the default values, but we of course want the user to be able to declare the attributes themselves.</p>
 <p>Let&rsquo;s create a method for setting the variables from the HTML element attributes.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#a6e22e">setAttributes</span>() {
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#a6e22e">setAttributes</span>() {
     <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">type</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">getAttribute</span>(<span style="color:#e6db74">&#39;type&#39;</span>) <span style="color:#f92672">||</span> <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">type</span>;
     <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">animation</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">hasAttribute</span>(<span style="color:#e6db74">&#39;animation&#39;</span>) <span style="color:#f92672">?</span> <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">getAttribute</span>(<span style="color:#e6db74">&#39;animation&#39;</span>) <span style="color:#f92672">===</span> <span style="color:#e6db74">&#39;true&#39;</span> <span style="color:#f92672">:</span> <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">animation</span>;
     <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">animationDuration</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">getAttribute</span>(<span style="color:#e6db74">&#39;animationDuration&#39;</span>) <span style="color:#f92672">||</span> <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">animationDuration</span>;
@@ -358,10 +358,10 @@ values from the library, but also set <code>underline</code> as the default type
 </code></pre></div><p>Normal attributes we can fetched by just using the <code>this.getAttribute(attr)</code> method. But we also have a couple of boolean properties in our component.
 These are a bit more trickier, since the HTML attributes can only be strings. In those cases we need to check for the existence of the attribute.</p>
 <p>This can be done with <code>this.hasAttribute(attr)</code>. So now we can use the boolean operators by omitting the value part of the attribute like so:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html">&lt;<span style="color:#f92672">rough-notation</span> <span style="color:#a6e22e">showOnLoad</span>&gt;&lt;/<span style="color:#f92672">rough-notation</span>&gt;
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html">&lt;<span style="color:#f92672">rough-notation</span> <span style="color:#a6e22e">showOnLoad</span>&gt;&lt;/<span style="color:#f92672">rough-notation</span>&gt;
 </code></pre></div><p>But if the default value of the property is true, this won&rsquo;t work. In these cases we want to check if the attribute is a string valued <code>true</code>.
 So in this case if we want to disable the animation, we can just write.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html">&lt;<span style="color:#f92672">rough-notation</span> <span style="color:#a6e22e">animation</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;false&#34;</span>&gt;&lt;/<span style="color:#f92672">rough-notation</span>&gt;
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html">&lt;<span style="color:#f92672">rough-notation</span> <span style="color:#a6e22e">animation</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;false&#34;</span>&gt;&lt;/<span style="color:#f92672">rough-notation</span>&gt;
 </code></pre></div><p>If we wanted to observe the changes inside these properties, we could employ the use of <code>attributeChangedCallback</code> function and
 custom setters for our properties. However our Web Component&rsquo;s values are set in the element initialization itself so this
 won&rsquo;t be needed here.</p>
@@ -377,12 +377,12 @@ the main DOM won&rsquo;t affect them.</p>
 <p>A fast tour through the source code of the library shows that the style element is assigned to a global variable <code>__rno_kf_s</code>.
 Short for &ldquo;Rough Notation Keyframe styles&rdquo;.</p>
 <p>We can just clone that node inside our element:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">append</span>(window.<span style="color:#a6e22e">__rno_kf_s</span>.<span style="color:#a6e22e">cloneNode</span>(<span style="color:#66d9ef">true</span>));
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">append</span>(window.<span style="color:#ae81ff">__</span><span style="color:#a6e22e">rno_kf_s</span>.<span style="color:#a6e22e">cloneNode</span>(<span style="color:#66d9ef">true</span>));
 </code></pre></div><p>We want to make sure we clone it, and not just yank it from the main DOM.</p>
 <p>Now if we immediately call <code>show()</code> after cloning the node everything should work, right?</p>
 <p>But now we notice that the animation doesn&rsquo;t seem to play. What gives?</p>
 <p>If we take a look at the Styles we want to clone, we notice that it&rsquo;s a keyframes styling along the lines of:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-css" data-lang="css">@<span style="color:#66d9ef">keyframes</span> <span style="color:#f92672">rough-notation-dash</span> {
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-css" data-lang="css">@<span style="color:#66d9ef">keyframes</span> <span style="color:#f92672">rough-notation-dash</span> {
     <span style="color:#f92672">to</span> {
         stroke-dashoffset: <span style="color:#ae81ff">0</span>;
     }
@@ -398,7 +398,7 @@ immediately calling the show method, the style element hasn&rsquo;t had time to 
 introduce some new bugs into our component.</p>
 <p>Instead we can just tell our code to wait for <em>the next</em> animation frame, and then run the <code>show()</code> command. This should fix our issue.</p>
 <p>To do that, we just write</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js">window.<span style="color:#a6e22e">requestAnimationFrame</span>(() =&gt; {
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js">window.<span style="color:#a6e22e">requestAnimationFrame</span>(() =&gt; {
     <span style="color:#66d9ef">if</span> (<span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">showOnLoad</span>) {
         <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">annotation</span>.<span style="color:#a6e22e">show</span>();
     }
@@ -407,7 +407,7 @@ introduce some new bugs into our component.</p>
 <hr>
 <h4 id="closing-in-on-the-target">Closing in on the target</h4>
 <p>So right now we should have a somewhat functional port of the Web Component. Our source code looks something along the lines of:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#66d9ef">import</span> { <span style="color:#a6e22e">annotate</span> } <span style="color:#a6e22e">from</span> <span style="color:#e6db74">&#39;rough-notation&#39;</span>;
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#66d9ef">import</span> { <span style="color:#a6e22e">annotate</span> } <span style="color:#a6e22e">from</span> <span style="color:#e6db74">&#39;rough-notation&#39;</span>;
 
 <span style="color:#66d9ef">export</span> <span style="color:#66d9ef">default</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">VanillaRoughNotation</span> <span style="color:#66d9ef">extends</span> <span style="color:#a6e22e">HTMLElement</span> {
     <span style="color:#a6e22e">constructor</span>() {
@@ -464,7 +464,7 @@ introduce some new bugs into our component.</p>
             });
         });
         <span style="color:#75715e">// Clone the style element from the windows styles to shadow dom.
-</span><span style="color:#75715e"></span>        <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">append</span>(window.<span style="color:#a6e22e">__rno_kf_s</span>.<span style="color:#a6e22e">cloneNode</span>(<span style="color:#66d9ef">true</span>));
+</span><span style="color:#75715e"></span>        <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">append</span>(window.<span style="color:#ae81ff">__</span><span style="color:#a6e22e">rno_kf_s</span>.<span style="color:#a6e22e">cloneNode</span>(<span style="color:#66d9ef">true</span>));
 
         window.<span style="color:#a6e22e">requestAnimationFrame</span>(() =&gt; {
             <span style="color:#66d9ef">if</span> (<span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">showOnLoad</span>) {
@@ -490,7 +490,7 @@ these functions as well. Luckily we can just expose those API&rsquo;s the same w
 <li>isShowing()</li>
 </ul>
 <p>To expose these API&rsquo;s we can just create wrapper functions for those inside our component:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#a6e22e">isShowing</span>() {
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#a6e22e">isShowing</span>() {
     <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">annotation</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span> <span style="color:#f92672">&amp;&amp;</span> <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">annotation</span>.<span style="color:#a6e22e">isShowing</span>();
 }
 
@@ -512,7 +512,7 @@ these functions as well. Luckily we can just expose those API&rsquo;s the same w
     }
 }
 </code></pre></div><p>Now our users can just call the functions by selecting our web components from the DOM and calling it.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js">document.<span style="color:#a6e22e">querySelector</span>(<span style="color:#e6db74">&#39;rough-notation&#39;</span>).<span style="color:#a6e22e">show</span>();
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js">document.<span style="color:#a6e22e">querySelector</span>(<span style="color:#e6db74">&#39;rough-notation&#39;</span>).<span style="color:#a6e22e">show</span>();
 </code></pre></div><hr>
 <h3 id="wrapping-things-up">Wrapping things up</h3>
 <p>Now we should have a functional Web Component we can use in our projects, no matter the framework.</p>

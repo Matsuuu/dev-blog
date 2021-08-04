@@ -69,8 +69,8 @@ Stoxy Hooks are a easy way to integrate Stoxy to any React or Preact application
 Examples Here I&rsquo;ll show a few simple examples of Stoxy Hooks in action" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="/posts/getting-hooked-on-stoxy/" /><meta property="og:image" content="/"/><meta property="article:section" content="posts" />
-<meta property="article:published_time" content="2021-04-22T19:50:38&#43;02:00" />
-<meta property="article:modified_time" content="2021-04-22T19:50:38&#43;02:00" /><meta property="og:site_name" content="Matsu" />
+<meta property="article:published_time" content="2021-04-22T19:50:38+02:00" />
+<meta property="article:modified_time" content="2021-04-22T19:50:38+02:00" /><meta property="og:site_name" content="Matsu" />
 
 
 
@@ -188,7 +188,7 @@ Examples Here I&rsquo;ll show a few simple examples of Stoxy Hooks in action" />
 <h3 id="examples">Examples</h3>
 <p>Here I&rsquo;ll show a few simple examples of Stoxy Hooks in action</p>
 <h4 id="a-simple-clicker">A Simple Clicker</h4>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-jsx" data-lang="jsx"><span style="color:#66d9ef">import</span> { <span style="color:#a6e22e">useStoxy</span> } <span style="color:#a6e22e">from</span> <span style="color:#e6db74">&#34;@stoxy/hooks&#34;</span>;
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-jsx" data-lang="jsx"><span style="color:#66d9ef">import</span> { <span style="color:#a6e22e">useStoxy</span> } <span style="color:#a6e22e">from</span> <span style="color:#e6db74">&#34;@stoxy/hooks&#34;</span>;
 <span style="color:#66d9ef">import</span> <span style="color:#a6e22e">React</span> <span style="color:#a6e22e">from</span> <span style="color:#e6db74">&#34;react&#34;</span>;
 
 <span style="color:#66d9ef">export</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">Clicker</span>() {
@@ -209,7 +209,7 @@ Examples Here I&rsquo;ll show a few simple examples of Stoxy Hooks in action" />
     );
 }
 </code></pre></div><h4 id="a-todo-list">A Todo List</h4>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-jsx" data-lang="jsx"><span style="color:#66d9ef">import</span> { <span style="color:#a6e22e">useStoxy</span> } <span style="color:#a6e22e">from</span> <span style="color:#e6db74">&#34;@stoxy/hooks&#34;</span>;
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-jsx" data-lang="jsx"><span style="color:#66d9ef">import</span> { <span style="color:#a6e22e">useStoxy</span> } <span style="color:#a6e22e">from</span> <span style="color:#e6db74">&#34;@stoxy/hooks&#34;</span>;
 <span style="color:#66d9ef">import</span> <span style="color:#f92672">*</span> <span style="color:#a6e22e">as</span> <span style="color:#a6e22e">preact</span> <span style="color:#a6e22e">from</span> <span style="color:#e6db74">&#34;preact/hooks&#34;</span>;
 <span style="color:#66d9ef">export</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">TodoList</span>() {
     <span style="color:#66d9ef">const</span> { <span style="color:#a6e22e">state</span> } <span style="color:#f92672">=</span> <span style="color:#a6e22e">useStoxy</span>(<span style="color:#a6e22e">preact</span>, {
@@ -227,7 +227,7 @@ Examples Here I&rsquo;ll show a few simple examples of Stoxy Hooks in action" />
         &lt;/<span style="color:#f92672">ul</span>&gt;
     );
 }
-</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-jsx" data-lang="jsx"><span style="color:#66d9ef">import</span> { <span style="color:#a6e22e">useStoxy</span> } <span style="color:#a6e22e">from</span> <span style="color:#e6db74">&#39;@stoxy/hooks&#39;</span>;
+</code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-jsx" data-lang="jsx"><span style="color:#66d9ef">import</span> { <span style="color:#a6e22e">useStoxy</span> } <span style="color:#a6e22e">from</span> <span style="color:#e6db74">&#39;@stoxy/hooks&#39;</span>;
 <span style="color:#66d9ef">import</span> <span style="color:#a6e22e">React</span> <span style="color:#a6e22e">from</span> <span style="color:#e6db74">&#39;react&#39;</span>;
 
 <span style="color:#66d9ef">export</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">AddToList</span>() {
@@ -253,7 +253,7 @@ Examples Here I&rsquo;ll show a few simple examples of Stoxy Hooks in action" />
 }
 </code></pre></div><h3 id="get-started">Get Started</h3>
 <p>You can easily get started using Stoxy hooks with just one quick install:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">npm install @stoxy/hooks
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">npm install @stoxy/hooks
 </code></pre></div><p>And you&rsquo;re all set!</p>
 <p>The whole Stoxy ecosystem is extremely lightweight, in package size and when writing code.</p>
 <p>Read more about the subject on the <a href="https://stoxy.dev/">Stoxy Website</a></p>

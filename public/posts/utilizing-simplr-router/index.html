@@ -63,8 +63,8 @@ That&rsquo;s when I started working on Simplr Router.
  The Dream From the beginning, I have wanted to keep Simplr Router at 0 dependecies, and so far we&rsquo;ve been able to keep it that way." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="/posts/utilizing-simplr-router/" /><meta property="og:image" content="/"/><meta property="article:section" content="posts" />
-<meta property="article:published_time" content="2021-01-18T10:12:38&#43;02:00" />
-<meta property="article:modified_time" content="2021-01-18T10:12:38&#43;02:00" /><meta property="og:site_name" content="Matsu" />
+<meta property="article:published_time" content="2021-01-18T10:12:38+02:00" />
+<meta property="article:modified_time" content="2021-01-18T10:12:38+02:00" /><meta property="og:site_name" content="Matsu" />
 
 
 
@@ -201,7 +201,7 @@ and <a href="https://github.com/Simplr/simplr-router-preact-middleware">Preact</
 <p>Allright that&rsquo;s enough about the history of Simplr Router. Now let&rsquo;s get into the present: How to use it!</p>
 <h3 id="installation">Installation</h3>
 <p>Installing Simplr Router is the same as any other NPM package, so first we run</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">npm install @simplr-wc/router
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">npm install @simplr-wc/router
 </code></pre></div><p>And after that we are ready to go! As the router is written in vanilla Javascript, we don&rsquo;t even need
 any build tools to get up and running.</p>
 <p>However to make development easier, I usually use the <a href="https://modern-web.dev/docs/dev-server/overview/">@web/dev-server</a> by <a href="https://modern-web.dev/">Modern Web</a></p>
@@ -212,7 +212,7 @@ any build tools to get up and running.</p>
 <p>First we want to create our views, into which we will be navigating to with the Router.</p>
 <p>Our base for the pages will be the following:</p>
 <p><strong>Home Page</strong></p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#75715e">// Create Template for content
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#75715e">// Create Template for content
 </span><span style="color:#75715e"></span><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">template</span> <span style="color:#f92672">=</span> document.<span style="color:#a6e22e">createElement</span>(<span style="color:#e6db74">&#34;template&#34;</span>);
 <span style="color:#a6e22e">template</span>.<span style="color:#a6e22e">innerHTML</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">`
 </span><span style="color:#e6db74">      &lt;style&gt;
@@ -248,7 +248,7 @@ any build tools to get up and running.</p>
   <span style="color:#a6e22e">customElements</span>.<span style="color:#a6e22e">define</span>(<span style="color:#e6db74">&#34;home-page&#34;</span>, <span style="color:#a6e22e">HomePage</span>);
 }
 </code></pre></div><p>And <strong>Profile Page</strong></p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#75715e">// Create Template for content
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#75715e">// Create Template for content
 </span><span style="color:#75715e"></span><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">template</span> <span style="color:#f92672">=</span> document.<span style="color:#a6e22e">createElement</span>(<span style="color:#e6db74">&#34;template&#34;</span>);
 <span style="color:#a6e22e">template</span>.<span style="color:#a6e22e">innerHTML</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">`
 </span><span style="color:#e6db74">      &lt;style&gt;
@@ -291,7 +291,7 @@ any build tools to get up and running.</p>
   <span style="color:#a6e22e">customElements</span>.<span style="color:#a6e22e">define</span>(<span style="color:#e6db74">&#34;profile-page&#34;</span>, <span style="color:#a6e22e">ProfilePage</span>);
 }
 </code></pre></div><p>On top of these views, we will have a navbar in just pure HTML prepended at the start of the index.html file.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html">&lt;<span style="color:#f92672">nav</span>&gt;
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html">&lt;<span style="color:#f92672">nav</span>&gt;
   &lt;<span style="color:#f92672">a</span> <span style="color:#a6e22e">href</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;/&#34;</span>&gt;Home&lt;/<span style="color:#f92672">a</span>&gt;
   &lt;<span style="color:#f92672">a</span> <span style="color:#a6e22e">href</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;/profile&#34;</span>&gt;Profile&lt;/<span style="color:#f92672">a</span>&gt;
   &lt;<span style="color:#f92672">a</span> <span style="color:#a6e22e">href</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;/profile/John&#34;</span>&gt;John&lt;/<span style="color:#f92672">a</span>&gt;
@@ -305,7 +305,7 @@ by using <code>&lt;home-page&gt;&lt;/home-page&gt;</code> and <code>&lt;profile-
 <p>The Simplr Router uses JSON as the routing table format due to it being widely used and
 easily configurable. It also allows us to ship the routing file as a separate file if we wanted to.</p>
 <p>There is a lot of configurable parts for the routes, but we can get by with just a few JSON properties</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#75715e">// Initialize a array of routes, each route being it&#39;s own JSON object
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#75715e">// Initialize a array of routes, each route being it&#39;s own JSON object
 </span><span style="color:#75715e"></span><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">routes</span> <span style="color:#f92672">=</span> [
   {
     <span style="color:#a6e22e">path</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;/&#34;</span>,
@@ -319,7 +319,7 @@ easily configurable. It also allows us to ship the routing file as a separate fi
 </code></pre></div><p>We can get by with just declaring a path for our view, and the component used to render the view.</p>
 <p>What if we wanted to create a dynamic profile page, in which the user&rsquo;s name would be given as a URL parameter?</p>
 <p>That&rsquo;s fully possible, and quite simple.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#75715e">// Initialize a array of routes, each route being it&#39;s own JSON object
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#75715e">// Initialize a array of routes, each route being it&#39;s own JSON object
 </span><span style="color:#75715e"></span><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">routes</span> <span style="color:#f92672">=</span> [
   {
     <span style="color:#a6e22e">path</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;/&#34;</span>,
@@ -343,13 +343,13 @@ easily configurable. It also allows us to ship the routing file as a separate fi
 <p>Sub-routes inherit the base path from their parent, and can be static or dynamic, like in our example above.</p>
 <p>The parameter from the URL is mapped onto the view, and is easily usable from within the view</p>
 <p>Inside our view component, we can access the name of the user in it&rsquo;s property through the keyword <code>this</code>.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#75715e">// When navigating to /profile/John
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#75715e">// When navigating to /profile/John
 </span><span style="color:#75715e"></span><span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">log</span>(<span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">user</span>);
 <span style="color:#75715e">// prints out &#34;John&#34;
 </span></code></pre></div><h3 id="putting-it-all-together">Putting it all together</h3>
 <p>Now that we have our views, we have our navigation elements and our routes, we&rsquo;re ready to put it all together.</p>
 <p>We need to import the Simplr Router, and initialize it with our routes</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#75715e">// Import the web components views
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#75715e">// Import the web components views
 </span><span style="color:#75715e"></span><span style="color:#66d9ef">import</span> <span style="color:#e6db74">&#34;./home.js&#34;</span>;
 <span style="color:#66d9ef">import</span> <span style="color:#e6db74">&#34;./profile.js&#34;</span>;
 <span style="color:#66d9ef">import</span> <span style="color:#a6e22e">SimplrRouter</span> <span style="color:#a6e22e">from</span> <span style="color:#e6db74">&#34;@simplr-wc/router&#34;</span>;
@@ -386,23 +386,23 @@ easily configurable. It also allows us to ship the routing file as a separate fi
 <p>Now that we have Simplr Router up and running, we are ready to customize it a bit. Let&rsquo;s start by modifying the transitions</p>
 <h4 id="removing-transitions">Removing transitions</h4>
 <p>If one wanted to remove the transitions altogether, there&rsquo;s a option to do just that.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">router</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> <span style="color:#a6e22e">SimplrRouter</span>({ <span style="color:#a6e22e">routes</span>, <span style="color:#a6e22e">disableTransition</span><span style="color:#f92672">:</span> <span style="color:#66d9ef">true</span> });
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">router</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> <span style="color:#a6e22e">SimplrRouter</span>({ <span style="color:#a6e22e">routes</span>, <span style="color:#a6e22e">disableTransition</span><span style="color:#f92672">:</span> <span style="color:#66d9ef">true</span> });
 </code></pre></div><p>This will make the page changes instant, instead of the default sliding animation the router provides out of the box.</p>
 <h4 id="changing-transitions">Changing transitions</h4>
 <p>If however we wanted a transition, but didn&rsquo;t want it to be the default, we can easily modify it.</p>
 <p>The first modification type would be the transition speed. This can be easily set in the initial configuration:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#75715e">// Transition speed is calculated in milliseconds
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#75715e">// Transition speed is calculated in milliseconds
 </span><span style="color:#75715e"></span><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">router</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> <span style="color:#a6e22e">SimplrRouter</span>({ <span style="color:#a6e22e">routes</span>, <span style="color:#a6e22e">transitionSpeed</span><span style="color:#f92672">:</span> <span style="color:#ae81ff">1000</span> });
 </code></pre></div><p>If the sliding transition is not something we want, we can also animate the whole transition ourselves.</p>
 <p>First we disable the default transition, and set the transitionSpeed to a slower speed.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">router</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> <span style="color:#a6e22e">SimplrRouter</span>({
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">router</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> <span style="color:#a6e22e">SimplrRouter</span>({
   <span style="color:#a6e22e">routes</span>,
   <span style="color:#a6e22e">disableTransition</span><span style="color:#f92672">:</span> <span style="color:#66d9ef">true</span>,
   <span style="color:#a6e22e">transitionSpeed</span><span style="color:#f92672">:</span> <span style="color:#ae81ff">1000</span>,
 });
 </code></pre></div><p>After that, we modify the CSS of our router&rsquo;s container elements. We modify the entering and leaving
 elements so that the fade-in-out effect applies to both of the views.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-css" data-lang="css"><span style="color:#f92672">simplr-router-container</span><span style="color:#f92672">[</span><span style="color:#f92672">entering-view</span><span style="color:#f92672">],</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-css" data-lang="css"><span style="color:#f92672">simplr-router-container</span><span style="color:#f92672">[</span><span style="color:#f92672">entering-view</span><span style="color:#f92672">],</span>
 <span style="color:#f92672">simplr-router-container</span><span style="color:#f92672">[</span><span style="color:#f92672">leaving-view</span><span style="color:#f92672">]</span> {
   <span style="color:#66d9ef">opacity</span>: <span style="color:#ae81ff">0</span>;
 }
@@ -415,7 +415,7 @@ For these cases we can declare a <code>not-found</code> path for when a view is 
 for when access to a certain view is denied by a guard.</p>
 <h5 id="not-found">Not Found</h5>
 <p>A not found page can be configured by creating a path named ´not-found´ and assigning it a view:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">routes</span> <span style="color:#f92672">=</span> [
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">routes</span> <span style="color:#f92672">=</span> [
   {
     <span style="color:#a6e22e">path</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;/&#34;</span>,
     <span style="color:#a6e22e">component</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;main-page&#34;</span>,
@@ -432,7 +432,7 @@ for when access to a certain view is denied by a guard.</p>
 <h5 id="forbidden">Forbidden</h5>
 <p>A forbidden page can be configured in the same manner. A forbidden page is triggered when a
 <a href="https://router.matsu.fi/recipes/guards">guard</a> fails it&rsquo;s check.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">routes</span> <span style="color:#f92672">=</span> [
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">routes</span> <span style="color:#f92672">=</span> [
   {
     <span style="color:#a6e22e">path</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;/&#34;</span>,
     <span style="color:#a6e22e">component</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;main-page&#34;</span>,
@@ -447,7 +447,7 @@ for when access to a certain view is denied by a guard.</p>
 <span style="color:#a6e22e">router</span>.<span style="color:#a6e22e">init</span>();
 </code></pre></div><h4 id="custom-actions">Custom Actions</h4>
 <p>If however you would like to run a piece of code when a invalid page is loaded, that is fully possible too.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">routes</span> <span style="color:#f92672">=</span> [
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">routes</span> <span style="color:#f92672">=</span> [
   {
     <span style="color:#a6e22e">path</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;/&#34;</span>,
     <span style="color:#a6e22e">component</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;main-page&#34;</span>,
@@ -468,7 +468,7 @@ on their initial page load, but instead you can only load the view component <st
 <p>The best past is: You barely have to do any work to enable this. All you have to do is
 instead of importing your views at the top of your file as we&rsquo;ve done in the examples, you will
 do it inside the routes.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#66d9ef">import</span> <span style="color:#a6e22e">SimplrRouter</span> <span style="color:#a6e22e">from</span> <span style="color:#e6db74">&#34;@simplr-wc/router&#34;</span>;
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#66d9ef">import</span> <span style="color:#a6e22e">SimplrRouter</span> <span style="color:#a6e22e">from</span> <span style="color:#e6db74">&#34;@simplr-wc/router&#34;</span>;
 
 <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">routes</span> <span style="color:#f92672">=</span> [
   {
@@ -508,7 +508,7 @@ and</li>
 <li><a href="https://github.com/Simplr/simplr-router-react-middleware">A React Middleware</a></li>
 </ul>
 <p>These middlewares will add support for Preact and React projects respectively, and can be applied with just 2 lines of code:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#66d9ef">import</span> <span style="color:#a6e22e">SimplrRouter</span> <span style="color:#a6e22e">from</span> <span style="color:#e6db74">&#34;@simplr-wc/router&#34;</span>;
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#66d9ef">import</span> <span style="color:#a6e22e">SimplrRouter</span> <span style="color:#a6e22e">from</span> <span style="color:#e6db74">&#34;@simplr-wc/router&#34;</span>;
 <span style="color:#66d9ef">import</span> <span style="color:#a6e22e">SimplrRouterPreactMiddleware</span> <span style="color:#a6e22e">from</span> <span style="color:#e6db74">&#34;@simplr-wc/router-preact-middleware&#34;</span>;
 
 <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">router</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> <span style="color:#a6e22e">SimplrRouter</span>({ <span style="color:#a6e22e">routes</span> });

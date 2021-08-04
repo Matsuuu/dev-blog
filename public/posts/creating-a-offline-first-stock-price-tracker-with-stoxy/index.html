@@ -63,8 +63,8 @@ After gaining some tracktion from different outlets, I decided I should create a
 That&rsquo;s why I decided to create a small Offline-first application for tracking stock prices. It will be built with Web Components and utilize the Stoxy library for handling the state, online and offline." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="/posts/creating-a-offline-first-stock-price-tracker-with-stoxy/" /><meta property="og:image" content="/"/><meta property="article:section" content="posts" />
-<meta property="article:published_time" content="2021-03-13T14:01:19&#43;02:00" />
-<meta property="article:modified_time" content="2021-03-13T14:01:19&#43;02:00" /><meta property="og:site_name" content="Matsu" />
+<meta property="article:published_time" content="2021-03-13T14:01:19+02:00" />
+<meta property="article:modified_time" content="2021-03-13T14:01:19+02:00" /><meta property="og:site_name" content="Matsu" />
 
 
 
@@ -198,7 +198,7 @@ press of a button.</p>
 <p>I scaffolded my project using out own in-house scaffolding tool, <code>@simplr-wc/create</code> with the command <code>npm init @simplr-wc</code>.</p>
 <p>This scaffolding tool is quite refined for our use cases and if you&rsquo;re following this post and developing yourself, I highly
 recommend going with the <a href="https://open-wc.org/">Open-WC</a> initializer</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">npm init @open-wc
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">npm init @open-wc
 </code></pre></div><p>Then selecting to scaffold a new application with linting and building tools pre-setup.</p>
 <p>I named my project <code>stoxy-stock-project</code> so all the references to that name during this post will have to be changed
 to match your naming scheme.</p>
@@ -207,7 +207,7 @@ to match your naming scheme.</p>
 <p>The manifest.json file is a required file for the web app to be recognized as a PWA.</p>
 <p>The file specifies basic metadata about our PWA app for the device.</p>
 <p>Following the MVP for the manifest.json file we end up with</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-json" data-lang="json"><span style="color:#960050;background-color:#1e0010">//</span> <span style="color:#960050;background-color:#1e0010">manifest.json</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-json" data-lang="json"><span style="color:#960050;background-color:#1e0010">//</span> <span style="color:#960050;background-color:#1e0010">manifest.json</span>
 
 {
   <span style="color:#f92672">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;Stoxy Stock App Demo&#34;</span>,
@@ -235,7 +235,7 @@ to match your naming scheme.</p>
 <a href="https://developers.google.com/web/tools/workbox">Workbox</a>, since it makes everything a lot simpler,
 but for this simple app, we&rsquo;re just going to be writing our implementation ourselves.</p>
 <p>We will start by creating our service worker file, <code>worker.js</code>.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#75715e">// worker.js
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#75715e">// worker.js
 </span><span style="color:#75715e"></span>
 <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">staticCacheName</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;stockapp-cache-v1&#34;</span>;
 <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">filesToCache</span> <span style="color:#f92672">=</span> [
@@ -277,7 +277,7 @@ the requests matching our cached sites with the cached version. This is done so 
 connectivity, we can still serve all of the files we need.</p>
 <p>Next we will need to register our service worker.</p>
 <p>In the initialization of our javascript, we create a function to register our service worker, if possible</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#75715e">// src/service-worker-setup.js
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#75715e">// src/service-worker-setup.js
 </span><span style="color:#75715e"></span>
 <span style="color:#66d9ef">export</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">register</span>() {
   <span style="color:#66d9ef">if</span> (<span style="color:#e6db74">&#34;serviceWorker&#34;</span> <span style="color:#66d9ef">in</span> <span style="color:#a6e22e">navigator</span>) {
@@ -294,7 +294,7 @@ They make the development process of Web Components a breeze and work really nic
 <h4 id="initializing-the-base-level-app">Initializing the base level app</h4>
 <p>First we are going to create the landing page for our app. It&rsquo;s going to contain all of the components required for
 our app to run.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#75715e">// stoxy-stock-project.js
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#75715e">// stoxy-stock-project.js
 </span><span style="color:#75715e"></span>
 <span style="color:#66d9ef">import</span> { <span style="color:#a6e22e">LitElement</span>, <span style="color:#a6e22e">html</span>, <span style="color:#a6e22e">css</span> } <span style="color:#a6e22e">from</span> <span style="color:#e6db74">&#34;lit-element&#34;</span>;
 <span style="color:#66d9ef">import</span> { <span style="color:#a6e22e">getStockInfo</span> } <span style="color:#a6e22e">from</span> <span style="color:#e6db74">&#34;./stockApi&#34;</span>;
@@ -398,7 +398,7 @@ a simple promise call.</p>
 <h4 id="adding-a-stock-to-follow">Adding a Stock to follow</h4>
 <p>Next up we are going to create the <code>stock-adder</code> component seen in the top level HTML.</p>
 <p>We want this to be a simple form component, which takes the stock name from the form and adds it to the state.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#75715e">// src/stock-adder.js
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#75715e">// src/stock-adder.js
 </span><span style="color:#75715e"></span>
 <span style="color:#66d9ef">import</span> { <span style="color:#a6e22e">LitElement</span>, <span style="color:#a6e22e">html</span>, <span style="color:#a6e22e">css</span> } <span style="color:#a6e22e">from</span> <span style="color:#e6db74">&#34;lit-element&#34;</span>;
 <span style="color:#66d9ef">import</span> { <span style="color:#a6e22e">add</span> } <span style="color:#a6e22e">from</span> <span style="color:#e6db74">&#34;@stoxy/core&#34;</span>;
@@ -488,7 +488,7 @@ newly added stock.</p>
 <h5 id="note">Note!</h5>
 <p>Instead of using a classic form, we could also use <a href="https://stoxy.dev/docs/components/stoxy-form/">Stoxy Form</a>.</p>
 <p>In that case, we would have our state be represented by a array of JSON objects instead of just strings.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#75715e">// Using add &amp; normal form
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#75715e">// Using add &amp; normal form
 </span><span style="color:#75715e"></span>[<span style="color:#e6db74">&#34;GME&#34;</span>, <span style="color:#e6db74">&#34;TSLA&#34;</span>][
   <span style="color:#75715e">// Using stoxy-form
 </span><span style="color:#75715e"></span>  ({ <span style="color:#a6e22e">stock</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;GME&#34;</span> }, { <span style="color:#a6e22e">stock</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;TSLA&#34;</span> })
@@ -503,7 +503,7 @@ to call the stock API for us and save the information onto the Stoxy state.</p>
 <p>Inside RapidAPI service we will be utilizing the <a href="https://rapidapi.com/apidojo/api/yahoo-finance1?endpoint=apiendpoint_ef6248fb-33e7-42ea-a8a6-58a7ef7f2177">Yahoo Finance</a>
 &ldquo;get-summary&rdquo; -api.</p>
 <p>By changing the code snippet to fetch, we get the perfect example for our case:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#a6e22e">fetch</span>(
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#a6e22e">fetch</span>(
   <span style="color:#e6db74">&#34;https://apidojo-yahoo-finance-v1.p.rapidapi.com/stock/v2/get-summary?symbol=AMRN&amp;region=US&#34;</span>,
   {
     <span style="color:#a6e22e">method</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;GET&#34;</span>,
@@ -521,7 +521,7 @@ to call the stock API for us and save the information onto the Stoxy state.</p>
   });
 </code></pre></div><p>We can just copy and paste&hellip; I mean carefully type ourselves the code onto our stockApi.js file.
 Let&rsquo;s also modify a few things while we&rsquo;re at it.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#75715e">// src/stockApi.js
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#75715e">// src/stockApi.js
 </span><span style="color:#75715e"></span>
 <span style="color:#66d9ef">import</span> { <span style="color:#a6e22e">update</span> } <span style="color:#a6e22e">from</span> <span style="color:#e6db74">&#34;@stoxy/core&#34;</span>;
 
@@ -574,7 +574,7 @@ our stock price data.</p>
 <h4 id="repeating-data-with-stoxy">Repeating data with Stoxy</h4>
 <p>You might have already spotted the <a href="https://stoxy.dev/docs/components/stoxy-repeat/">stoxy-repeat</a> component
 in our main app file. Inside the file we were using it to repeat out stock display component.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html">&lt;<span style="color:#f92672">stoxy-repeat</span> <span style="color:#a6e22e">key</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;stocks&#34;</span> <span style="color:#a6e22e">id</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;iStock&#34;</span> <span style="color:#a6e22e">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;stock-area&#34;</span>&gt;
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html">&lt;<span style="color:#f92672">stoxy-repeat</span> <span style="color:#a6e22e">key</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;stocks&#34;</span> <span style="color:#a6e22e">id</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;iStock&#34;</span> <span style="color:#a6e22e">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;stock-area&#34;</span>&gt;
   &lt;<span style="color:#f92672">stock-price-display</span> <span style="color:#a6e22e">stock</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;iStock&#34;</span>&gt;&lt;/<span style="color:#f92672">stock-price-display</span>&gt;
 &lt;/<span style="color:#f92672">stoxy-repeat</span>&gt;
 </code></pre></div><p>Let&rsquo;s disect a little bit what&rsquo;s going on here:</p>
@@ -588,7 +588,7 @@ any accessors like <code>iStock.name</code>  etc.</p>
 <p>Next let&rsquo;s see how our stock display component handles this.</p>
 <hr>
 <h4 id="stock-display-component">Stock display component</h4>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#75715e">// src/stock-price-display.js
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#75715e">// src/stock-price-display.js
 </span><span style="color:#75715e"></span>
 <span style="color:#66d9ef">import</span> { <span style="color:#a6e22e">LitElement</span>, <span style="color:#a6e22e">html</span>, <span style="color:#a6e22e">css</span> } <span style="color:#a6e22e">from</span> <span style="color:#e6db74">&#39;lit-element&#39;</span>;
 <span style="color:#66d9ef">import</span> { <span style="color:#a6e22e">remove</span>, <span style="color:#a6e22e">update</span> } <span style="color:#a6e22e">from</span> <span style="color:#e6db74">&#39;@stoxy/core&#39;</span>;
