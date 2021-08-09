@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    
+      <title>
+        Re-Learning Clojure. Part one: Getting my feet wet ::
+        Matsu — Abusing Javascript and The Web platform
+      </title>
+    
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta
+  name="description"
+  content="After following my friend Juhis&amp;rsquo;s series on learning rust, I decided I should pick up Clojure again. And while I&amp;rsquo;m at it, I want to revitalize my blog writing, so here we are: Two stones with one bird.
+I first learned Clojure in 2018 while working for my previous employer and I really enjoyed my time with!
+However work took me towards another path; developing Java applications with some Javascript, and then moving to working more with Javascript."
+/>
+<meta
+  name="keywords"
+  content=""
+/>
+<meta name="robots" content="noodp" />
+<link rel="canonical" href="/posts/re-learning-clojure-part-one/" />
+
+
+
+
+
+<link rel="stylesheet" href="/assets/style.css" />
+
+<link rel="stylesheet" href="/style.css" />
+
+
+<link
+  rel="apple-touch-icon-precomposed"
+  sizes="144x144"
+  href="/img/apple-touch-icon-144-precomposed.png"
+/>
+<link rel="shortcut icon" href="/img/favicon.png" />
+
+
+<link href="/assets/fonts/Inter-Italic.woff2" rel="preload" type="font/woff2" as="font" crossorigin="">
+<link href="/assets/fonts/Inter-Regular.woff2" rel="preload" type="font/woff2" as="font" crossorigin="">
+<link href="/assets/fonts/Inter-Medium.woff2" rel="preload" type="font/woff2" as="font" crossorigin="">
+<link href="/assets/fonts/Inter-MediumItalic.woff2" rel="preload" type="font/woff2" as="font" crossorigin="">
+<link href="/assets/fonts/Inter-Bold.woff2" rel="preload" type="font/woff2" as="font" crossorigin="">
+<link href="/assets/fonts/Inter-BoldItalic.woff2" rel="preload" type="font/woff2" as="font" crossorigin="">
+
+
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="/"/>
+
+<meta name="twitter:title" content="Re-Learning Clojure. Part one: Getting my feet wet"/>
+<meta name="twitter:description" content="After following my friend Juhis&rsquo;s series on learning rust, I decided I should pick up Clojure again. And while I&rsquo;m at it, I want to revitalize my blog writing, so here we are: Two stones with one bird.
+I first learned Clojure in 2018 while working for my previous employer and I really enjoyed my time with!
+However work took me towards another path; developing Java applications with some Javascript, and then moving to working more with Javascript."/>
+
+
+
+<meta property="og:title" content="Re-Learning Clojure. Part one: Getting my feet wet" />
+<meta property="og:description" content="After following my friend Juhis&rsquo;s series on learning rust, I decided I should pick up Clojure again. And while I&rsquo;m at it, I want to revitalize my blog writing, so here we are: Two stones with one bird.
+I first learned Clojure in 2018 while working for my previous employer and I really enjoyed my time with!
+However work took me towards another path; developing Java applications with some Javascript, and then moving to working more with Javascript." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/posts/re-learning-clojure-part-one/" /><meta property="og:image" content="/"/><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2021-08-08T23:26:00+02:00" />
+<meta property="article:modified_time" content="2021-08-08T23:26:00+02:00" /><meta property="og:site_name" content="Matsu" />
+
+
+
+
+
+
+
+  </head>
+  <body class="dark-theme">
+    <div class="container">
+      <header class="header">
+  <span class="header__inner">
+    <a
+  href="/"
+  class="logo"
+  style="text-decoration: none;"
+>
+  
+    <span class="logo__mark"><svg xmlns="http://www.w3.org/2000/svg" class="greater-icon" viewBox="0 0 44 44">
+  <path fill="none" d="M15 8l14.729 14.382L15 35.367" />
+</svg>
+</span>
+    <span class="logo__text"
+      >:wq</span
+    >
+    <span class="logo__cursor"></span>
+  
+</a>
+
+    <span class="header__right">
+      
+        <nav class="menu">
+  <ul class="menu__inner menu__inner--desktop">
+    
+      
+        
+          <li><a href="/posts">Blog</a></li>
+        
+      
+    
+  </ul>
+
+  <ul class="menu__inner menu__inner--mobile">
+    
+      
+        <li><a href="/posts">Blog</a></li>
+      
+    
+  </ul>
+</nav>
+
+        <span class="menu-trigger">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M0 0h24v24H0z" fill="none" />
+            <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z" />
+          </svg>
+        </span>
+      
+      <span class="theme-toggle">
+        <svg
+  class="theme-toggler"
+  width="24"
+  height="24"
+  viewBox="0 0 48 48"
+  fill="none"
+  xmlns="http://www.w3.org/2000/svg"
+>
+  <path
+    d="M22 41C32.4934 41 41 32.4934 41 22C41 11.5066 32.4934 3 22
+  3C11.5066 3 3 11.5066 3 22C3 32.4934 11.5066 41 22 41ZM7 22C7
+  13.7157 13.7157 7 22 7V37C13.7157 37 7 30.2843 7 22Z"
+  />
+</svg>
+
+      </span>
+    </span>
+  </span>
+</header>
+
+
+      <div class="content">
+        
+  
+  
+
+  <div class="post">
+    <h1 class="post-title">Re-Learning Clojure. Part one: Getting my feet wet</h1>
+    <div class="post-meta">
+      
+        <span class="post-date">
+          2021-08-08
+        </span>
+
+        
+          
+        
+      
+
+      
+
+
+      
+    </div>
+
+    
+
+    
+
+    <div class="post-content">
+      
+      <p>After following my friend <a href="https://hamatti.org/posts/learning-rust-pattern-matching/">Juhis&rsquo;s series on learning rust</a>,
+I decided I should pick up Clojure again. And while I&rsquo;m at it, I want to revitalize my blog writing, so here we are: Two stones with one bird.</p>
+<p>I first learned Clojure in 2018 while working for my previous employer and I really enjoyed my time with!</p>
+<p>However work took me towards another path; developing Java applications with some Javascript, and then
+moving to working more with Javascript. However, Clojure changed me. My Java(script) code was different after
+dipping my toes into Clojure. I thought more in a functional mindset, utilizing more functional styles of working:
+Using maps and reducers, writing more and more recursive functions, and most of all: Not mutating as much state as I did before.
+I had grown tired of side effects, and approaching problems from a more functional point of view did help with that.</p>
+<p>Now after a few years of developing mostly in OOP-inspired languages, I&rsquo;m re-learning Clojure, and I&rsquo;m doing it
+the way a lot of developers did it: By following the book <a href="https://www.braveclojure.com/clojure-for-the-brave-and-true/">Clojure for the Brave and True</a>.</p>
+<h2 id="chapter-one">Chapter One</h2>
+<p><a href="https://www.braveclojure.com/getting-started/">Link</a></p>
+<h3 id="introduction">Introduction</h3>
+<p>To start off, I love the more laid back approach to learning a language the book provides. From the first chapter,
+I was giggling away at the way this book lays stuff out.</p>
+<p>I was also so happy to find out about the &ldquo;4 Labyrinths&rdquo;. Those Labyrinths being:</p>
+<ul>
+<li>Tooling</li>
+<li>Language (syntax, semantics, data structures)</li>
+<li>Artifacts (building projects, distributing them, etc.)</li>
+<li>Mindset</li>
+</ul>
+<p>Earlier in my career I tried learning C++ by doing, instead of reading a dry C++ book, and it was quite a slope.
+I had trouble finding good material on how to approach getting my first programs to run, how I should structure my programs,
+how Makefiles work etc.</p>
+<p>It&rsquo;s a refreshing thing to know that from the get-go these things are getting sorted out.</p>
+<h3 id="getting-started">Getting started</h3>
+<p>Even though the beginning steps were familiar to me due to having worked with Clojure, I still enjoyed
+being called a little teapot! I&rsquo;ll try to do all of the exercised even if they are obvious to me.</p>
+<p>I was a bit hesitant as the author was bringing up Emacs. As a avid Vim user, I really didn&rsquo;t feel like
+delving into emacs at this point. Luckily it&rsquo;s only optional, and the author even listed nice resources for other
+editors too.</p>
+<p>I had actually set up my dev environment for Clojure on Vim earlier while trying stuff out, so I was happy running with the
+following setup:</p>
+<ul>
+<li><a href="https://github.com/clojure-lsp/clojure-lsp">The Clojure LSP</a></li>
+<li><a href="https://github.com/Olical/conjure">Conjure</a></li>
+<li><a href="https://neovim.io/">NeoVim 0.5.x</a></li>
+</ul>
+<p>And after reading through the Conjure bindings from <code>:help conjure-mappings</code>, I was all set. I had a REPL
+that works with Vim, and i can evaluate forms with a simple mapping (space + ee) in my case.</p>
+<p>I however still went through the emacs chapter out of interest. Know thy enemy and so on.</p>
+<p>Yay! Chapter one has been cleared by this little teapot. Next onto Chapters 2 and 3.</p>
+<h2 id="chapter-two">Chapter Two</h2>
+<p><a href="https://www.braveclojure.com/basic-emacs/">Link</a></p>
+<p>As this is the emacs chapter, I will mostly be scimming through it. I&rsquo;ve always been interested in emacs,
+but vim is currently my editor of choice and I&rsquo;m not changing at the moment.</p>
+<p>I really enjoy how in depth the book goes into learning emacs. This must be a great experience for someone
+picking up the editor and doing their journey through the book with it, learning emacs AND Clojure while they&rsquo;re at it.</p>
+<h2 id="chapter-three">Chapter Three</h2>
+<p><a href="https://www.braveclojure.com/do-things/">Link</a></p>
+<h3 id="syntax">Syntax</h3>
+<p>I love how the book just jumps straight into action. We are promised fun, we get fun. We get to make hobbits
+and hit them! What could be better.</p>
+<p>I can&rsquo;t help but chuckle at the way this book is written. Everything from the tone of every sentence to the
+parantheses mines beneath Massachusetts. As someone who doesn&rsquo;t really read books, this is some captivating writing.</p>
+<p>I also have to add: I absolutely love the Panda with the Dust buster.</p>
+<p>Allright let&rsquo;s get into the meat of things, the code.</p>
+<p>I like how we get straight into things, and start working with the most basic (and important) language features:
+iteration and conditionals. The addition of how-and-why to use the <code>do</code> keyword was extremely helpful too</p>
+<p>As someone who works with both Javascript and Java, I enjoy that Clojure has the <code>truthy</code> and <code>falsey</code> logical
+representations. Too many times I&rsquo;ve had to write <code>if (something == null)</code> in Java. No more!</p>
+<p>As someone a bit familiar with Clojure, and familiar with Functional programming, it&rsquo;s clear to me, but it&rsquo;s really nice
+that we are approaching immutability from the get-go and that comes out clearly from the use of the word &ldquo;bind&rdquo; as the author explains.</p>
+<p>It&rsquo;s also nice to follow along the explanations, since every time a new keyword is thrown at us, we are also told <em>when</em>
+we are told what it actually means, instead of just hoping that it gets explained to us at some point, or god forbid,
+is expected for us to know.</p>
+<h3 id="data-structures">Data structures</h3>
+<p>When learning a new language, it&rsquo;s quite important to know about the data structures used by the language. Especially when working
+with such a different beast like Clojure, it&rsquo;s really good to familiarize yourself with the new data structures and their names.</p>
+<p>As I saw the first use of keywords, I was wondering why they were just scooted over, but here we are luckily told that it&rsquo;ll
+be explained soon. From what I remember from my Clojure times, Keywords are quite a big part of development.</p>
+<h4 id="maps">Maps</h4>
+<p>The maps were nicely explained but I found maybe a bit lacking on the explanation on why use <code>get</code> if you can just look up the value by omitting
+it and using the map itself as the operator.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-clj" data-lang="clj">({<span style="color:#e6db74">:name</span> <span style="color:#e6db74">&#34;The Human Coffeepot&#34;</span>} <span style="color:#e6db74">:name</span>)
+<span style="color:#75715e">; vs</span>
+(get {<span style="color:#e6db74">:name</span> <span style="color:#e6db74">&#34;The Human Coffeepot&#34;</span>} <span style="color:#e6db74">:name</span>)
+</code></pre></div><h4 id="keywords">Keywords</h4>
+<p>The next confusing step was that the function above was turned upside down and it still works</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-clj" data-lang="clj">(<span style="color:#e6db74">:a</span> { <span style="color:#e6db74">:a</span> <span style="color:#ae81ff">1</span> <span style="color:#e6db74">:b</span> <span style="color:#ae81ff">2</span>})
+<span style="color:#75715e">; =&gt; 1</span>
+</code></pre></div><p>Maybe that&rsquo;s just the magic of Clojure.</p>
+<p>Well the line</p>
+<blockquote>
+<p>Using a keyword as a function is pleasantly succinct, and Real Clojurists do it all the time. You should do it too!</p>
+</blockquote>
+<p>made me trust that I should just go with the keyword approach for all of this. It&rsquo;s great to get a straight up recommendation.</p>
+<h4 id="vectors-and-lists">Vectors and Lists</h4>
+<p>Going into the the next section, it&rsquo;s again really nice to get a affirmative recommendation from the author
+on where to use vectors, and where to use lists. When learning a new language I seem to always struggle to find the
+best data structure for each case and it can become a burdain. This really eases that burdain.</p>
+<h4 id="sets">Sets</h4>
+<p>The quick scim through sets was plenty enough for someone who know the jist of how sets work in other languages.</p>
+<p>Having examples of usage and also value retrieval from all of these data structures is extremely helpful.</p>
+<p>I&rsquo;ve been enjoying the simplicity of Clojure and how you can do so much with so little. I&rsquo;ve actually watched a couple of
+Clojure talks by Rich Hickey himself, and grown to love how you can do so much with such a small set of language details to remember.
+It reminds me of the <a href="https://en.wikipedia.org/wiki/Natural_semantic_metalanguage">Natural Semantic Metalanguage theory</a>, in which you can
+reduce a lexicon down to a set of semantic primitives, which you can use to explain any word in the language. For my finnish readers there&rsquo;s
+a finnish version of it <a href="https://www.65sanaa.fi/">called &ldquo;65 Words&rdquo; here</a>.</p>
+<h4 id="functions">Functions</h4>
+<p>Allright. That&rsquo;s enough about data structures, next we&rsquo;ll go into the meat of programming: Functions.</p>
+<p>We just go straight into the crazy syntax of Lisps and how you can just create there horrid monsters like</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-clj" data-lang="clj">((and (= <span style="color:#ae81ff">1</span> <span style="color:#ae81ff">1</span>) +) <span style="color:#ae81ff">1</span> <span style="color:#ae81ff">2</span> <span style="color:#ae81ff">3</span>)
+<span style="color:#75715e">; =&gt; 6</span>
+
+((first [+ <span style="color:#ae81ff">0</span>]) <span style="color:#ae81ff">1</span> <span style="color:#ae81ff">2</span> <span style="color:#ae81ff">3</span>)
+<span style="color:#75715e">; =&gt; 6</span>
+</code></pre></div><p>However, like watching a car crash in slow motion, I can&rsquo;t turn and look away. It&rsquo;s extremely intriguing how you can take
+such a simple way of creating functions, and take it so far to create this kind of funky monsters. It makes you wonder
+what kind of actually useful function you could create with the same approach.</p>
+<p>The examples given about evaluation, and how the evaluation is done, step by step is really helpful to help understand
+how to structure your code in Clojure and how to make the best use of it. Going into how some <code>special forms</code> bend the rules
+a bit is something that is best done with examples, and those are provided.</p>
+<p>As someone who tends to write a lot of JavaDoc and JSDoc to explain what&rsquo;s going on, I appriciate the time the author put in
+to actually highlight the DocString as a equally important part of the function in the &ldquo;Defining Functions&rdquo; -section.</p>
+<h5 id="arity-overloading">Arity overloading</h5>
+<p>I had completely forgotten about this gem. This is one of the cool things that got me into Clojure, and I really enjoy
+how simple it&rsquo;s made in Clojure to do this.</p>
+<p>Simply put, you can handle the function in different ways depending on the number of args given e.g.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-clj" data-lang="clj">(<span style="color:#66d9ef">defn </span>x-chop
+  <span style="color:#e6db74">&#34;Describe the kind of chop you&#39;re inflicting on someone&#34;</span>
+  ([name chop-type]
+     (str <span style="color:#e6db74">&#34;I &#34;</span> chop-type <span style="color:#e6db74">&#34; chop &#34;</span> name <span style="color:#e6db74">&#34;! Take that!&#34;</span>))
+  ([name]
+     (<span style="color:#a6e22e">x-chop</span> name <span style="color:#e6db74">&#34;karate&#34;</span>)))
+</code></pre></div><p>Working with Java, I often run into situations where I&rsquo;d like to do this, and I often do, but the syntax to achieve it is so much more cumbersome.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">doThing</span><span style="color:#f92672">(</span>WayOfDoing way<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+    <span style="color:#75715e">// Apply way on thing
+</span><span style="color:#75715e"></span><span style="color:#f92672">}</span>
+
+<span style="color:#66d9ef">void</span> <span style="color:#a6e22e">doThing</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+    doThing<span style="color:#f92672">(</span>WayOfDoing<span style="color:#f92672">.</span><span style="color:#a6e22e">DEFAULT_WAY</span><span style="color:#f92672">);</span>
+<span style="color:#f92672">}</span>
+</code></pre></div><h4 id="destructuring">Destructuring</h4>
+<p>Ah. A familiar term from JavaScript land. This should be a nice refresher on destructuring objects.</p>
+<p>Finding out that you can destructure lists and vectors was expected, but the use of the rest parameter here is a nice
+reminder for developers that you can do that too.</p>
+<p>Destructuring maps is quite cool, as it kind of works in the same premise as fetching a value by keyword from a map.
+The syntax however is something I really need to freshen my memory on. I can&rsquo;t seem to remember when to add what kinds of
+parentheses around the function arguments.</p>
+<p>Example given by the book on map destructuring:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-clj" data-lang="clj">(<span style="color:#66d9ef">defn </span>announce-treasure-location
+<span style="color:#960050;background-color:#1e0010">➊</span>   [{lat <span style="color:#e6db74">:lat</span> lng <span style="color:#e6db74">:lng</span>}]
+  (println (str <span style="color:#e6db74">&#34;Treasure lat: &#34;</span> lat))
+  (println (str <span style="color:#e6db74">&#34;Treasure lng: &#34;</span> lng)))
+
+(<span style="color:#a6e22e">announce-treasure-location</span> {<span style="color:#e6db74">:lat</span> <span style="color:#ae81ff">28.22</span> <span style="color:#e6db74">:lng</span> <span style="color:#ae81ff">81.33</span>})
+<span style="color:#75715e">; =&gt; Treasure lat: 28.22</span>
+<span style="color:#75715e">; =&gt; Treasure lng: 81.33</span>
+</code></pre></div><p>What really wooed me over was the <code>:keys</code> -keyword you can use in your function parameter declaration. It&rsquo;s so simple, yet so effective!</p>
+<pre><code>(defn announce-treasure-location
+  [{:keys [lat lng]}]
+  (println (str &quot;Treasure lat: &quot; lat))
+  (println (str &quot;Treasure lng: &quot; lng)))
+</code></pre><p>The <code>:as</code> keyword also shows that all of these cases have really been thought through. Sometimes you want to have the full object AND
+destructure some of the values, especially when working in functional languages.</p>
+<h4 id="anonymous-functions">Anonymous functions</h4>
+<p>Oh boy. I&rsquo;ve been working so much with Javascript and Java Lambdas that I&rsquo;ve grown extremely accustomed to anonymous functions.
+I can remember however, in 2018 when learning Clojure, I was so weirded out about &ldquo;Why would you use anonymous functions&rdquo;. Oh silly 2018 me.</p>
+<p>Reader functions are something that I really need to look into. They look weird and I don&rsquo;t really understand them.</p>
+<p>Edit: Okay yeah Matsuu from 5 minutes into the future. The explanation on how to use the Reader functions is quite good
+and I can imagine using them has their place. However I think I&rsquo;ll not be littering my codebase with those yet.</p>
+<h3 id="ending-words">Ending words</h3>
+<p>Allright. We got through the teaching part of Chapter 3. As it&rsquo;s 23.25 over here and I&rsquo;ve got work tomorrow, I&rsquo;ll be leaving the coding part
+for next time.</p>
+<p>I&rsquo;ll be documenting my learnings in this blog as I go forwards as writing them out helps me internalize the information better myself.</p>
+<p>Until next time! And remember to be brave!</p>
+
+    </div>
+    
+
+    
+      
+    
+  </div>
+
+      </div>
+
+      
+        <footer class="footer">
+  <div class="footer__inner">
+    
+      <div class="copyright copyright--user"><a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener">CC BY-NC 4.0</a></div>
+      
+  </div>
+</footer>
+
+<script src="/assets/main.js"></script>
+<script src="/assets/prism.js"></script>
+
+
+      
+    </div>
+
+    
+  </body>
+</html>
