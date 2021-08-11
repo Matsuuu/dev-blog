@@ -2,6 +2,12 @@
 title: "Re-Learning Clojure. Part one: Getting my feet wet"
 date: 2021-08-08T23:26:00+02:00
 ---
+<script>
+setTimeout(() => {
+    Prism.languages.clojure = { comment: /;.*/, string: { pattern: /"(?:[^"\\]|\\.)*"/, greedy: !0 }, operator: /(?:::|[:|'])\b[a-z][\w*+!?-]*\b/i, keyword: { pattern: /([^\w+*'?-])(?:def|if|do|let|\.\.|quote|var|->>|->|fn|loop|recur|throw|try|monitor-enter|\.|new|set!|def-|defn|defn-|defmacro|defmulti|defmethod|defstruct|defonce|declare|definline|definterface|defprotocol|==|defrecord|>=|deftype|<=|defproject|ns|\*|\+|-|\/|<|=|>|accessor|agent|agent-errors|aget|alength|all-ns|alter|and|append-child|apply|array-map|aset|aset-boolean|aset-byte|aset-char|aset-double|aset-float|aset-int|aset-long|aset-short|assert|assoc|await|await-for|bean|binding|bit-and|bit-not|bit-or|bit-shift-left|bit-shift-right|bit-xor|boolean|branch\?|butlast|byte|cast|char|children|class|clear-agent-errors|comment|commute|comp|comparator|complement|concat|conj|cons|constantly|cond|if-not|construct-proxy|contains\?|count|create-ns|create-struct|cycle|dec|deref|difference|disj|dissoc|distinct|doall|doc|dorun|doseq|dosync|dotimes|doto|double|down|drop|drop-while|edit|end\?|ensure|eval|every\?|false\?|ffirst|file-seq|filter|find|find-doc|find-ns|find-var|first|float|flush|for|fnseq|frest|gensym|get-proxy-class|get|hash-map|hash-set|identical\?|identity|if-let|import|in-ns|inc|index|insert-child|insert-left|insert-right|inspect-table|inspect-tree|instance\?|int|interleave|intersection|into|into-array|iterate|join|key|keys|keyword|keyword\?|last|lazy-cat|lazy-cons|left|lefts|line-seq|list\*|list|load|load-file|locking|long|macroexpand|macroexpand-1|make-array|make-node|map|map-invert|map\?|mapcat|max|max-key|memfn|merge|merge-with|meta|min|min-key|name|namespace|neg\?|newline|next|nil\?|node|not|not-any\?|not-every\?|not=|ns-imports|ns-interns|ns-map|ns-name|ns-publics|ns-refers|ns-resolve|ns-unmap|nth|nthrest|or|parse|partial|path|peek|pop|pos\?|pr|pr-str|print|print-str|println|println-str|prn|prn-str|project|proxy|proxy-mappings|quot|rand|rand-int|range|re-find|re-groups|re-matcher|re-matches|re-pattern|re-seq|read|read-line|reduce|ref|ref-set|refer|rem|remove|remove-method|remove-ns|rename|rename-keys|repeat|replace|replicate|resolve|rest|resultset-seq|reverse|rfirst|right|rights|root|rrest|rseq|second|select|select-keys|send|send-off|seq|seq-zip|seq\?|set|short|slurp|some|sort|sort-by|sorted-map|sorted-map-by|sorted-set|special-symbol\?|split-at|split-with|str|string\?|struct|struct-map|subs|subvec|symbol|symbol\?|sync|take|take-nth|take-while|test|time|to-array|to-array-2d|tree-seq|true\?|union|up|update-proxy|val|vals|var-get|var-set|var\?|vector|vector-zip|vector\?|when|when-first|when-let|when-not|with-local-vars|with-meta|with-open|with-out-str|xml-seq|xml-zip|zero\?|zipmap|zipper)(?=[^\w+*'?-])/, lookbehind: !0 }, boolean: /\b(?:true|false|nil)\b/, number: /\b[\da-f]+\b/i, punctuation: /[{}\[\](),]/ };
+    Prism.highlightAll();
+});
+</script>
 
 After following my friend [Juhis's series on learning rust](https://hamatti.org/posts/learning-rust-pattern-matching/),
 I decided I should pick up Clojure again. And while I'm at it, I want to revitalize my blog writing, so here we are: Two stones with one bird.
@@ -116,7 +122,7 @@ be explained soon. From what I remember from my Clojure times, Keywords are quit
 The maps were nicely explained but I found maybe a bit lacking on the explanation on why use `get` if you can just look up the value by omitting
 it and using the map itself as the operator.
 
-```clj
+```clojure
 ({:name "The Human Coffeepot"} :name)
 ; vs
 (get {:name "The Human Coffeepot"} :name)
@@ -126,7 +132,7 @@ it and using the map itself as the operator.
 
 The next confusing step was that the function above was turned upside down and it still works
 
-```clj
+```clojure
 (:a { :a 1 :b 2})
 ; => 1
 ```
@@ -165,7 +171,7 @@ Allright. That's enough about data structures, next we'll go into the meat of pr
 
 We just go straight into the crazy syntax of Lisps and how you can just create there horrid monsters like
 
-```clj
+```clojure
 ((and (= 1 1) +) 1 2 3)
 ; => 6
 
@@ -191,7 +197,7 @@ how simple it's made in Clojure to do this.
 
 Simply put, you can handle the function in different ways depending on the number of args given e.g.
 
-```clj
+```clojure
 (defn x-chop
   "Describe the kind of chop you're inflicting on someone"
   ([name chop-type]
@@ -225,9 +231,9 @@ parentheses around the function arguments.
 
 Example given by the book on map destructuring:
 
-```clj
+```clojure
 (defn announce-treasure-location
-➊   [{lat :lat lng :lng}]
+  [{lat :lat lng :lng}]
   (println (str "Treasure lat: " lat))
   (println (str "Treasure lng: " lng)))
 
@@ -238,12 +244,13 @@ Example given by the book on map destructuring:
 
 What really wooed me over was the `:keys` -keyword you can use in your function parameter declaration. It's so simple, yet so effective!
 
-```
+```clojure
 (defn announce-treasure-location
   [{:keys [lat lng]}]
   (println (str "Treasure lat: " lat))
   (println (str "Treasure lng: " lng)))
 ```
+
 
 The `:as` keyword also shows that all of these cases have really been thought through. Sometimes you want to have the full object AND
 destructure some of the values, especially when working in functional languages.
