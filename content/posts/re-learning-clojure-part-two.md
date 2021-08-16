@@ -26,6 +26,11 @@ Here's a quick webp to showcase what my editor looks like while writing some of 
 I change up where I set up the REPL output, but currently it's on the right side as a log file. Some of the REPL actions also get 
 displayed inline with the code. This is achieved with Conjure.
 
+And the setup is also easy: Just run `lein repl` in one tmux window, and open up vim in another.
+
+I could set it up so that the repl runs when I open up Vim but I don't really want to bind that kind of
+things into my vim config.
+
 
 ---
 
