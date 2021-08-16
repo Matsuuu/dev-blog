@@ -1,6 +1,6 @@
 ---
 title: "Re-Learning Clojure. Part two: High octane action"
-date: 2021-08-11T19:00:00+02:00
+date: 2021-08-16T18:00:00+02:00
 ---
 
 Re-Learning Clojure is a blog series of my adventures through [Clojure for te Brave and True](https://www.braveclojure.com/). 
@@ -34,7 +34,7 @@ things into my vim config.
 
 ---
 
-#### So many parantheses to remember
+### So many parantheses to remember
 
 Going through the usages of `let`, a kind of binding, I already know I'm going to be getting in trouble with
 knowing how many sets of braces and parantheses I need to put into declarations.
@@ -64,8 +64,8 @@ of Clojure, which are clearly different from the other languages I've written wi
 One of the big things I remember from Clojure is recursion. As we are not really allowed to have mutable variables, we need to utilize
 recursion to iterate through changing values.
 
-The first type of recursion we're introduced here is the `loop` - `recur` way of doing recursion. I like how clear it is once you
-realize how the work in tandem.
+The first type of recursion we're introduced here is the `loop` - `recur` way of doing recursion. I like how clear 
+it is once you realize how they work in tandem.
 
 ```clojure
 (loop [iteration 0]
@@ -93,6 +93,118 @@ can just put a `#` before a string and now it's a Regex!
 
 ```
 
+### The Clojure language
+
+A thing I always have loved about Clojure is, that alot of the things you build with it, heck even most of the
+core library is built from small pieces of code, which function perfectly together, can be chained together,
+and do one thing and do it well.
+
+Where as a lot of languages have a lot of vocabluary you need to learn. There's the `class`es, `void`s, and `interface`s, 
+there's only 24 of those in the whole Clojure language. I repeat: *24*.
+
+Those can even be easily listed in the REPL
+
+```clojure
+(keys (. clojure.lang.Compiler specials))
+; => (& monitor-exit case* try reify* finally loop* do letfn* if clojure.core/import* new deftype* let* fn* recur set! . var quote catch throw monitor-enter def)
+
+
+(count (keys (. clojure.lang.Compiler specials)))
+; => 24
+```
+
+### Getting back to the symmetrizer
+
+Looking at the symmetrizer with fresh eyes, it really looks simpler than before. Getting into the
+head-tail mindset when iterating elements is something that might take some time but I've worked with recursion in other
+languages plenty so I'm sure it'll go smoothly!
+
+
+### Reduce the effort
+
+Coming from Javascript, seeing Reduce is a familiar sight. What's different here is that with Functional
+languages, it seems to be welcome with open arms [unlike with JavaScript](https://twitter.com/jaffathecake/status/1213077702300852224?lang=en).
+
+Of course when you're working more and more with recursive patterns and doing operations on lists, 
+function like `reduce` and `map` were bound to peek their heads out.
+
+What irks me a little bit is the order of parameters here though:
+
+```clojure
+; No initial value
+(reduce + [1 2 3 4]) ; 10
+
+; Initial value of 15
+(reduce + 15 [1 2 3 4]) ; 25
+```
+
+Working a lot with JavaScript, I'm used to giving the initial value last, instead of first.
+
+```javascript
+const sum = [1,2,3,4].reduce((acc, num) => acc += num, 15); // 25
+```
+
+I guess this is just a case for getting used to, and luckily with the REPL workflow, it's really fast to try and fail!
+
+
+Going through the example of creating our own reducer was quite a mouthful though.
+
+```clojure
+(defn my-reduce
+  ([f initial coll]
+    (loop [result initial
+           remaining coll]
+        (if (empty? remaining)
+            result
+            (recur (f result (first remaining)) (rest remaining)))))
+  ([f [head & tail]]
+    (my-reduce f head tail)))
+```
+
+Strangely enough, like a abstractionist painting: The more I stare at it, the more it starts to make sense.
+
+
+### Today I woke up and chose violence
+
+Going into the final parts of this chapter, I expect we're putting all of we've learned together.
+
+Having developed games with a weighed "AI" system for the enemies, where different attacks have different
+chances of occuring, this hit-determining function seemed awfully familiar.
+
+```clojure
+(defn hit
+  [asym-body-parts]
+  (let [sym-parts (better-symmetrize-body-parts asym-body-parts)
+        body-part-size-sum (reduce + (map :size sym-parts))
+        target (rand body-part-size-sum)]
+    (loop [[part & remaining] sym-parts
+           accumulated-size (:size part)]
+      (if (> accumulated-size target)
+        part
+        (recur remaining (+ accumulated-size (:size (first remaining))))))))
+```
+
+Now we're just going to be choosing violence and evaluating the forms
+
+```clojure
+(hit asym-hobbit-body-parts) ; {:name "left-thigh", :size 4}
+```
+
+... Not too bad. Our hobbit will live.
+
+
+### Summary
+
+Phew... That was a journey and a half. I feel like this chapter took forever. Well it pretty much did. I started
+writing about it in the previous post and it took this whole post to finish.
+
+I'm aware that my learning clojure is majorly slowed down by the fact that I need to write everything down but 
+at the same time I feel like I'm developing multiple skills at the same time, while 
+processing what I've learned more thoroughly.
+
+I'm excited for what's next, as Chapter 4 will be about Clojure's Core functions and 5 about Function mindset!
+
+For now I'll be doing the books exercises, and going forwards to chapter 4! Until next time!
 
 <script>
 setTimeout(() => {
