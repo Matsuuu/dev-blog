@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    
+      <title>
+        Re-Learning Clojure. Part two: High octane action ::
+        Matsu — Abusing Javascript and The Web platform
+      </title>
+    
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta
+  name="description"
+  content="Re-Learning Clojure is a blog series of my adventures through Clojure for te Brave and True.
+In this series I&amp;rsquo;m trying to re-learn clojure and deepen my skills in the language.
+Putting it all together Link
+Let&amp;rsquo;s get straight into the action, continuing from where we left off.
+After fighting a bit with some Vim autocommands, I got auto-pairs working. With Clojure I feel it&amp;rsquo;s beneficial to have the brackets close themselves by default."
+/>
+<meta
+  name="keywords"
+  content=""
+/>
+<meta name="robots" content="noodp" />
+<link rel="canonical" href="/posts/re-learning-clojure-part-two/" />
+
+
+
+
+
+<link rel="stylesheet" href="/assets/style.css" />
+
+<link rel="stylesheet" href="/style.css" />
+
+
+<link
+  rel="apple-touch-icon-precomposed"
+  sizes="144x144"
+  href="/img/apple-touch-icon-144-precomposed.png"
+/>
+<link rel="shortcut icon" href="/img/favicon.png" />
+
+
+<link href="/assets/fonts/Inter-Italic.woff2" rel="preload" type="font/woff2" as="font" crossorigin="">
+<link href="/assets/fonts/Inter-Regular.woff2" rel="preload" type="font/woff2" as="font" crossorigin="">
+<link href="/assets/fonts/Inter-Medium.woff2" rel="preload" type="font/woff2" as="font" crossorigin="">
+<link href="/assets/fonts/Inter-MediumItalic.woff2" rel="preload" type="font/woff2" as="font" crossorigin="">
+<link href="/assets/fonts/Inter-Bold.woff2" rel="preload" type="font/woff2" as="font" crossorigin="">
+<link href="/assets/fonts/Inter-BoldItalic.woff2" rel="preload" type="font/woff2" as="font" crossorigin="">
+
+
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="/"/>
+
+<meta name="twitter:title" content="Re-Learning Clojure. Part two: High octane action"/>
+<meta name="twitter:description" content="Re-Learning Clojure is a blog series of my adventures through Clojure for te Brave and True.
+In this series I&rsquo;m trying to re-learn clojure and deepen my skills in the language.
+Putting it all together Link
+Let&rsquo;s get straight into the action, continuing from where we left off.
+After fighting a bit with some Vim autocommands, I got auto-pairs working. With Clojure I feel it&rsquo;s beneficial to have the brackets close themselves by default."/>
+
+
+
+<meta property="og:title" content="Re-Learning Clojure. Part two: High octane action" />
+<meta property="og:description" content="Re-Learning Clojure is a blog series of my adventures through Clojure for te Brave and True.
+In this series I&rsquo;m trying to re-learn clojure and deepen my skills in the language.
+Putting it all together Link
+Let&rsquo;s get straight into the action, continuing from where we left off.
+After fighting a bit with some Vim autocommands, I got auto-pairs working. With Clojure I feel it&rsquo;s beneficial to have the brackets close themselves by default." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/posts/re-learning-clojure-part-two/" /><meta property="og:image" content="/"/><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2021-08-16T18:00:00+02:00" />
+<meta property="article:modified_time" content="2021-08-16T18:00:00+02:00" /><meta property="og:site_name" content="Matsu" />
+
+
+
+
+
+
+
+  </head>
+  <body class="dark-theme">
+    <div class="container">
+      <header class="header">
+  <span class="header__inner">
+    <a
+  href="/"
+  class="logo"
+  style="text-decoration: none;"
+>
+  
+    <span class="logo__mark"><svg xmlns="http://www.w3.org/2000/svg" class="greater-icon" viewBox="0 0 44 44">
+  <path fill="none" d="M15 8l14.729 14.382L15 35.367" />
+</svg>
+</span>
+    <span class="logo__text"
+      >&lt;matsu-blog&gt;</span
+    >
+    <span class="logo__cursor"></span>
+  
+</a>
+
+    <span class="header__right">
+      
+        <nav class="menu">
+  <ul class="menu__inner menu__inner--desktop">
+    
+      
+        
+          <li><a href="/posts">Blog</a></li>
+        
+      
+    
+  </ul>
+
+  <ul class="menu__inner menu__inner--mobile">
+    
+      
+        <li><a href="/posts">Blog</a></li>
+      
+    
+  </ul>
+</nav>
+
+        <span class="menu-trigger">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M0 0h24v24H0z" fill="none" />
+            <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z" />
+          </svg>
+        </span>
+      
+      <span class="theme-toggle">
+        <svg
+  class="theme-toggler"
+  width="24"
+  height="24"
+  viewBox="0 0 48 48"
+  fill="none"
+  xmlns="http://www.w3.org/2000/svg"
+>
+  <path
+    d="M22 41C32.4934 41 41 32.4934 41 22C41 11.5066 32.4934 3 22
+  3C11.5066 3 3 11.5066 3 22C3 32.4934 11.5066 41 22 41ZM7 22C7
+  13.7157 13.7157 7 22 7V37C13.7157 37 7 30.2843 7 22Z"
+  />
+</svg>
+
+      </span>
+    </span>
+  </span>
+</header>
+
+
+      <div class="content">
+        
+  
+  
+
+  <div class="post">
+    <h1 class="post-title">Re-Learning Clojure. Part two: High octane action</h1>
+    <div class="post-meta">
+      
+        <span class="post-date">
+          2021-08-16
+        </span>
+
+        
+          
+        
+      
+
+      
+
+
+      
+    </div>
+
+    
+
+    
+
+    <div class="post-content">
+      
+      <p>Re-Learning Clojure is a blog series of my adventures through <a href="https://www.braveclojure.com/">Clojure for te Brave and True</a>.</p>
+<p>In this series I&rsquo;m trying to re-learn clojure and deepen my skills in the language.</p>
+<h2 id="putting-it-all-together">Putting it all together</h2>
+<p><a href="https://www.braveclojure.com/do-things/#Pulling_It_All_Together">Link</a></p>
+<p>Let&rsquo;s get straight into the action, continuing from where we left off.</p>
+<p>After fighting a bit with some Vim autocommands, I got <a href="https://github.com/jiangmiao/auto-pairs">auto-pairs</a> working. With Clojure I feel
+it&rsquo;s beneficial to have the brackets close themselves by default. I don&rsquo;t really enjoy this in other languages but here it&rsquo;s
+something I&rsquo;m at least giving a try.</p>
+<p>Some of you might be interested in what my development setup looks like.</p>
+<p>Here&rsquo;s a quick webp to showcase what my editor looks like while writing some of the more basic examples.</p>
+<p><img src="/clojure-dev.webp" alt="Clojure Dev"></p>
+<p>I change up where I set up the REPL output, but currently it&rsquo;s on the right side as a log file. Some of the REPL actions also get
+displayed inline with the code. This is achieved with Conjure.</p>
+<p>And the setup is also easy: Just run <code>lein repl</code> in one tmux window, and open up vim in another.</p>
+<p>I could set it up so that the repl runs when I open up Vim but I don&rsquo;t really want to bind that kind of
+things into my vim config.</p>
+<hr>
+<h3 id="so-many-parantheses-to-remember">So many parantheses to remember</h3>
+<p>Going through the usages of <code>let</code>, a kind of binding, I already know I&rsquo;m going to be getting in trouble with
+knowing how many sets of braces and parantheses I need to put into declarations.</p>
+<p>Take this piece of code for example:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-clojure" data-lang="clojure">(<span style="color:#66d9ef">let </span>[[first-dog <span style="color:#f92672">&amp;</span> rest-of-the-dogs] dalmatian-list]
+    [first-dog rest-of-the-dogs])   
+<span style="color:#75715e">; =&gt; [&#34;Pongo&#34; (&#34;Perdita&#34; &#34;Puppy 1&#34; &#34;Puppy 2&#34;)]</span>
+</code></pre></div><p>The fact that you can assign multiple variables from a single list, and the amount of square brackets surrounding them
+is going to be something I know I&rsquo;ll be fighting with.</p>
+<hr>
+<h4 id="muscle-memory-is-best-memory">Muscle memory is best memory</h4>
+<p>I&rsquo;m trying out all of the code examples shown in the book, and trying to work on remembering the mappings used
+to evaluate forms, outer forms, visually selected forms etc. I&rsquo;ll try to improve my vim movement to match the demands
+of Clojure, which are clearly different from the other languages I&rsquo;ve written with.</p>
+<h3 id="all-the-kinds-of-recursion">All the kinds of recursion</h3>
+<p>One of the big things I remember from Clojure is recursion. As we are not really allowed to have mutable variables, we need to utilize
+recursion to iterate through changing values.</p>
+<p>The first type of recursion we&rsquo;re introduced here is the <code>loop</code> - <code>recur</code> way of doing recursion. I like how clear
+it is once you realize how they work in tandem.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-clojure" data-lang="clojure">(<span style="color:#66d9ef">loop </span>[iteration <span style="color:#ae81ff">0</span>]
+  (println (str <span style="color:#e6db74">&#34;Iteration &#34;</span> iteration))
+  (<span style="color:#66d9ef">if </span>(&gt; iteration <span style="color:#ae81ff">3</span>)
+    (println <span style="color:#e6db74">&#34;Goodbye!&#34;</span>)
+    (<span style="color:#a6e22e">recur</span> (inc iteration))))
+<span style="color:#75715e">; =&gt; Iteration 0</span>
+<span style="color:#75715e">; =&gt; Iteration 1</span>
+<span style="color:#75715e">; =&gt; Iteration 2</span>
+<span style="color:#75715e">; =&gt; Iteration 3</span>
+<span style="color:#75715e">; =&gt; Iteration 4</span>
+<span style="color:#75715e">; =&gt; Goodbye!</span>
+</code></pre></div><h3 id="matchy-matchies">Matchy matchies.</h3>
+<p>I like how simple the regexes are made in Clojure. Coming from Java, with Pattern and Match classes, and Javascript, with RegExp -classes, I like how you
+can just put a <code>#</code> before a string and now it&rsquo;s a Regex!</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-clojure" data-lang="clojure"><span style="color:#75715e">; Find if the string &#34;left-eye&#34; starts with &#34;left-&#34; </span>
+(re-find <span style="color:#f92672">#</span><span style="color:#e6db74">&#34;^left-&#34;</span> <span style="color:#e6db74">&#34;left-eye&#34;</span>)
+<span style="color:#75715e">; =&gt; &#34;left-&#34;</span>
+
+</code></pre></div><h3 id="the-clojure-language">The Clojure language</h3>
+<p>A thing I always have loved about Clojure is, that alot of the things you build with it, heck even most of the
+core library is built from small pieces of code, which function perfectly together, can be chained together,
+and do one thing and do it well.</p>
+<p>Where as a lot of languages have a lot of vocabluary you need to learn. There&rsquo;s the <code>class</code>es, <code>void</code>s, and <code>interface</code>s,
+there&rsquo;s only 24 of those in the whole Clojure language. I repeat: <em>24</em>.</p>
+<p>Those can even be easily listed in the REPL</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-clojure" data-lang="clojure">(keys (<span style="color:#66d9ef">. </span>clojure.lang.Compiler specials))
+<span style="color:#75715e">; =&gt; (&amp; monitor-exit case* try reify* finally loop* do letfn* if clojure.core/import* new deftype* let* fn* recur set! . var quote catch throw monitor-enter def)</span>
+
+
+(count (keys (<span style="color:#66d9ef">. </span>clojure.lang.Compiler specials)))
+<span style="color:#75715e">; =&gt; 24</span>
+</code></pre></div><h3 id="getting-back-to-the-symmetrizer">Getting back to the symmetrizer</h3>
+<p>Looking at the symmetrizer with fresh eyes, it really looks simpler than before. Getting into the
+head-tail mindset when iterating elements is something that might take some time but I&rsquo;ve worked with recursion in other
+languages plenty so I&rsquo;m sure it&rsquo;ll go smoothly!</p>
+<h3 id="reduce-the-effort">Reduce the effort</h3>
+<p>Coming from Javascript, seeing Reduce is a familiar sight. What&rsquo;s different here is that with Functional
+languages, it seems to be welcome with open arms <a href="https://twitter.com/jaffathecake/status/1213077702300852224?lang=en">unlike with JavaScript</a>.</p>
+<p>Of course when you&rsquo;re working more and more with recursive patterns and doing operations on lists,
+function like <code>reduce</code> and <code>map</code> were bound to peek their heads out.</p>
+<p>What irks me a little bit is the order of parameters here though:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-clojure" data-lang="clojure"><span style="color:#75715e">; No initial value</span>
+(reduce + [<span style="color:#ae81ff">1</span> <span style="color:#ae81ff">2</span> <span style="color:#ae81ff">3</span> <span style="color:#ae81ff">4</span>]) <span style="color:#75715e">; 10</span>
+
+<span style="color:#75715e">; Initial value of 15</span>
+(reduce + <span style="color:#ae81ff">15</span> [<span style="color:#ae81ff">1</span> <span style="color:#ae81ff">2</span> <span style="color:#ae81ff">3</span> <span style="color:#ae81ff">4</span>]) <span style="color:#75715e">; 25</span>
+</code></pre></div><p>Working a lot with JavaScript, I&rsquo;m used to giving the initial value last, instead of first.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">sum</span> <span style="color:#f92672">=</span> [<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">2</span>,<span style="color:#ae81ff">3</span>,<span style="color:#ae81ff">4</span>].<span style="color:#a6e22e">reduce</span>((<span style="color:#a6e22e">acc</span>, <span style="color:#a6e22e">num</span>) =&gt; <span style="color:#a6e22e">acc</span> <span style="color:#f92672">+=</span> <span style="color:#a6e22e">num</span>, <span style="color:#ae81ff">15</span>); <span style="color:#75715e">// 25
+</span></code></pre></div><p>I guess this is just a case for getting used to, and luckily with the REPL workflow, it&rsquo;s really fast to try and fail!</p>
+<p>Going through the example of creating our own reducer was quite a mouthful though.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-clojure" data-lang="clojure">(<span style="color:#66d9ef">defn </span>my-reduce
+  ([f initial coll]
+    (<span style="color:#66d9ef">loop </span>[result initial
+           remaining coll]
+        (<span style="color:#66d9ef">if </span>(<span style="color:#a6e22e">empty?</span> remaining)
+            result
+            (<span style="color:#a6e22e">recur</span> (<span style="color:#a6e22e">f</span> result (first remaining)) (rest remaining)))))
+  ([f [head <span style="color:#f92672">&amp;</span> tail]]
+    (<span style="color:#a6e22e">my-reduce</span> f head tail)))
+</code></pre></div><p>Strangely enough, like a abstractionist painting: The more I stare at it, the more it starts to make sense.</p>
+<h3 id="today-i-woke-up-and-chose-violence">Today I woke up and chose violence</h3>
+<p>Going into the final parts of this chapter, I expect we&rsquo;re putting all of we&rsquo;ve learned together.</p>
+<p>Having developed games with a weighed &ldquo;AI&rdquo; system for the enemies, where different attacks have different
+chances of occuring, this hit-determining function seemed awfully familiar.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-clojure" data-lang="clojure">(<span style="color:#66d9ef">defn </span>hit
+  [asym-body-parts]
+  (<span style="color:#66d9ef">let </span>[sym-parts (<span style="color:#a6e22e">better-symmetrize-body-parts</span> asym-body-parts)
+        body-part-size-sum (reduce + (map <span style="color:#e6db74">:size</span> sym-parts))
+        target (rand body-part-size-sum)]
+    (<span style="color:#66d9ef">loop </span>[[part <span style="color:#f92672">&amp;</span> remaining] sym-parts
+           accumulated-size (<span style="color:#e6db74">:size</span> part)]
+      (<span style="color:#66d9ef">if </span>(&gt; accumulated-size target)
+        part
+        (<span style="color:#a6e22e">recur</span> remaining (+ accumulated-size (<span style="color:#e6db74">:size</span> (first remaining))))))))
+</code></pre></div><p>Now we&rsquo;re just going to be choosing violence and evaluating the forms</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-clojure" data-lang="clojure">(<span style="color:#a6e22e">hit</span> asym-hobbit-body-parts) <span style="color:#75715e">; {:name &#34;left-thigh&#34;, :size 4}</span>
+</code></pre></div><p>&hellip; Not too bad. Our hobbit will live.</p>
+<h3 id="summary">Summary</h3>
+<p>Phew&hellip; That was a journey and a half. I feel like this chapter took forever. Well it pretty much did. I started
+writing about it in the previous post and it took this whole post to finish.</p>
+<p>I&rsquo;m aware that my learning clojure is majorly slowed down by the fact that I need to write everything down but
+at the same time I feel like I&rsquo;m developing multiple skills at the same time, while
+processing what I&rsquo;ve learned more thoroughly.</p>
+<p>I&rsquo;m excited for what&rsquo;s next, as Chapter 4 will be about Clojure&rsquo;s Core functions and 5 about Function mindset!</p>
+<p>For now I&rsquo;ll be doing the books exercises, and going forwards to chapter 4! Until next time!</p>
+<script>
+setTimeout(() => {
+    Prism.languages.clojure = { comment: /;.*/, string: { pattern: /"(?:[^"\\]|\\.)*"/, greedy: !0 }, operator: /(?:::|[:|'])\b[a-z][\w*+!?-]*\b/i, keyword: { pattern: /([^\w+*'?-])(?:def|if|do|let|\.\.|quote|var|->>|->|fn|loop|recur|throw|try|monitor-enter|\.|new|set!|def-|defn|defn-|defmacro|defmulti|defmethod|defstruct|defonce|declare|definline|definterface|defprotocol|==|defrecord|>=|deftype|<=|defproject|ns|\*|\+|-|\/|<|=|>|accessor|agent|agent-errors|aget|alength|all-ns|alter|and|append-child|apply|array-map|aset|aset-boolean|aset-byte|aset-char|aset-double|aset-float|aset-int|aset-long|aset-short|assert|assoc|await|await-for|bean|binding|bit-and|bit-not|bit-or|bit-shift-left|bit-shift-right|bit-xor|boolean|branch\?|butlast|byte|cast|char|children|class|clear-agent-errors|comment|commute|comp|comparator|complement|concat|conj|cons|constantly|cond|if-not|construct-proxy|contains\?|count|create-ns|create-struct|cycle|dec|deref|difference|disj|dissoc|distinct|doall|doc|dorun|doseq|dosync|dotimes|doto|double|down|drop|drop-while|edit|end\?|ensure|eval|every\?|false\?|ffirst|file-seq|filter|find|find-doc|find-ns|find-var|first|float|flush|for|fnseq|frest|gensym|get-proxy-class|get|hash-map|hash-set|identical\?|identity|if-let|import|in-ns|inc|index|insert-child|insert-left|insert-right|inspect-table|inspect-tree|instance\?|int|interleave|intersection|into|into-array|iterate|join|key|keys|keyword|keyword\?|last|lazy-cat|lazy-cons|left|lefts|line-seq|list\*|list|load|load-file|locking|long|macroexpand|macroexpand-1|make-array|make-node|map|map-invert|map\?|mapcat|max|max-key|memfn|merge|merge-with|meta|min|min-key|name|namespace|neg\?|newline|next|nil\?|node|not|not-any\?|not-every\?|not=|ns-imports|ns-interns|ns-map|ns-name|ns-publics|ns-refers|ns-resolve|ns-unmap|nth|nthrest|or|parse|partial|path|peek|pop|pos\?|pr|pr-str|print|print-str|println|println-str|prn|prn-str|project|proxy|proxy-mappings|quot|rand|rand-int|range|re-find|re-groups|re-matcher|re-matches|re-pattern|re-seq|read|read-line|reduce|ref|ref-set|refer|rem|remove|remove-method|remove-ns|rename|rename-keys|repeat|replace|replicate|resolve|rest|resultset-seq|reverse|rfirst|right|rights|root|rrest|rseq|second|select|select-keys|send|send-off|seq|seq-zip|seq\?|set|short|slurp|some|sort|sort-by|sorted-map|sorted-map-by|sorted-set|special-symbol\?|split-at|split-with|str|string\?|struct|struct-map|subs|subvec|symbol|symbol\?|sync|take|take-nth|take-while|test|time|to-array|to-array-2d|tree-seq|true\?|union|up|update-proxy|val|vals|var-get|var-set|var\?|vector|vector-zip|vector\?|when|when-first|when-let|when-not|with-local-vars|with-meta|with-open|with-out-str|xml-seq|xml-zip|zero\?|zipmap|zipper)(?=[^\w+*'?-])/, lookbehind: !0 }, boolean: /\b(?:true|false|nil)\b/, number: /\b[\da-f]+\b/i, punctuation: /[{}\[\](),]/ };
+    Prism.highlightAll();
+});
+</script>
+
+    </div>
+    
+
+    
+      
+    
+  </div>
+
+      </div>
+
+      
+        <footer class="footer">
+  <div class="footer__inner">
+    
+      <div class="copyright copyright--user"><a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener">CC BY-NC 4.0</a></div>
+      
+  </div>
+</footer>
+
+<script src="/assets/main.js"></script>
+<script src="/assets/prism.js"></script>
+
+
+      
+    </div>
+
+    
+  </body>
+</html>
