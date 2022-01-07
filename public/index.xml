@@ -10,56 +10,10 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>&lt;a href=&#34;https://creativecommons.org/licenses/by-nc/4.0/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;CC BY-NC 4.0&lt;/a&gt;</copyright>
-    <lastBuildDate>Mon, 16 Aug 2021 18:00:00 +0200</lastBuildDate>
+    <lastBuildDate>Wed, 04 Aug 2021 19:50:38 +0200</lastBuildDate>
     
 	<atom:link href="/index.xml" rel="self" type="application/rss+xml" />
     
-    
-    <item>
-      <title>Re-Learning Clojure. Part two: High octane action</title>
-      <link>/posts/re-learning-clojure-part-two/</link>
-      <pubDate>Mon, 16 Aug 2021 18:00:00 +0200</pubDate>
-      
-      <guid>/posts/re-learning-clojure-part-two/</guid>
-      <description>
-        
-          
-          
-          
-        
-        
-        
-          Re-Learning Clojure is a blog series of my adventures through Clojure for te Brave and True.
-In this series I&amp;rsquo;m trying to re-learn clojure and deepen my skills in the language.
-Putting it all together Link
-Let&amp;rsquo;s get straight into the action, continuing from where we left off.
-After fighting a bit with some Vim autocommands, I got auto-pairs working. With Clojure I feel it&amp;rsquo;s beneficial to have the brackets close themselves by default.
-          
-        
-        </description>
-    </item>
-    
-    <item>
-      <title>Re-Learning Clojure. Part one: Getting my feet wet</title>
-      <link>/posts/re-learning-clojure-part-one/</link>
-      <pubDate>Sun, 08 Aug 2021 23:26:00 +0200</pubDate>
-      
-      <guid>/posts/re-learning-clojure-part-one/</guid>
-      <description>
-        
-          
-          
-          
-        
-        
-        
-          After following my friend Juhis&amp;rsquo;s series on learning rust, I decided I should pick up Clojure again. And while I&amp;rsquo;m at it, I want to revitalize my blog writing, so here we are: Two stones with one bird.
-I first learned Clojure in 2018 while working for my previous employer and I really enjoyed my time with!
-However work took me towards another path; developing Java applications with some Javascript, and then moving to working more with Javascript.
-          
-        
-        </description>
-    </item>
     
     <item>
       <title>Writing JavaScript, but with types!</title>
